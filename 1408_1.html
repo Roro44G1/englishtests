@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Interactive de Limba Engleză - Word Formation (B2 Avansat)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+       .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+       .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+       .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .tab-link:hover {
+            color: #3498db;
+        }
+       .tab-link.active {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+        }
+       .test-content {
+            display: none;
+        }
+       .test-content.active {
+            display: block;
+        }
+       .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-left: 3px solid #e0e0e0;
+            transition: border-left-color 0.3s;
+        }
+       .question:hover {
+            border-left-color: #3498db;
+        }
+       .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+            color: #555;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 15px;
+            margin: 0 5px;
+            width: 150px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+       .root-word {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+       .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+       .button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin: 5px 10px;
+        }
+       .button:hover {
+            background-color: #2980b9;
+        }
+       .button.reset {
+            background-color: #95a5a6;
+        }
+       .button.reset:hover {
+            background-color: #7f8c8d;
+        }
+       .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #eaf5ff;
+            border-radius: 5px;
+            border: 1px solid #bddef6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Teste Interactive de Engleză</h1>
+        <h2>Word Formation (B2 Avansat)</h2>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="showTest('test1')">Test 1</button>
+            <button class="tab-link" onclick="showTest('test2')">Test 2</button>
+            <button class="tab-link" onclick="showTest('test3')">Test 3</button>
+            <button class="tab-link" onclick="showTest('test4')">Test 4</button>
+        </div>
+
+        <div id="test1" class="test-content active">
+            <form id="form-test1"></form>
+            <div class="controls">
+                <button type="button" class="button" onclick="calculateScore(1)">Verifică Scorul</button>
+                <button type="button" class="button reset" onclick="resetTest(1)">Resetează</button>
+            </div>
+            <div id="result-test1" class="result" style="display:none;"></div>
+        </div>
+
+        <div id="test2" class="test-content">
+            <form id="form-test2"></form>
+            <div class="controls">
+                <button type="button" class="button" onclick="calculateScore(2)">Verifică Scorul</button>
+                <button type="button" class="button reset" onclick="resetTest(2)">Resetează</button>
+            </div>
+            <div id="result-test2" class="result" style="display:none;"></div>
+        </div>
+
+        <div id="test3" class="test-content">
+            <form id="form-test3"></form>
+            <div class="controls">
+                <button type="button" class="button" onclick="calculateScore(3)">Verifică Scorul</button>
+                <button type="button" class="button reset" onclick="resetTest(3)">Resetează</button>
+            </div>
+            <div id="result-test3" class="result" style="display:none;"></div>
+        </div>
+
+        <div id="test4" class="test-content">
+            <form id="form-test4"></form>
+            <div class="controls">
+                <button type="button" class="button" onclick="calculateScore(4)">Verifică Scorul</button>
+                <button type="button" class="button reset" onclick="resetTest(4)">Resetează</button>
+            </div>
+            <div id="result-test4" class="result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const testsData = {
+            test1: {
+                title: "Test 1: Dezvoltare Personală și Motivație",
+                questions: [
+                    { sentence: "Finding the right ___ is key to achieving your goals.", root: "MOTIVATE" },
+                    { sentence: "She showed incredible ___ in the face of adversity.", root: "STRONG" },
+                    { sentence: "His ___ to succeed was unwavering.", root: "DETERMINE" },
+                    { sentence: "___ is the ability to bounce back from setbacks.", root: "RESILIENT" },
+                    { sentence: "The journey of self-___ is lifelong.", root: "DISCOVER" },
+                    { sentence: "Unlocking your ___ potential requires dedication.", root: "CREATE" },
+                    { sentence: "Regular exercise is highly ___ for your health.", root: "BENEFIT" },
+                    { sentence: "Self-___ is essential for forming good habits.", root: "DISCIPLINARY" },
+                    { sentence: "A strong ___ in yourself is the first step to success.", root: "BELIEVE" },
+                    { sentence: "Positive thinking can have a ___ effect on your life.", root: "POWER" },
+                    { sentence: "It takes ___ to admit your mistakes and learn from them.", root: "COURAGEOUS" },
+                    { sentence: "This book offers ___ advice for improving your daily routine.", root: "PRACTICE" },
+                    { sentence: "___ is more important than talent in the long run.", root: "PERSIST" },
+                    { sentence: "He has the ___ to become a great leader.", root: "ABLE" },
+                    { sentence: "Understanding the ___ of teamwork is crucial.", root: "IMPORTANT" },
+                    { sentence: "Making a ___ decision to change is the first step.", root: "CONSCIOUSNESS" },
+                    { sentence: "The ___ of new skills is an ongoing process.", root: "ACQUIRE" },
+                    { sentence: "Maintaining a sense of ___ can help you overcome challenges.", root: "OPTIMIST" },
+                    { sentence: "Your mental and ___ well-being are interconnected.", root: "PSYCHOLOGY" },
+                    { sentence: "Procrastination is an ___ habit that hinders progress.", root: "PRODUCTIVE" },
+                    { sentence: "He spoke with ___ and clarity.", root: "CONFIDENT" },
+                    { sentence: "___ towards others can bring you happiness.", root: "GENEROUS" },
+                    { sentence: "The ___ of a growth mindset is transformative.", root: "ADOPT" },
+                    { sentence: "She has an ___ talent for painting.", root: "AMAZE" },
+                    { sentence: "Financial ___ gives you freedom of choice.", root: "INDEPENDENT" },
+                    { sentence: "A deep ___ to your goals is necessary for success.", root: "COMMIT" },
+                    { sentence: "Personal ___ is a journey, not a destination.", root: "TRANSFORM" },
+                    { sentence: "She has a great ___ for understanding complex problems.", root: "CAPABLE" },
+                    { sentence: "Reaching this milestone was a significant ___.", root: "ACHIEVE" },
+                    { sentence: "Her speech was very ___ and inspired many people.", root: "INFLUENCE" },
+                    { sentence: "You need to take ___ responsibility for your actions.", root: "PERSON" },
+                    { sentence: "___ is key when adapting to new situations.", root: "FLEXIBLE" },
+                    { sentence: "The ___ of your comfort zone leads to growth.", root: "EXPAND" },
+                    { sentence: "She is a strong ___ for environmental protection.", root: "ADVOCACY" },
+                    { sentence: "Time ___ is a skill that can be learned.", root: "MANAGE" },
+                    { sentence: "His ___ to the cause was admirable.", root: "DEDICATE" },
+                    { sentence: "Building a strong ___ with your mentor is important.", root: "RELATE" },
+                    { sentence: "She found ___ in the stories of successful people.", root: "INSPIRE" },
+                    { sentence: "The ___ that she could do it changed everything.", root: "REALISE" },
+                    { sentence: "He is known for his ___ approach to problem-solving.", root: "INNOVATE" },
+                    { sentence: "Developing soft ___ is as important as technical knowledge.", root: "SKILFUL" },
+                    { sentence: "His ___ for the project was contagious.", root: "ENTHUSE" },
+                    { sentence: "The ___ of happiness is a universal human goal.", root: "PURSUE" },
+                    { sentence: "Showing ___ for the small things in life can improve your mood.", root: "APPRECIATE" },
+                    { sentence: "The book provides valuable ___ into human behavior.", root: "SIGHT" },
+                    { sentence: "Her ___ to learn and grow was impressive.", root: "WILLING" },
+                    { sentence: "___ is the key to building lasting habits.", root: "CONSISTENT" },
+                    { sentence: "Critical ___ skills are essential in the modern world.", root: "THINK" },
+                    { sentence: "Everyone has untapped ___ waiting to be discovered.", root: "POTENT" },
+                    { sentence: "Marathon running requires incredible physical and mental ___.", root: "ENDURE" }
+                ],
+                answers: ["motivation", "strength", "determination", "resilience", "discovery", "creative", "beneficial", "discipline", "belief", "powerful", "courage", "practical", "persistence", "ability", "importance", "conscious", "acquisition", "optimism", "psychological", "unproductive", "confidence", "generosity", "adoption", "amazing", "independence", "commitment", "transformation", "capacity", "achievement", "influential", "personal", "flexibility", "expansion", "advocate", "management", "dedication", "relationship", "inspiration", "realisation/realization", "innovative", "skills", "enthusiasm", "pursuit", "appreciation", "insights", "willingness", "consistency", "thinking", "potential", "endurance"]
+            },
+            test2: {
+                title: "Test 2: Literatură, Artă și Cultură",
+                questions: [
+                    { sentence: "The ending of the novel was ___ and left many questions unanswered.", root: "MYSTERY" },
+                    { sentence: "The author's ___ prose brought the historical setting to life.", root: "DESCRIBE" },
+                    { sentence: "The painting was admired for its perfect ___ and balance.", root: "SYMMETRICAL" },
+                    { sentence: "The poem is open to multiple ___, which makes it fascinating.", root: "INTERPRET" },
+                    { sentence: "The songwriter is known for her ___ and poetic style.", root: "LYRIC" },
+                    { sentence: "The museum has an extensive ___ of modern art.", root: "COLLECT" },
+                    { sentence: "He is a ___ figure in the world of jazz music.", root: "LEGEND" },
+                    { sentence: "The film is a work of ___ fiction, set in the distant future.", root: "SPECULATE" },
+                    { sentence: "Her performance in the play was truly ___.", root: "REMARK" },
+                    { sentence: "The festival celebrated the cultural ___ of the region.", root: "DIVERSE" },
+                    { sentence: "The film's ___ of the main character was very nuanced.", root: "PORTRAY" },
+                    { sentence: "The garden was ___ pleasing, with beautiful flower arrangements.", root: "AESTHETIC" },
+                    { sentence: "The use of ___ in the novel added a deeper layer of meaning.", root: "SYMBOL" },
+                    { sentence: "The gallery is holding a ___ of the artist's early work.", root: "RETROSPECT" },
+                    { sentence: "The novel explores themes of identity and ___.", root: "BELONG" },
+                    { sentence: "The director has a very ___ visual style.", root: "DISTINCT" },
+                    { sentence: "The book received critical ___ and won several awards.", root: "ACCLAIMED" },
+                    { sentence: "It was a ___ film that made you question your own beliefs.", root: "THOUGHT" },
+                    { sentence: "The music was a ___ of classical and electronic styles.", root: "COMBINE" },
+                    { sentence: "The painting is considered a ___ of the Renaissance period.", root: "MASTER" },
+                    { sentence: "The theme of ___ is central to the plot of the tragedy.", root: "BETRAY" },
+                    { sentence: "The ballerina danced with grace and ___.", root: "ELEGANT" },
+                    { sentence: "The sculpture was a powerful ___ of human suffering.", root: "REPRESENT" },
+                    { sentence: "The actors' facial ___ conveyed a wide range of emotions.", root: "EXPRESS" },
+                    { sentence: "The poem had a ___ and lasting impact on me.", root: "PROFOUNDLY" },
+                    { sentence: "The author was heavily ___ by historical events.", root: "INFLUENCE" },
+                    { sentence: "She has a unique ___ vision.", root: "ART" },
+                    { sentence: "The album is a ___ of his best songs.", root: "COMPILE" },
+                    { sentence: "The photograph of the sunset was absolutely ___.", root: "STUN" },
+                    { sentence: "The art school aims to foster ___ in its students.", root: "CREATE" },
+                    { sentence: "The ___ of the new artistic movement shocked the establishment.", root: "EMERGE" },
+                    { sentence: "Her latest novel is a work of historical ___.", root: "FICTIONAL" },
+                    { sentence: "The orchestra played a ___ and beautiful melody.", root: "HARMONY" },
+                    { sentence: "The play can be seen as a social ___ on modern life.", root: "COMMENT" },
+                    { sentence: "The book is a ___ of the king's reign.", root: "CHRONOLOGICAL" },
+                    { sentence: "The artist was known for her ___ use of color.", root: "CONVENTION" },
+                    { sentence: "He was captivated by the ___ of the landscape.", root: "BEAUTIFUL" },
+                    { sentence: "The novel explores the complex ___ of family relationships.", root: "DYNAMIC" },
+                    { sentence: "The ___ of her first book was a dream come true.", root: "PUBLISH" },
+                    { sentence: "The plot had an ___ twist at the very end.", root: "EXPECT" },
+                    { sentence: "The diary gives a ___ insight into the writer's life.", root: "PERSON" },
+                    { sentence: "Her music will ___ with a new generation of listeners.", root: "RESONANCE" },
+                    { sentence: "The curator made a careful ___ of paintings for the exhibition.", root: "SELECT" },
+                    { sentence: "The special effects in the movie were very ___.", root: "IMPRESS" },
+                    { sentence: "There is a beautiful ___ in the design.", root: "SIMPLE" },
+                    { sentence: "The main character experiences a profound sense of ___.", root: "LOSE" },
+                    { sentence: "The film was a ___ about the life of a famous musician.", root: "DOCUMENT" },
+                    { sentence: "The music was highly ___ and brought back many memories.", root: "EVOKE" },
+                    { sentence: "The book delves into deep ___ questions.", root: "PHILOSOPHY" },
+                    { sentence: "The play was a powerful ___ about social injustice.", root: "DRAMATIST" }
+                ],
+                answers: ["mysterious", "descriptive", "symmetry", "interpretations", "lyrical", "collection", "legendary", "speculative", "remarkable", "diversity", "portrayal", "aesthetically", "symbolism", "retrospective", "belonging", "distinctive", "acclaim", "thought-provoking", "combination", "masterpiece", "betrayal", "elegance", "representation", "expressions", "profound", "influenced", "artistic", "compilation", "stunning", "creativity", "emergence", "fiction", "harmonious", "commentary", "chronicle", "unconventional", "beauty", "dynamics", "publication", "unexpected", "personal", "resonate", "selection", "impressive", "simplicity", "loss", "documentary", "evocative", "philosophical", "drama"]
+            },
+            test3: {
+                title: "Test 3: Lifestyle Modern și Tehnologie",
+                questions: [
+                    { sentence: "The ___ of smartphones has changed daily life.", root: "EMERGE" },
+                    { sentence: "Living a ___ lifestyle is becoming more popular.", root: "SUSTAIN" },
+                    { sentence: "Remote work offers greater ___ to employees.", root: "FLEXIBLE" },
+                    { sentence: "Finding a healthy work-life ___ is a common goal.", root: "BALANCED" },
+                    { sentence: "The over-___ of fast fashion has negative environmental effects.", root: "CONSUME" },
+                    { sentence: "Technological ___ are happening at a rapid pace.", root: "INNOVATE" },
+                    { sentence: "The new app has a very ___ and user-friendly interface.", root: "INTERACT" },
+                    { sentence: "There is growing public ___ about data privacy.", root: "AWARE" },
+                    { sentence: "Virtual ___ technology is becoming increasingly realistic.", root: "REAL" },
+                    { sentence: "The ___ of electric cars is on the rise.", root: "ADOPT" },
+                    { sentence: "The fitness app provides ___ workout plans.", root: "PERSON" },
+                    { sentence: "The ___ of the new system is its main selling point.", root: "RELY" },
+                    { sentence: "We need to be more ___ consumers of technology.", root: "RESPONSE" },
+                    { sentence: "___ has led to the growth of megacities around the world.", root: "URBAN" },
+                    { sentence: "Regular physical ___ is important for health.", root: "ACTIVE" },
+                    { sentence: "Cyber-___ is a growing threat in the digital age.", root: "SECURE" },
+                    { sentence: "Social media can give you a distorted ___ on reality.", root: "PERSUADE" },
+                    { sentence: "The ___ of the economy is changing how we work.", root: "DIGITAL" },
+                    { sentence: "We need to build more ___ communities.", root: "SUSTAIN" },
+                    { sentence: "The ___ of smart devices into our homes is now commonplace.", root: "INTEGRATE" },
+                    { sentence: "Online shopping is very ___ and saves time.", root: "CONVENIENCE" },
+                    { sentence: "___ has connected people and markets across the world.", root: "GLOBAL" },
+                    { sentence: "The company is known for its ___ product designs.", root: "INNOVATE" },
+                    { sentence: "The digital ___ has affected all industries.", root: "TRANSFORM" },
+                    { sentence: "The new phone has many ___ features.", root: "CUSTOM" },
+                    { sentence: "Spending time in ___ is good for your mental health.", root: "NATURAL" },
+                    { sentence: "The goal is to provide ___ access to technology for all.", root: "EQUAL" },
+                    { sentence: "The city has a new plan for the ___ of urban spaces.", root: "GREEN" },
+                    { sentence: "We need to use our resources more ___.", root: "EFFECT" },
+                    { sentence: "The ___ of the modern workplace are constantly changing.", root: "DYNAMIC" },
+                    { sentence: "There are many ___ considerations when developing AI.", root: "ETHIC" },
+                    { sentence: "The ___ of our cities is an ongoing process.", root: "MODERN" },
+                    { sentence: "Social media is a platform for self-___.", root: "EXPRESS" },
+                    { sentence: "Improving ___ to the internet is a key goal.", root: "ACCESS" },
+                    { sentence: "___ intelligence is transforming many industries.", root: "ARTIFICE" },
+                    { sentence: "___ is a crucial skill in a fast-changing world.", root: "ADAPT" },
+                    { sentence: "It is important to be an ___ consumer of news.", root: "INFORMATION" },
+                    { sentence: "Poor internet ___ can be a major problem.", root: "CONNECT" },
+                    { sentence: "The design of the new community center is very ___.", root: "INCLUDE" },
+                    { sentence: "The ___ of the system makes it difficult to understand.", root: "COMPLEX" },
+                    { sentence: "The app provides a ___ user experience across all devices.", root: "SEAM" },
+                    { sentence: "There is a wide ___ of online courses available.", root: "VARY" },
+                    { sentence: "___ vehicles could revolutionize transportation.", root: "AUTONOMY" },
+                    { sentence: "The ___ of a healthy lifestyle takes time and effort.", root: "CULTIVATE" },
+                    { sentence: "The trend is towards ___ food production.", root: "LOCAL" },
+                    { sentence: "The ___ of labor has changed in the modern economy.", root: "DIVIDE" },
+                    { sentence: "We all need to reduce our carbon ___.", root: "FOOT" },
+                    { sentence: "We live in a culture of ___ and instant gratification.", root: "IMMEDIATE" },
+                    { sentence: "Our online ___ are becoming as important as face-to-face ones.", root: "INTERACT" },
+                    { sentence: "___ has both positive and negative consequences.", root: "GLOBAL" }
+                ],
+                answers: ["emergence", "sustainable", "flexibility", "balance", "consumption", "innovations", "interactive", "awareness", "reality", "adoption", "personalised/personalized", "reliability", "responsible", "urbanisation/urbanization", "activity", "security", "perspective", "digitalisation/digitalization", "sustainable", "integration", "convenient", "globalisation/globalization", "innovative", "transformation", "customisable/customizable", "nature", "equitable", "greening", "effectively", "dynamics", "ethical", "modernisation/modernization", "expression", "accessibility", "artificial", "adaptability", "informed", "connectivity", "inclusive", "complexity", "seamless", "variety", "autonomous", "cultivation", "localised/localized", "division", "footprint", "immediacy", "interactions", "globalisation/globalization"]
+            },
+            test4: {
+                title: "Test 4: Societate, Știință și Concepte Abstracte",
+                questions: [
+                    { sentence: "The detective solved the case using pure ___.", root: "LOGICAL" },
+                    { sentence: "The historical ___ of the discovery is immense.", root: "SIGNIFY" },
+                    { sentence: "There is a direct ___ between effort and results.", root: "CORRELATE" },
+                    { sentence: "He looked at the strange object in ___.", root: "BELIEVE" },
+                    { sentence: "The scientist proposed a new ___ to explain the data.", root: "HYPOTHETICAL" },
+                    { sentence: "There has been a ___ increase in global temperatures.", root: "SIGNIFY" },
+                    { sentence: "The ___ of the universe is something we may never fully grasp.", root: "COMPLEX" },
+                    { sentence: "The evidence against him was ___.", root: "REFUTE" },
+                    { sentence: "It's difficult to ___ the idea of infinity.", root: "CONCEPT" },
+                    { sentence: "The new discovery was a major ___ in the field of medicine.", root: "BREAK" },
+                    { sentence: "The report provides a ___ analysis of the situation.", root: "COMPREHEND" },
+                    { sentence: "The study has far-reaching ___ for public policy.", root: "IMPLY" },
+                    { sentence: "His conclusions were based on several false ___.", root: "ASSUME" },
+                    { sentence: "The experiment was conducted under ___ conditions.", root: "CONTROL" },
+                    { sentence: "The results of the two studies were not ___.", root: "CONSIST" },
+                    { sentence: "He was an ___ figure in the political history of his country.", root: "INFLUENCE" },
+                    { sentence: "Scientific research must be conducted with academic ___.", root: "RIGOROUS" },
+                    { sentence: "We like to think we live in a ___ society.", root: "CIVIL" },
+                    { sentence: "The model is purely ___ and has not been tested in practice.", root: "THEORY" },
+                    { sentence: "The results of the experiment must be ___ by other researchers.", root: "VALID" },
+                    { sentence: "The origin of the ancient manuscript remains ___.", root: "ENIGMA" },
+                    { sentence: "He has an ___ knowledge of the subject.", root: "EXTEND" },
+                    { sentence: "The issue is still a matter of fierce ___.", root: "DEBATABLE" },
+                    { sentence: "It is important for a journalist to remain ___.", root: "OBJECT" },
+                    { sentence: "The findings of the study are not ___ to the entire population.", root: "GENERAL" },
+                    { sentence: "___ drives much of the modern economy.", root: "CONSUME" },
+                    { sentence: "The ___ of his research to the current problem is clear.", root: "RELEVANT" },
+                    { sentence: "Science is based on ___ evidence, not on belief.", root: "EMPIRIC" },
+                    { sentence: "Data from a single source can be ___.", root: "RELY" },
+                    { sentence: "She is a professor of moral ___.", root: "PHILOSOPHICAL" },
+                    { sentence: "The scandal was widely ___ in the media.", root: "PUBLIC" },
+                    { sentence: "The book is a ___ of ideas from various fields.", root: "SYNTHESISE" },
+                    { sentence: "These are just ___ findings; more research is needed.", root: "PRELIMINARY" },
+                    { sentence: "The outcome will be ___ by a number of factors.", root: "DETERMINE" },
+                    { sentence: "The survey sample must be ___ of the whole population.", root: "REPRESENT" },
+                    { sentence: "His statement was ___ to the evidence.", root: "CONTRADICT" },
+                    { sentence: "The researcher tried to avoid personal ___ in the study.", root: "BIASED" },
+                    { sentence: "She has a strong ___ to become a doctor.", root: "ASPIRE" },
+                    { sentence: "The film received a lot of ___ from the press.", root: "CRITIC" },
+                    { sentence: "___ the data took several weeks.", root: "ANALYSIS" },
+                    { sentence: "The effects of the policy are well-___.", root: "DOCUMENT" },
+                    { sentence: "The study explores the ___ of memory.", root: "PSYCHOLOGIST" },
+                    { sentence: "The theory has not yet been ___ by experiment.", root: "CONFIRMATION" },
+                    { sentence: "The concept is not easily ___.", root: "DEFINE" },
+                    { sentence: "The historical text is open to various ___.", root: "INTERPRET" },
+                    { sentence: "The decision had major ___ consequences.", root: "POLITICS" },
+                    { sentence: "He came to the logical ___ that he was wrong.", root: "CONCLUDE" },
+                    { sentence: "Our ___ of reality is shaped by our experiences.", root: "PERCEIVE" },
+                    { sentence: "The invention of the printing press was ___.", root: "REVOLUTION" },
+                    { sentence: "The spirit of scientific ___ is essential for progress.", root: "INQUIRE" }
+                ],
+                answers: ["logic", "significance", "correlation", "disbelief", "hypothesis", "significant", "complexity", "irrefutable", "conceptualise/conceptualize", "breakthrough", "comprehensive", "implications", "assumptions", "controlled", "consistent", "influential", "rigour/rigor", "civilised/civilized", "theoretical", "validated", "enigmatic", "extensive", "debate", "objective", "generalisable/generalizable", "consumerism", "relevance", "empirical", "unreliable", "philosophy", "publicised/publicized", "synthesis", "preliminary", "determined", "representative", "contradictory", "bias", "aspiration", "criticism", "analysing/analyzing", "documented", "psychology", "confirmed", "definable", "interpretations", "political", "conclusion", "perception", "revolutionary", "inquiry"]
+            }
+        };
+
+        function generateQuestions() {
+            for (let testNum = 1; testNum <= 4; testNum++) {
+                const testKey = `test${testNum}`;
+                const form = document.getElementById(`form-${testKey}`);
+                const data = testsData[testKey];
+                let html = `<h2>${data.title}</h2>`;
+                data.questions.forEach((q, index) => {
+                    const parts = q.sentence.split('___');
+                    html += `
+                        <div class="question">
+                            <span class="question-number">${index + 1}.</span>
+                            ${parts[0]}
+                            <input type="text" id="q-${testNum}-${index + 1}" autocomplete="off">
+                            ${parts[1]} (<span class="root-word">${q.root}</span>)
+                        </div>
+                    `;
+                });
+                form.innerHTML = html;
+            }
+        }
+
+        function showTest(testId) {
+            // Hide all test content
+            const contents = document.querySelectorAll('.test-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Deactivate all tab links
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show the selected test content
+            document.getElementById(testId).classList.add('active');
+            
+            // Activate the clicked tab link
+            document.querySelector(`.tab-link[onclick="showTest('${testId}')"]`).classList.add('active');
+        }
+
+        function calculateScore(testNumber) {
+            const testKey = `test${testNumber}`;
+            const correctAnswers = testsData[testKey].answers;
+            let score = 0;
+            for (let i = 0; i < correctAnswers.length; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i + 1}`);
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const possibleAnswers = correctAnswers[i].split('/');
+                
+                if (possibleAnswers.includes(userAnswer)) {
+                    score++;
+                    inputElement.style.borderColor = '#2ecc71'; // Green for correct
+                } else {
+                    inputElement.style.borderColor = '#e74c3c'; // Red for incorrect
+                }
+            }
+            
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            resultDiv.innerHTML = `Scorul tău este: ${score} / ${correctAnswers.length}`;
+            resultDiv.style.display = 'block';
+        }
+
+        function resetTest(testNumber) {
+            const testKey = `test${testNumber}`;
+            const form = document.getElementById(`form-${testKey}`);
+            form.reset();
+            
+            const inputs = form.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.style.borderColor = '#ccc'; // Reset border color
+            });
+
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            resultDiv.style.display = 'none';
+        }
+
+        // Initial setup
+        window.onload = () => {
+            generateQuestions();
+            // Set the first tab as active on page load
+            document.getElementById('test1').classList.add('active');
+            document.querySelector('.tab-link').classList.add('active');
+        };
+    </script>
+
+</body>
+</html>
