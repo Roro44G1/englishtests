@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Interactive de Limba Engleză - Key Word Transformation (B2)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+       .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+       .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+       .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .tab-link:hover {
+            color: #3498db;
+        }
+       .tab-link.active {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+        }
+       .test-content {
+            display: none;
+        }
+       .test-content.active {
+            display: block;
+        }
+       .question {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-left: 3px solid #e0e0e0;
+            transition: border-left-color 0.3s;
+        }
+        .question:hover {
+            border-left-color: #3498db;
+        }
+       .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+            color: #555;
+        }
+        .sentence {
+            margin-bottom: 5px;
+        }
+        /* New wrapper for the transformation line */
+        .transformation-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 15px;
+            /* Adjusted width */
+            width: 280px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+       .keyword {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+       .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+       .button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin: 5px 10px;
+        }
+       .button:hover {
+            background-color: #2980b9;
+        }
+       .button.reset {
+            background-color: #95a5a6;
+        }
+       .button.reset:hover {
+            background-color: #7f8c8d;
+        }
+       .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #eaf5ff;
+            border-radius: 5px;
+            border: 1px solid #bddef6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Teste Interactive de Engleză</h1>
+        <h2>Key Word Transformation (B2)</h2>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="showTest('test1')">Test 1: Sănătate</button>
+            <button class="tab-link" onclick="showTest('test2')">Test 2: Călătorii</button>
+            <button class="tab-link" onclick="showTest('test3')">Test 3: Carieră</button>
+            <button class="tab-link" onclick="showTest('test4')">Test 4: Mediu</button>
+            <button class="tab-link" onclick="showTest('test5')">Test 5: Divertisment</button>
+        </div>
+
+        <div id="test1" class="test-content active"></div>
+        <div id="test2" class="test-content"></div>
+        <div id="test3" class="test-content"></div>
+        <div id="test4" class="test-content"></div>
+        <div id="test5" class="test-content"></div>
+    </div>
+
+    <script>
+        const testsData = {
+            test1: {
+                title: "Test 1: Sănătate și Fitness",
+                questions: [
+                    { first: "You should reduce the amount of sugar you eat.", given: "CUT", second: "You should ___ sugar." },
+                    { first: "I find it difficult to get enough sleep.", given: "TROUBLE", second: "I ___ enough sleep." },
+                    { first: "The doctor advised me not to eat fatty foods.", given: "AVOID", second: "The doctor told me ___ fatty foods." },
+                    { first: "She started jogging three times a week.", given: "TAKEN", second: "She has ___ three times a week." },
+                    { first: "It's not a good idea to exercise immediately after a big meal.", given: "AVOID", second: "You ___ immediately after a big meal." },
+                    { first: "He couldn't continue the race because of his injury.", given: "PREVENTED", second: "His injury ___ the race." },
+                    { first: "I regret eating so much cake.", given: "WISH", second: "I ___ so much cake." },
+                    { first: "A healthy diet is very important.", given: "OF", second: "A healthy diet is ___ importance." },
+                    { first: "They say that laughter is the best medicine.", given: "SAID", second: "Laughter ___ the best medicine." },
+                    { first: "He is not as fit as he used to be.", given: "THAN", second: "He used to be ___ he is now." },
+                    { first: "You must not drink alcohol if you are taking this medicine.", given: "ALLOWED", second: "You are ___ alcohol if you are taking this medicine." },
+                    { first: "Why don't you join a gym?", given: "WERE", second: "If I ___ join a gym." },
+                    { first: "I think it is important to warm up before exercising.", given: "FIND", second: "I ___ to warm up before exercising." },
+                    { first: "She recovered from her illness very quickly.", given: "GOT", second: "She ___ her illness very quickly." },
+                    { first: "He is not accustomed to waking up so early.", given: "USED", second: "He is not ___ up so early." },
+                    { first: "It is recommended that you drink two litres of water a day.", given: "SUPPOSED", second: "You ___ two litres of water a day." },
+                    { first: "I prefer cycling to running.", given: "RATHER", second: "I would ___ than run." },
+                    { first: "The new gym was opened by a famous athlete.", given: "WHO", second: "It was a famous athlete ___ the new gym." },
+                    { first: "It's a pity I didn't start exercising earlier.", given: "ONLY", second: "If ___ exercising earlier." },
+                    { first: "He was so tired that he fell asleep on the sofa.", given: "SUCH", second: "He was under ___ that he fell asleep on the sofa." },
+                    { first: "It's pointless to worry about your health all the time.", given: "POINT", second: "There is ___ about your health all the time." },
+                    { first: "He made a quick recovery from his operation.", given: "OVER", second: "He quickly ___ his operation." },
+                    { first: "You won't get fit unless you exercise regularly.", given: "IF", second: "You won't get fit ___ exercise regularly." },
+                    { first: "The coach made the team train for two hours.", given: "WERE", second: "The team ___ for two hours by the coach." },
+                    { first: "It is unlikely that he will win the match.", given: "PROBABLY", second: "He ___ win the match." },
+                    { first: "She is very good at swimming.", given: "GOOD", second: "Swimming is something she is ___." },
+                    { first: "I haven't had a check-up for over a year.", given: "LAST", second: "The ___ a check-up was over a year ago." },
+                    { first: "Despite feeling tired, she went for a run.", given: "OF", second: "In spite ___ she went for a run." },
+                    { first: "It's possible that he forgot his appointment.", given: "MAY", second: "He ___ his appointment." },
+                    { first: "The new diet is said to be very effective.", given: "SUPPOSED", second: "The new diet ___ very effective." }
+                ],
+                answers: ["cut down on", "have trouble getting", "to avoid eating", "taken up jogging", "should avoid exercising", "prevented him from continuing", "wish I had not eaten", "of great/of the utmost", "is said to be", "fitter than", "not allowed to drink", "were you, I would", "find it important", "got over", "used to waking", "are supposed to drink", "rather cycle", "who opened", "only I had started", "such tiredness/fatigue", "no point in worrying", "got over", "if you do not", "were made to train", "will probably not", "very good at", "last time I had", "of feeling tired", "may have forgotten", "is supposed to be"]
+            },
+            test2: {
+                title: "Test 2: Călătorii și Turism",
+                questions: [
+                    { first: "We arrived at the airport too late to catch the plane.", given: "BY", second: "The plane had already left ___ we arrived at the airport." },
+                    { first: "I prefer visiting historical sites to lying on a beach.", given: "RATHER", second: "I would ___ historical sites than lie on a beach." },
+                    { first: "The journey was shorter than I had expected.", given: "AS", second: "The journey was not ___ I had expected." },
+                    { first: "They cancelled the trip because of the bad weather.", given: "OFF", second: "The trip was ___ because of the bad weather." },
+                    { first: "I regret not visiting the museum.", given: "WISH", second: "I ___ the museum." },
+                    { first: "It's a good idea to book your tickets in advance.", given: "SHOULD", second: "You ___ your tickets in advance." },
+                    { first: "I haven't been abroad for two years.", given: "LAST", second: "The ___ abroad was two years ago." },
+                    { first: "She was very excited about her holiday.", given: "FORWARD", second: "She was really ___ her holiday." },
+                    { first: "We had to wait for hours at the border.", given: "MADE", second: "We were ___ for hours at the border." },
+                    { first: "It's possible that the flight will be delayed.", given: "MAY", second: "The flight ___ delayed." },
+                    { first: "I'm not used to such hot weather.", given: "GET", second: "I can't ___ such hot weather." },
+                    { first: "The hotel wasn't as good as I thought it would be.", given: "EXPECTATIONS", second: "The hotel didn't live ___." },
+                    { first: "Why don't you ask for a room with a sea view?", given: "SUGGEST", second: "I ___ for a room with a sea view." },
+                    { first: "Although the hotel was cheap, it was very clean.", given: "FACT", second: "Despite ___ cheap, the hotel was very clean." },
+                    { first: "The local guide gave us a lot of useful information.", given: "WERE", second: "We ___ a lot of useful information by the local guide." },
+                    { first: "It was the most beautiful place I had ever seen.", given: "NEVER", second: "I had ___ a beautiful place before." },
+                    { first: "You are not allowed to take photos inside the palace.", given: "FORBIDDEN", second: "It ___ to take photos inside the palace." },
+                    { first: "I'm sure she enjoyed her trip to Paris.", given: "MUST", second: "She ___ her trip to Paris." },
+                    { first: "We couldn't find the hotel.", given: "DIFFICULTY", second: "We ___ the hotel." },
+                    { first: "The price of the holiday includes accommodation and flights.", given: "INCLUDED", second: "Accommodation and flights ___ the price of the holiday." },
+                    { first: "He started his journey early in the morning.", given: "SET", second: "He ___ on his journey early in the morning." },
+                    { first: "I would have gone with you if I had known.", given: "KNOWN", second: "Had ___ I would have gone with you." },
+                    { first: "It is said that this city is over 2,000 years old.", given: "TO", second: "This city is ___ over 2,000 years old." },
+                    { first: "The airline lost our luggage.", given: "HAD", second: "We ___ by the airline." },
+                    { first: "There is no point in complaining about the delay.", given: "USE", second: "It's ___ about the delay." },
+                    { first: "It was such a long flight that we were exhausted.", given: "SO", second: "The flight ___ that we were exhausted." },
+                    { first: "I advise you to get travel insurance.", given: "WERE", second: "If I ___ get travel insurance." },
+                    { first: "I'm sorry I missed the flight.", given: "REGRET", second: "I ___ the flight." },
+                    { first: "He has never been on a cruise before.", given: "FIRST", second: "It's the ___ he has ever been on a cruise." },
+                    { first: "I'm not sure if I packed my passport.", given: "MIGHT", second: "I ___ my passport." }
+                ],
+                answers: ["by the time", "rather visit", "as long as/so long as", "called off", "wish I had visited", "should book", "last time I went", "looking forward to", "made to wait", "may be", "get used to", "up to my expectations", "suggest you ask/suggest asking", "the fact that it was", "were given", "never seen such", "is forbidden", "must have enjoyed", "had difficulty finding", "are included in", "set off", "I known", "said to be", "had our luggage lost", "no use complaining", "was so long", "were you, I would", "regret missing", "first time", "might not have packed/might have forgotten to pack"]
+            },
+            test3: {
+                title: "Test 3: Muncă și Carieră",
+                questions: [
+                    { first: "She was offered a promotion at work.", given: "GIVEN", second: "She ___ a promotion at work." },
+                    { first: "He is responsible for managing the sales team.", given: "CHARGE", second: "He is ___ the sales team." },
+                    { first: "I don't think I'm suitable for this job.", given: "CUT", second: "I don't think I'm ___ for this job." },
+                    { first: "They made him redundant after ten years with the company.", given: "WAS", second: "He ___ after ten years with the company." },
+                    { first: "You need to have experience to get this job.", given: "UNLESS", second: "You can't get this job ___ experience." },
+                    { first: "He regrets not applying for the job.", given: "WISHES", second: "He ___ for the job." },
+                    { first: "The manager is not happy with his performance.", given: "IMPRESSED", second: "The manager is not ___ his performance." },
+                    { first: "She has a good relationship with her colleagues.", given: "GETS", second: "She ___ well with her colleagues." },
+                    { first: "It's not necessary to wear a suit to the office.", given: "HAVE", second: "You don't ___ a suit to the office." },
+                    { first: "He is likely to get the promotion.", given: "PROBABLY", second: "He will ___ the promotion." },
+                    { first: "I would prefer to work from home.", given: "RATHER", second: "I ___ from home." },
+                    { first: "She is considering changing her career.", given: "THINKING", second: "She ___ her career." },
+                    { first: "He was so busy that he didn't have time for lunch.", given: "TOO", second: "He was ___ time for lunch." },
+                    { first: "The company was founded by his grandfather.", given: "SET", second: "His grandfather ___ the company." },
+                    { first: "I'm sure he has finished the report.", given: "MUST", second: "He ___ the report." },
+                    { first: "She had difficulty persuading her boss.", given: "HARD", second: "She found ___ her boss." },
+                    { first: "He was fired because he was always late.", given: "ACCOUNT", second: "He was fired on ___ always late." },
+                    { first: "It's pointless to apply for that job without the right qualifications.", given: "POINT", second: "There is ___ for that job without the right qualifications." },
+                    { first: "The interview was not as difficult as I expected.", given: "LESS", second: "The interview was ___ I expected." },
+                    { first: "He succeeded in getting a pay rise.", given: "MANAGED", second: "He ___ a pay rise." },
+                    { first: "I advise you to update your CV.", given: "BETTER", second: "You ___ your CV." },
+                    { first: "The meeting has been postponed until next week.", given: "PUT", second: "The meeting has been ___ until next week." },
+                    { first: "She didn't get the job in spite of her qualifications.", given: "ALTHOUGH", second: "She didn't get the job ___ qualified." },
+                    { first: "I'm not used to working such long hours.", given: "ACCUSTOMED", second: "I am not ___ such long hours." },
+                    { first: "He said he was sorry for the mistake.", given: "APOLOGISED", second: "He ___ the mistake." },
+                    { first: "It's the first time I have ever had to give a presentation.", given: "NEVER", second: "I ___ to give a presentation before." },
+                    { first: "You are not allowed to use your phone during the meeting.", given: "MUST", second: "You ___ your phone during the meeting." },
+                    { first: "The boss wants the report to be finished by Friday.", given: "HAVE", second: "The boss wants to ___ by Friday." },
+                    { first: "Perhaps he was not informed about the meeting.", given: "MIGHT", second: "He ___ informed about the meeting." },
+                    { first: "She is considered to be the best person for the job.", given: "REGARDED", second: "She ___ the best person for the job." }
+                ],
+                answers: ["was given the offer of", "in charge of managing", "cut out", "was made redundant", "unless you have", "wishes he had applied", "impressed with/by", "gets on", "have to wear", "probably get", "would rather work", "is thinking of changing", "too busy to have", "set up", "must have finished", "it hard to persuade", "account of being", "no point in applying", "less difficult than", "managed to get", "had better update", "put off", "although she was", "accustomed to working", "apologised for", "have never had", "must not use", "have the report finished", "might not have been", "is regarded as"]
+            },
+            test4: {
+                title: "Test 4: Mediu și Natură",
+                questions: [
+                    { first: "We must do something to protect endangered species.", given: "NEEDS", second: "Something ___ to protect endangered species." },
+                    { first: "Pollution has a negative effect on the environment.", given: "AFFECTS", second: "The environment ___ by pollution." },
+                    { first: "It's important to recycle paper and plastic.", given: "SHOULD", second: "Paper and plastic ___." },
+                    { first: "The government has introduced new laws to reduce emissions.", given: "AIMED", second: "New laws have been introduced ___ emissions." },
+                    { first: "I think we use too much energy.", given: "CUT", second: "I think we should ___ the amount of energy we use." },
+                    { first: "The factory was closed down because it was polluting the river.", given: "DUE", second: "The factory was closed down ___ the river." },
+                    { first: "If we don't act now, climate change will get worse.", given: "UNLESS", second: "Climate change will get worse ___ now." },
+                    { first: "Many people are not aware of the dangers of deforestation.", given: "AWARENESS", second: "There is a lack ___ the dangers of deforestation." },
+                    { first: "The storm caused a lot of damage to the town.", given: "DAMAGED", second: "The town was ___ by the storm." },
+                    { first: "It's our responsibility to look after the planet.", given: "FOR", second: "We are ___ after the planet." },
+                    { first: "The new wind farm will generate electricity for 10,000 homes.", given: "BE", second: "Electricity will ___ for 10,000 homes by the new wind farm." },
+                    { first: "He regrets not joining the environmental group.", given: "WISHES", second: "He ___ the environmental group." },
+                    { first: "It is said that the polar ice caps are melting.", given: "TO", second: "The polar ice caps are ___." },
+                    { first: "The use of plastic bags has been banned in many countries.", given: "NO", second: "People are ___ allowed to use plastic bags in many countries." },
+                    { first: "The forest fire was so big that it could be seen from space.", given: "SUCH", second: "It was ___ that it could be seen from space." },
+                    { first: "I would prefer it if people used public transport more.", given: "RATHER", second: "I would ___ public transport more." },
+                    { first: "The company was fined for dumping chemical waste.", given: "PAID", second: "The company ___ for dumping chemical waste." },
+                    { first: "It is unlikely that they will stop the project.", given: "PROBABLY", second: "They ___ the project." },
+                    { first: "We must avoid wasting water.", given: "PREVENTED", second: "The waste of water ___." },
+                    { first: "The rise in sea levels is a serious threat.", given: "THREATENS", second: "The sea level rise ___ coastal areas." },
+                    { first: "He is a strong supporter of renewable energy.", given: "BELIEVES", second: "He strongly ___ renewable energy." },
+                    { first: "The documentary was about the importance of biodiversity.", given: "FOCUSED", second: "The documentary ___ the importance of biodiversity." },
+                    { first: "In spite of the warnings, people continued to pollute.", given: "ALTHOUGH", second: "People continued to pollute ___ warned." },
+                    { first: "The problem is not as simple as it seems.", given: "MORE", second: "The problem is ___ it seems." },
+                    { first: "The council is planning to create more green spaces.", given: "PLANS", second: "There are ___ more green spaces." },
+                    { first: "I'm sure the government knew about the risks.", given: "HAVE", second: "The government must ___ about the risks." },
+                    { first: "It's pointless to argue with him about climate change.", given: "USE", second: "It's ___ with him about climate change." },
+                    { first: "The new law will come into effect next month.", given: "FORCE", second: "The new law will come ___ next month." },
+                    { first: "The survival of many species depends on our actions.", given: "IF", second: "Many species will not survive ___ act." },
+                    { first: "The organization was set up to protect wildlife.", given: "ORDER", second: "The organization was set up ___ wildlife." }
+                ],
+                answers: ["needs to be done", "is negatively affected", "should be recycled", "aimed at reducing", "cut down on", "due to it polluting", "unless we act", "of awareness of", "badly damaged", "responsible for looking", "be generated", "wishes he had joined", "said to be melting", "no longer", "such a big fire", "rather people used", "paid a fine", "will probably not stop", "must be prevented", "threatens to flood", "believes in", "focused on", "although they were", "more complicated than", "plans to create", "have known", "no use arguing", "into force", "if we do not", "in order to protect"]
+            },
+            test5: {
+                title: "Test 5: Media și Divertisment",
+                questions: [
+                    { first: "The film was so boring that I fell asleep.", given: "SUCH", second: "It was ___ that I fell asleep." },
+                    { first: "I prefer watching films at home to going to the cinema.", given: "RATHER", second: "I would ___ at home than go to the cinema." },
+                    { first: "The new series is much better than the last one.", given: "AS", second: "The last series was not ___ the new one." },
+                    { first: "They are showing the film on TV tonight.", given: "BEING", second: "The film ___ on TV tonight." },
+                    { first: "I haven't been to a concert for years.", given: "TIME", second: "The last ___ to a concert was years ago." },
+                    { first: "The actor is famous for his charity work.", given: "KNOWN", second: "The actor ___ his charity work." },
+                    { first: "It's not worth buying the DVD.", given: "POINT", second: "There is ___ the DVD." },
+                    { first: "The director's new film is expected to be a huge success.", given: "SUPPOSED", second: "The director's new film ___ a huge success." },
+                    { first: "She regrets becoming an actress.", given: "WISHES", second: "She ___ an actress." },
+                    { first: "He was disappointed with the ending of the book.", given: "FOUND", second: "He ___ disappointing." },
+                    { first: "The tickets for the concert sold out in an hour.", given: "NO", second: "There were ___ left after an hour." },
+                    { first: "I'm sure she didn't see the film.", given: "CAN'T", second: "She ___ the film." },
+                    { first: "The journalist asked the actress some personal questions.", given: "WERE", second: "The actress ___ some personal questions by the journalist." },
+                    { first: "The TV show is not as popular as it used to be.", given: "LESS", second: "The TV show is ___ it used to be." },
+                    { first: "I advise you not to read the spoilers.", given: "WERE", second: "If I ___ not read the spoilers." },
+                    { first: "The band had to cancel their tour.", given: "CALL", second: "The band had to ___ their tour." },
+                    { first: "Despite being a famous star, he is very down-to-earth.", given: "OF", second: "In spite ___ a famous star, he is very down-to-earth." },
+                    { first: "It's the best book I have ever read.", given: "NEVER", second: "I have ___ a better book." },
+                    { first: "The TV was too loud, so I turned it down.", given: "SUCH", second: "There was ___ that I turned it down." },
+                    { first: "The celebrity is said to be writing a new book.", given: "REPORTED", second: "It ___ that the celebrity is writing a new book." },
+                    { first: "I had my photo taken with the actor.", given: "OF", second: "The actor took a photo ___ me." },
+                    { first: "The game is not suitable for children.", given: "MEANT", second: "The game is ___ for children." },
+                    { first: "He is a very talented musician.", given: "DEAL", second: "He has a great ___ talent." },
+                    { first: "The critic gave the film a bad review.", given: "REVIEWED", second: "The film ___ by the critic." },
+                    { first: "It seems that the band has split up.", given: "APPEARS", second: "The band ___ split up." },
+                    { first: "I have no intention of watching that show.", given: "INTEND", second: "I do ___ that show." },
+                    { first: "I'm really excited about the new album release.", given: "LOOKING", second: "I'm really ___ the new album release." },
+                    { first: "He found it difficult to learn his lines.", given: "TROUBLE", second: "He ___ his lines." },
+                    { first: "The plot was so complicated I couldn't follow it.", given: "TOO", second: "The plot was ___ me to follow." },
+                    { first: "It's possible she didn't get the message.", given: "MAY", second: "She ___ the message." }
+                ],
+                answers: ["such a boring film", "rather watch films", "as good as", "is being shown", "time I went", "is known for", "no point in buying", "is supposed to be", "wishes she had not become", "found the ending", "no tickets", "can't have seen", "was asked", "less popular than", "were you, I would", "call off", "of being", "never read", "such a loud noise", "is reported", "of me with", "not meant", "deal of musical", "was reviewed badly", "appears to have", "not intend to watch", "looking forward to", "had trouble learning", "too complicated for", "may not have got"]
+            }
+        };
+
+        function generateQuestions() {
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const container = document.getElementById(testKey);
+                const data = testsData[testKey];
+                
+                let html = `<h2>${data.title}</h2>`;
+                html += `<form id="form-${testKey}">`;
+                
+                data.questions.forEach((q, index) => {
+                    const parts = q.second.split('___');
+                    html += `
+                        <div class="question">
+                            <div class="question-number">${index + 1}.</div>
+                            <div class="sentence">${q.first} (<strong>${q.given}</strong>)</div>
+                            <div class="transformation-wrapper">
+                                <span>${parts[0]}</span>
+                                <input type="text" id="q-${testNum}-${index + 1}" autocomplete="off">
+                                <span>${parts[1]}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</form>`;
+                html += `
+                    <div class="controls">
+                        <button type="button" class="button" onclick="calculateScore(${testNum})">Verifică Scorul</button>
+                        <button type="button" class="button reset" onclick="resetTest(${testNum})">Resetează</button>
+                    </div>
+                    <div id="result-${testKey}" class="result" style="display:none;"></div>
+                `;
+                container.innerHTML = html;
+            }
+        }
+
+        function showTest(testId) {
+            const contents = document.querySelectorAll('.test-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(testId).classList.add('active');
+            document.querySelector(`.tab-link[onclick="showTest('${testId}')"]`).classList.add('active');
+        }
+
+        function calculateScore(testNumber) {
+            const testKey = `test${testNumber}`;
+            const correctAnswers = testsData[testKey].answers;
+            let score = 0;
+            
+            for (let i = 0; i < correctAnswers.length; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i + 1}`);
+                if (!inputElement) continue;
+
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const possibleAnswers = correctAnswers[i].split('/');
+                
+                if (possibleAnswers.includes(userAnswer)) {
+                    score++;
+                    inputElement.style.borderColor = '#2ecc71';
+                } else {
+                    inputElement.style.borderColor = '#e74c3c';
+                }
+            }
+            
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            resultDiv.innerHTML = `Scorul tău este: ${score} / ${correctAnswers.length}`;
+            resultDiv.style.display = 'block';
+        }
+
+        function resetTest(testNumber) {
+            const testKey = `test${testNumber}`;
+            const form = document.getElementById(`form-${testKey}`);
+            if (form) {
+                form.reset();
+                const inputs = form.querySelectorAll('input[type="text"]');
+                inputs.forEach(input => {
+                    input.style.borderColor = '#ccc';
+                });
+            }
+
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            if (resultDiv) {
+                resultDiv.style.display = 'none';
+            }
+        }
+
+        window.onload = () => {
+            generateQuestions();
+            showTest('test1');
+        };
+    </script>
+
+</body>
+</html>
