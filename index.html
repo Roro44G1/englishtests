@@ -1,1 +1,242 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste interactive de limba engleză</title>
+    <style>
+        /* ------- Stiluri generale ------- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            color: #1d3557;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #457b9d;
+        }
+
+        /* ------- Stiluri pentru secțiuni ------- */
+        .test-section {
+            margin-bottom: 60px;
+        }
+
+        .test-section h2 {
+            font-size: 2em;
+            color: #1d3557;
+            border-bottom: 3px solid #a8dadc;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        /* ------- Containerul pentru carduri (Flexbox) ------- */
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px; /* Spațiu între carduri */
+            justify-content: flex-start; /* Aliniază cardurile la stânga */
+        }
+
+        /* ------- Stilurile pentru carduri ------- */
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            
+            /* Flex-grow, flex-shrink, flex-basis. Cardurile vor avea ~280px lățime */
+            flex: 1 1 280px; 
+            max-width: 320px;
+            min-height: 160px;
+            
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .card-content h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.3em;
+            color: #1d3557;
+        }
+
+        .card-content .date {
+            font-size: 0.95em;
+            color: #6c757d;
+        }
+
+        .card-footer {
+            background-color: #457b9d;
+            color: #f1faee;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 1em;
+            border-top: 1px solid #e9ecef;
+            transition: background-color 0.3s ease;
+        }
+        
+        .card:hover .card-footer {
+            background-color: #e63946;
+        }
+        
+        /* ------- Media queries pentru responsivitate ------- */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2em;
+            }
+            .test-section h2 {
+                font-size: 1.6em;
+            }
+            .card-container {
+                justify-content: center; /* Centrează cardurile pe ecrane mici */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Teste interactive de limba engleză</h1>
+            <p>Selectați un test din listele de mai jos pentru a începe.</p>
+        </header>
+
+        <!-- Secțiunea 1: Key Word Transformation -->
+        <section class="test-section">
+            <h2>Key Word Transformation (KWT)</h2>
+            <div class="card-container">
+                <!-- Cardurile pentru KWT -->
+                <a href="KWT_1808.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 1</h3>
+                        <p class="date">Data: 18 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="KWT_1908.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 2</h3>
+                        <p class="date">Data: 19 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="KWT_2008.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 3</h3>
+                        <p class="date">Data: 20 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="KWT_2108.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 4</h3>
+                        <p class="date">Data: 21 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="KWT_2208.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 5</h3>
+                        <p class="date">Data: 22 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="KWT_2308.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 6</h3>
+                        <p class="date">Data: 23 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Secțiunea 2: Word Formation -->
+        <section class="test-section">
+            <h2>Word Formation (WF)</h2>
+            <div class="card-container">
+                <!-- Cardurile pentru WF -->
+                <a href="WT_1808.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 1</h3>
+                        <p class="date">Data: 18 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="WT_1908.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 2</h3>
+                        <p class="date">Data: 19 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="WT_2008.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 3</h3>
+                        <p class="date">Data: 20 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="WT_2108.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 4</h3>
+                        <p class="date">Data: 21 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="WT_2208.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 5</h3>
+                        <p class="date">Data: 22 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+                <a href="WT_2308.html" class="card">
+                    <div class="card-content">
+                        <h3>Testul 6</h3>
+                        <p class="date">Data: 23 august 2025</p>
+                    </div>
+                    <div class="card-footer">Accesează testul</div>
+                </a>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
