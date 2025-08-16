@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KWT-23.08</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+       .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+       .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+       .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .tab-link:hover {
+            color: #3498db;
+        }
+       .tab-link.active {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+        }
+       .test-content {
+            display: none;
+        }
+       .test-content.active {
+            display: block;
+        }
+       .question {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-left: 3px solid #e0e0e0;
+            transition: border-left-color 0.3s;
+        }
+        .question:hover {
+            border-left-color: #3498db;
+        }
+       .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+            color: #555;
+        }
+        .sentence {
+            margin-bottom: 5px;
+        }
+        .transformation-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 15px;
+            width: 280px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+       .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+       .button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            margin: 5px;
+        }
+        .button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+       .button:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+       .button.reset {
+            background-color: #e74c3c;
+        }
+       .button.reset:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+        .button.save {
+            background-color: #27ae60;
+        }
+        .button.save:hover:not(:disabled) {
+            background-color: #229954;
+        }
+        .button.print {
+            background-color: #8e44ad;
+        }
+        .button.print:hover:not(:disabled) {
+            background-color: #7d3c98;
+        }
+       .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #eaf5ff;
+            border-radius: 5px;
+            border: 1px solid #bddef6;
+        }
+        /* Accordion Styles */
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .accordion-button {
+            width: 100%;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            cursor: pointer;
+            padding: 15px 20px;
+            text-align: left;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .accordion-button:hover {
+            background-color: #e9ecef;
+        }
+        .accordion-content {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .accordion-content.active {
+            padding: 15px 20px;
+        }
+        .accordion-content ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .accordion-content li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>English Interactive Tests</h1>
+        <h2 id="test-set-name"></h2>
+        <p id="test-instructions" class="text-center italic text-gray-600 mb-6"></p>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="showTab('test1')">Art</button>
+            <button class="tab-link" onclick="showTab('test2')">Natural World</button>
+            <button class="tab-link" onclick="showTab('test3')">Communication</button>
+            <button class="tab-link" onclick="showTab('test4')">Mind & Body</button>
+            <button class="tab-link" onclick="showTab('test5')">Modern Life</button>
+            <button class="tab-link" onclick="showTab('answers')">Answers</button>
+        </div>
+
+        <div id="test1" class="test-content active"></div>
+        <div id="test2" class="test-content"></div>
+        <div id="test3" class="test-content"></div>
+        <div id="test4" class="test-content"></div>
+        <div id="test5" class="test-content"></div>
+        <div id="answers" class="test-content">
+            <h2 class="text-2xl font-bold mb-4 text-center">Correct Answers</h2>
+            <div id="accordion-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let answersUnlocked = false;
+        const testTimestamps = {};
+        const testSetName = "KWT_2308";
+
+        const testsData = {
+            test1: {
+                title: "Art & Creativity",
+                questions: [
+                    { first: "The artist's style is very different from traditional art.", given: "COMMON", second: "The artist's style has ___ traditional art.", answer: "little in common with", fullAnswer: "The artist's style has little in common with traditional art." },
+                    { first: "I regret not visiting the art gallery.", given: "WISH", second: "I ___ the art gallery.", answer: "wish I had visited", fullAnswer: "I wish I had visited the art gallery." },
+                    { first: "The sculpture was so impressive that it won an award.", given: "SUCH", second: "It was ___ that it won an award.", answer: "such an impressive sculpture", fullAnswer: "It was such an impressive sculpture that it won an award." },
+                    { first: "It's possible the painting is a forgery.", given: "MIGHT", second: "The painting ___ a forgery.", answer: "might be", fullAnswer: "The painting might be a forgery." },
+                    { first: "The new exhibition is said to be controversial.", given: "TO", second: "The new exhibition is ___ controversial.", answer: "said to be", fullAnswer: "The new exhibition is said to be controversial." },
+                    { first: "You must not touch the exhibits.", given: "ALLOWED", second: "You are ___ the exhibits.", answer: "not allowed to touch", fullAnswer: "You are not allowed to touch the exhibits." },
+                    { first: "He is not used to modern art.", given: "ACCUSTOMED", second: "He is not ___ modern art.", answer: "accustomed to", fullAnswer: "He is not accustomed to modern art." },
+                    { first: "The last time a famous painting was stolen was years ago.", given: "FOR", second: "A famous painting has ___ years.", answer: "not been stolen for", fullAnswer: "A famous painting has not been stolen for years." },
+                    { first: "I advise you to take a guided tour.", given: "WERE", second: "If I ___ take a guided tour.", answer: "were you, I would", fullAnswer: "If I were you, I would take a guided tour." },
+                    { first: "The portrait is being restored by an expert.", given: "IS", second: "An expert ___ the portrait.", answer: "is restoring", fullAnswer: "An expert is restoring the portrait." },
+                    { first: "She had difficulty choosing her favourite painting.", given: "IT", second: "She found ___ her favourite painting.", answer: "it difficult to choose", fullAnswer: "She found it difficult to choose her favourite painting." },
+                    { first: "The performance was not as captivating as I had hoped.", given: "LESS", second: "The performance was ___ I had hoped.", answer: "less captivating than", fullAnswer: "The performance was less captivating than I had hoped." },
+                    { first: "Despite being abstract, the painting was very emotional.", given: "OF", second: "In spite ___ abstract, the painting was very emotional.", answer: "of being", fullAnswer: "In spite of being abstract, the painting was very emotional." },
+                    { first: "The play is intended to make people think.", given: "AIM", second: "The play ___ people think.", answer: "aims to make", fullAnswer: "The play aims to make people think." },
+                    { first: "It is likely that the artist will become famous.", given: "PROBABLE", second: "It is ___ will become famous.", answer: "probable that the artist", fullAnswer: "It is probable that the artist will become famous." },
+                    { first: "He prefers classical music to pop music.", given: "RATHER", second: "He would ___ pop music.", answer: "rather listen to classical music than", fullAnswer: "He would rather listen to classical music than pop music." },
+                    { first: "It's not worth queuing for hours to see the exhibition.", given: "POINT", second: "There is ___ for hours to see the exhibition.", answer: "no point in queuing", fullAnswer: "There is no point in queuing for hours to see the exhibition." },
+                    { first: "The director is considered a genius.", given: "AS", second: "The director is regarded ___ a genius.", answer: "as", fullAnswer: "The director is regarded as a genius." },
+                    { first: "I'm sure the concert was a sell-out.", given: "HAVE", second: "The concert must ___ a sell-out.", answer: "have been", fullAnswer: "The concert must have been a sell-out." },
+                    { first: "The creativity of the artist is his greatest asset.", given: "STRENGTH", second: "The artist's ___ is his creativity.", answer: "greatest strength", fullAnswer: "The artist's greatest strength is his creativity." },
+                    { first: "She had to cancel her performance.", given: "OFF", second: "She had to ___ her performance.", answer: "call off", fullAnswer: "She had to call off her performance." },
+                    { first: "The poem was too difficult for me to understand.", given: "THAT", second: "The poem was ___ I couldn't understand it.", answer: "so difficult that", fullAnswer: "The poem was so difficult that I couldn't understand it." },
+                    { first: "The gallery's collection is its main attraction.", given: "FOR", second: "The gallery is best ___ its collection.", answer: "known for", fullAnswer: "The gallery is best known for its collection." },
+                    { first: "The musician is said to be very talented.", given: "REPUTATION", second: "The musician has a ___ very talented.", answer: "reputation for being", fullAnswer: "The musician has a reputation for being very talented." },
+                    { first: "She started her artistic journey as a child.", given: "SET", second: "She ___ on her artistic journey as a child.", answer: "set out", fullAnswer: "She set out on her artistic journey as a child." }
+                ]
+            },
+            test2: {
+                title: "The Natural World",
+                questions: [
+                    { first: "The documentary about whales was fascinating.", given: "FOUND", second: "I ___ fascinating.", answer: "found the documentary about whales", fullAnswer: "I found the documentary about whales fascinating." },
+                    { first: "I regret not going on the safari.", given: "WISH", second: "I ___ on the safari.", answer: "wish I had gone", fullAnswer: "I wish I had gone on the safari." },
+                    { first: "The storm was so strong that trees were uprooted.", given: "SUCH", second: "It was ___ that trees were uprooted.", answer: "such a strong storm", fullAnswer: "It was such a strong storm that trees were uprooted." },
+                    { first: "It's possible the animal is endangered.", given: "MIGHT", second: "The animal ___ endangered.", answer: "might be", fullAnswer: "The animal might be endangered." },
+                    { first: "The national park is said to be beautiful.", given: "TO", second: "The national park is ___ beautiful.", answer: "said to be", fullAnswer: "The national park is said to be beautiful." },
+                    { first: "You must not feed the animals.", given: "ALLOWED", second: "You are ___ the animals.", answer: "not allowed to feed", fullAnswer: "You are not allowed to feed the animals." },
+                    { first: "He is not used to hiking in the mountains.", given: "ACCUSTOMED", second: "He is not ___ in the mountains.", answer: "accustomed to hiking", fullAnswer: "He is not accustomed to hiking in the mountains." },
+                    { first: "The last time a rare bird was spotted here was last year.", given: "SINCE", second: "A rare bird has not ___ last year.", answer: "been spotted here since", fullAnswer: "A rare bird has not been spotted here since last year." },
+                    { first: "I advise you to wear proper hiking boots.", given: "WERE", second: "If I ___ wear proper hiking boots.", answer: "were you, I would", fullAnswer: "If I were you, I would wear proper hiking boots." },
+                    { first: "The forest is being protected by new laws.", given: "ARE", second: "New laws ___ the forest.", answer: "are protecting", fullAnswer: "New laws are protecting the forest." },
+                    { first: "She had difficulty identifying the plant.", given: "IT", second: "She found ___ the plant.", answer: "it difficult to identify", fullAnswer: "She found it difficult to identify the plant." },
+                    { first: "The desert is not as lifeless as people think.", given: "MORE", second: "The desert is ___ people think.", answer: "more full of life than", fullAnswer: "The desert is more full of life than people think." },
+                    { first: "Despite the cold, they went for a walk in the snow.", given: "OF", second: "In spite ___ cold, they went for a walk in the snow.", answer: "of it being", fullAnswer: "In spite of it being cold, they went for a walk in the snow." },
+                    { first: "The project is intended to restore the habitat.", given: "AIM", second: "The project ___ the habitat.", answer: "aims to restore", fullAnswer: "The project aims to restore the habitat." },
+                    { first: "It is likely that the species will recover.", given: "PROBABLE", second: "It is ___ will recover.", answer: "probable that the species", fullAnswer: "It is probable that the species will recover." },
+                    { first: "He prefers watching wildlife to going to the zoo.", given: "RATHER", second: "He would ___ go to the zoo.", answer: "rather watch wildlife than", fullAnswer: "He would rather watch wildlife than go to the zoo." },
+                    { first: "It's not worth trying to see the animals at midday.", given: "POINT", second: "There is ___ to see the animals at midday.", answer: "no point in trying", fullAnswer: "There is no point in trying to see the animals at midday." },
+                    { first: "The ocean is considered a mysterious place.", given: "AS", second: "The ocean is regarded ___ a mysterious place.", answer: "as", fullAnswer: "The ocean is regarded as a mysterious place." },
+                    { first: "I'm sure the guide knew the way.", given: "HAVE", second: "The guide must ___ the way.", answer: "have known", fullAnswer: "The guide must have known the way." },
+                    { first: "The beauty of the landscape is its main attraction.", given: "FOR", second: "The landscape is best ___ its beauty.", answer: "known for", fullAnswer: "The landscape is best known for its beauty." },
+                    { first: "She had to cut short her trip.", given: "SHORT", second: "She had to ___ her trip short.", answer: "cut", fullAnswer: "She had to cut her trip short." },
+                    { first: "The path was too narrow to walk side by side.", given: "ENOUGH", second: "The path was not ___ to walk side by side.", answer: "wide enough", fullAnswer: "The path was not wide enough to walk side by side." },
+                    { first: "The river's pollution level is alarming.", given: "ALARMINGLY", second: "The river is ___.", answer: "alarmingly polluted", fullAnswer: "The river is alarmingly polluted." },
+                    { first: "The conservation efforts are said to be successful.", given: "REPUTATION", second: "The conservation efforts have a ___ successful.", answer: "reputation for being", fullAnswer: "The conservation efforts have a reputation for being successful." },
+                    { first: "They started their trek at sunrise.", given: "OFF", second: "They ___ on their trek at sunrise.", answer: "set off", fullAnswer: "They set off on their trek at sunrise." }
+                ]
+            },
+            test3: {
+                title: "Communication",
+                questions: [
+                    { first: "She finds it difficult to get her point across.", given: "TROUBLE", second: "She ___ her point across.", answer: "has trouble getting", fullAnswer: "She has trouble getting her point across." },
+                    { first: "I regret saying that to him.", given: "WISH", second: "I ___ that to him.", answer: "wish I had not said", fullAnswer: "I wish I had not said that to him." },
+                    { first: "The speech was so boring that I nearly fell asleep.", given: "SUCH", second: "It was ___ that I nearly fell asleep.", answer: "such a boring speech", fullAnswer: "It was such a boring speech that I nearly fell asleep." },
+                    { first: "It's possible she didn't receive your message.", given: "MAY", second: "She ___ your message.", answer: "may not have received", fullAnswer: "She may not have received your message." },
+                    { first: "He is said to be an excellent public speaker.", given: "TO", second: "He is ___ an excellent public speaker.", answer: "said to be", fullAnswer: "He is said to be an excellent public speaker." },
+                    { first: "You must not interrupt when someone else is talking.", given: "AVOID", second: "You must ___ when someone else is talking.", answer: "avoid interrupting", fullAnswer: "You must avoid interrupting when someone else is talking." },
+                    { first: "He is not used to giving presentations.", given: "ACCUSTOMED", second: "He is not ___ presentations.", answer: "accustomed to giving", fullAnswer: "He is not accustomed to giving presentations." },
+                    { first: "The last time we had a proper conversation was a long time ago.", given: "FOR", second: "We have not ___ a long time.", answer: "had a proper conversation for", fullAnswer: "We have not had a proper conversation for a long time." },
+                    { first: "I advise you to choose your words carefully.", given: "WERE", second: "If I ___ choose your words carefully.", answer: "were you, I would", fullAnswer: "If I were you, I would choose your words carefully." },
+                    { first: "The news is being broadcast on all channels.", given: "ARE", second: "They ___ the news on all channels.", answer: "are broadcasting", fullAnswer: "They are broadcasting the news on all channels." },
+                    { first: "She had difficulty understanding his accent.", given: "IT", second: "She found ___ his accent.", answer: "it difficult to understand", fullAnswer: "She found it difficult to understand his accent." },
+                    { first: "His explanation was not as clear as it could have been.", given: "LESS", second: "His explanation was ___ it could have been.", answer: "less clear than", fullAnswer: "His explanation was less clear than it could have been." },
+                    { first: "Despite the language barrier, they became friends.", given: "OF", second: "In spite ___ language barrier, they became friends.", answer: "of the", fullAnswer: "In spite of the language barrier, they became friends." },
+                    { first: "The meeting is intended to improve communication.", given: "AIM", second: "The meeting ___ communication.", answer: "aims to improve", fullAnswer: "The meeting aims to improve communication." },
+                    { first: "It is likely that the message was misinterpreted.", given: "PROBABLE", second: "It is ___ was misinterpreted.", answer: "probable that the message", fullAnswer: "It is probable that the message was misinterpreted." },
+                    { first: "He prefers face-to-face conversations to phone calls.", given: "RATHER", second: "He would ___ have a phone call.", answer: "rather have a face-to-face conversation than", fullAnswer: "He would rather have a face-to-face conversation than have a phone call." },
+                    { first: "It's not worth arguing about politics.", given: "POINT", second: "There is ___ about politics.", answer: "no point in arguing", fullAnswer: "There is no point in arguing about politics." },
+                    { first: "She is considered an expert in non-verbal communication.", given: "AS", second: "She is regarded ___ an expert in non-verbal communication.", answer: "as", fullAnswer: "She is regarded as an expert in non-verbal communication." },
+                    { first: "I'm sure he didn't understand the instructions.", given: "HAVE", second: "He can't ___ the instructions.", answer: "have understood", fullAnswer: "He can't have understood the instructions." },
+                    { first: "The clarity of his speech is his strong point.", given: "STRENGTH", second: "His ___ is the clarity of his speech.", answer: "strength", fullAnswer: "His strength is the clarity of his speech." },
+                    { first: "He had to cancel the debate.", given: "OFF", second: "The debate had to ___.", answer: "be called off", fullAnswer: "The debate had to be called off." },
+                    { first: "The room was too noisy to have a conversation.", given: "ENOUGH", second: "The room was not ___ to have a conversation.", answer: "quiet enough", fullAnswer: "The room was not quiet enough to have a conversation." },
+                    { first: "Her ability to listen is what makes her a great friend.", given: "MAKES", second: "What ___ a great friend is her ability to listen.", answer: "makes her", fullAnswer: "What makes her a great friend is her ability to listen." },
+                    { first: "The politician is said to be very persuasive.", given: "REPUTATION", second: "The politician has a ___ very persuasive.", answer: "reputation for being", fullAnswer: "The politician has a reputation for being very persuasive." },
+                    { first: "She brought up an interesting topic.", given: "UP", second: "An interesting topic ___ by her.", answer: "was brought up", fullAnswer: "An interesting topic was brought up by her." }
+                ]
+            },
+            test4: {
+                title: "Mind & Body",
+                questions: [
+                    { first: "He finds it hard to relax after work.", given: "DIFFICULTY", second: "He ___ after work.", answer: "has difficulty relaxing", fullAnswer: "He has difficulty relaxing after work." },
+                    { first: "I regret not getting enough sleep.", given: "WISH", second: "I ___ enough sleep.", answer: "wish I had got", fullAnswer: "I wish I had got enough sleep." },
+                    { first: "The yoga class was so relaxing that I fell asleep.", given: "SUCH", second: "It was ___ that I fell asleep.", answer: "such a relaxing yoga class", fullAnswer: "It was such a relaxing yoga class that I fell asleep." },
+                    { first: "It's possible that stress is causing his headaches.", given: "MIGHT", second: "His headaches ___ by stress.", answer: "might be caused", fullAnswer: "His headaches might be caused by stress." },
+                    { first: "Meditation is said to improve focus.", given: "TO", second: "Meditation is ___ focus.", answer: "said to improve", fullAnswer: "Meditation is said to improve focus." },
+                    { first: "You must not ignore your mental health.", given: "ATTENTION", second: "You must ___ your mental health.", answer: "pay attention to", fullAnswer: "You must pay attention to your mental health." },
+                    { first: "She is not used to waking up so early.", given: "ACCUSTOMED", second: "She is not ___ up so early.", answer: "accustomed to waking", fullAnswer: "She is not accustomed to waking up so early." },
+                    { first: "The last time he felt this energetic was a long time ago.", given: "FOR", second: "He has not ___ a long time.", answer: "felt this energetic for", fullAnswer: "He has not felt this energetic for a long time." },
+                    { first: "I advise you to try mindfulness.", given: "WERE", second: "If I ___ try mindfulness.", answer: "were you, I would", fullAnswer: "If I were you, I would try mindfulness." },
+                    { first: "A healthy diet is being promoted by the campaign.", given: "IS", second: "The campaign ___ a healthy diet.", answer: "is promoting", fullAnswer: "The campaign is promoting a healthy diet." },
+                    { first: "She had difficulty concentrating on her work.", given: "IT", second: "She found ___ on her work.", answer: "it difficult to concentrate", fullAnswer: "She found it difficult to concentrate on her work." },
+                    { first: "His physical fitness is not as good as it used to be.", given: "LESS", second: "He is ___ he used to be.", answer: "less physically fit than", fullAnswer: "He is less physically fit than he used to be." },
+                    { first: "Despite being tired, she went for a run.", given: "OF", second: "In spite ___ tired, she went for a run.", answer: "of being", fullAnswer: "In spite of being tired, she went for a run." },
+                    { first: "The workshop is intended to reduce anxiety.", given: "AIM", second: "The workshop ___ anxiety.", answer: "aims to reduce", fullAnswer: "The workshop aims to reduce anxiety." },
+                    { first: "It is likely that he will feel better soon.", given: "PROBABLE", second: "It is ___ better soon.", answer: "probable that he will feel", fullAnswer: "It is probable that he will feel better soon." },
+                    { first: "He prefers exercising outdoors to going to a gym.", given: "RATHER", second: "He would ___ go to a gym.", answer: "rather exercise outdoors than", fullAnswer: "He would rather exercise outdoors than go to a gym." },
+                    { first: "It's not worth getting stressed about the exam.", given: "POINT", second: "There is ___ about the exam.", answer: "no point in getting stressed", fullAnswer: "There is no point in getting stressed about the exam." },
+                    { first: "A positive mindset is considered very important.", given: "AS", second: "A positive mindset is regarded ___ very important.", answer: "as being", fullAnswer: "A positive mindset is regarded as being very important." },
+                    { first: "I'm sure she has forgotten her worries.", given: "HAVE", second: "She must ___ her worries.", answer: "have forgotten", fullAnswer: "She must have forgotten her worries." },
+                    { first: "The balance between work and life is crucial.", given: "STRIKE", second: "It is crucial ___ between work and life.", answer: "to strike a balance", fullAnswer: "It is crucial to strike a balance between work and life." },
+                    { first: "He had to give up caffeine.", given: "UP", second: "He had to ___ caffeine.", answer: "give up", fullAnswer: "He had to give up caffeine." },
+                    { first: "The problem was too complex for him to solve.", given: "THAT", second: "The problem was ___ he couldn't solve it.", answer: "so complex that", fullAnswer: "The problem was so complex that he couldn't solve it." },
+                    { first: "Her ability to stay calm is her best quality.", given: "MAKES", second: "What ___ is her ability to stay calm.", answer: "makes her special", fullAnswer: "What makes her special is her ability to stay calm." },
+                    { first: "The therapist is said to be very effective.", given: "REPUTATION", second: "The therapist has a ___ very effective.", answer: "reputation for being", fullAnswer: "The therapist has a reputation for being very effective." },
+                    { first: "She started her wellness journey last year.", given: "OFF", second: "She ___ on her wellness journey last year.", answer: "set off", fullAnswer: "She set off on her wellness journey last year." }
+                ]
+            },
+            test5: {
+                title: "Modern Life",
+                questions: [
+                    { first: "I haven't been to a live concert for ages.", given: "SINCE", second: "It's ___ a live concert.", answer: "ages since I went to", fullAnswer: "It's ages since I went to a live concert." },
+                    { first: "He finds it hard to keep up with the latest trends.", given: "DIFFICULTY", second: "He ___ up with the latest trends.", answer: "has difficulty keeping", fullAnswer: "He has difficulty keeping up with the latest trends." },
+                    { first: "I regret spending so much time on social media.", given: "WISH", second: "I ___ so much time on social media.", answer: "wish I had not spent", fullAnswer: "I wish I had not spent so much time on social media." },
+                    { first: "The city is so crowded that it's stressful.", given: "SUCH", second: "It is ___ that it's stressful.", answer: "such a crowded city", fullAnswer: "It is such a crowded city that it's stressful." },
+                    { first: "It's possible that online shopping will replace traditional shops.", given: "MAY", second: "Online shopping ___ traditional shops.", answer: "may replace", fullAnswer: "Online shopping may replace traditional shops." },
+                    { first: "He is considered to be a fashion icon.", given: "AS", second: "He is regarded ___ a fashion icon.", answer: "as", fullAnswer: "He is regarded as a fashion icon." },
+                    { first: "You should not believe everything you see online.", given: "TAKE", second: "You should ___ with a pinch of salt.", answer: "take what you see online", fullAnswer: "You should take what you see online with a pinch of salt." },
+                    { first: "Life is not as simple as it was in the past.", given: "LESS", second: "Life is ___ it was in the past.", answer: "less simple than", fullAnswer: "Life is less simple than it was in the past." },
+                    { first: "I advise you to reduce your screen time.", given: "WERE", second: "If I ___ reduce your screen time.", answer: "were you, I would", fullAnswer: "If I were you, I would reduce your screen time." },
+                    { first: "He is not used to the fast pace of city life.", given: "ACCUSTOMED", second: "He is not ___ the fast pace of city life.", answer: "accustomed to", fullAnswer: "He is not accustomed to the fast pace of city life." },
+                    { first: "I'm sure she has heard the news.", given: "HAVE", second: "She must ___ the news.", answer: "have heard", fullAnswer: "She must have heard the news." },
+                    { first: "She finally succeeded in finding a work-life balance.", given: "MANAGED", second: "She finally ___ a work-life balance.", answer: "managed to find", fullAnswer: "She finally managed to find a work-life balance." },
+                    { first: "It's not worth getting into debt for a new phone.", given: "POINT", second: "There is ___ into debt for a new phone.", answer: "no point in getting", fullAnswer: "There is no point in getting into debt for a new phone." },
+                    { first: "The convenience of online shopping makes it popular.", given: "DUE", second: "The popularity of online shopping is ___ its convenience.", answer: "due to", fullAnswer: "The popularity of online shopping is due to its convenience." },
+                    { first: "Remote working is said to be the new normal.", given: "TO", second: "Remote working is ___ the new normal.", answer: "said to be", fullAnswer: "Remote working is said to be the new normal." },
+                    { first: "She has a reputation for being a trendsetter.", given: "KNOWN", second: "She is ___ a trendsetter.", answer: "known to be", fullAnswer: "She is known to be a trendsetter." },
+                    { first: "I prefer living in the city to the countryside.", given: "RATHER", second: "I would ___ in the countryside.", answer: "rather live in the city than", fullAnswer: "I would rather live in the city than in the countryside." },
+                    { first: "He takes after his father's love for gadgets.", given: "LIKE", second: "He loves ___ his father.", answer: "gadgets like", fullAnswer: "He loves gadgets like his father." },
+                    { first: "You must not ignore the importance of privacy.", given: "ATTENTION", second: "You must ___ the importance of privacy.", answer: "pay attention to", fullAnswer: "You must pay attention to the importance of privacy." },
+                    { first: "Despite the benefits, technology has its downsides.", given: "OF", second: "In spite ___ benefits, technology has its downsides.", answer: "of the", fullAnswer: "In spite of the benefits, technology has its downsides." },
+                    { first: "The traffic was too heavy to get there on time.", given: "ENOUGH", second: "The traffic was not ___ to get there on time.", answer: "light enough", fullAnswer: "The traffic was not light enough to get there on time." },
+                    { first: "They had to cancel their plans.", given: "OFF", second: "Their plans had to ___.", answer: "be called off", fullAnswer: "Their plans had to be called off." },
+                    { first: "He is unlikely to change his lifestyle.", given: "PROBABLY", second: "He ___ his lifestyle.", answer: "will probably not change", fullAnswer: "He will probably not change his lifestyle." },
+                    { first: "She was brought up in a big city.", given: "RAISED", second: "She was ___ in a big city.", answer: "raised", fullAnswer: "She was raised in a big city." },
+                    { first: "The constant noise is the worst thing about living here.", given: "PART", second: "The ___ living here is the constant noise.", answer: "worst part about", fullAnswer: "The worst part about living here is the constant noise." }
+                ]
+            }
+        };
+
+        function generateQuestions() {
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const container = document.getElementById(testKey);
+                const data = testsData[testKey];
+                
+                let html = `<h2>${data.title}</h2>`;
+                html += `<form id="form-${testKey}" oninput="updateCheckButtonState(${testNum})">`;
+                
+                data.questions.forEach((q, index) => {
+                    const parts = q.second.split('___');
+                    html += `
+                        <div class="question">
+                            <div class="question-number">${index + 1}.</div>
+                            <div class="sentence">${q.first} (<strong>${q.given}</strong>)</div>
+                            <div class="transformation-wrapper">
+                                <span>${parts[0]}</span>
+                                <input type="text" id="q-${testNum}-${index + 1}" autocomplete="off">
+                                <span>${parts[1]}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</form>`;
+                html += `
+                    <div class="controls">
+                        <button type="button" class="button check" id="check-btn-${testKey}" onclick="calculateScore(${testNum})" disabled>Check Score</button>
+                        <button type="button" class="button save" onclick="saveProgress(${testNum})">Save Progress</button>
+                        <button type="button" class="button reset" onclick="resetTest(${testNum})">Reset</button>
+                        <button type="button" class="button print" id="print-btn-${testKey}" onclick="printResults(${testNum})" disabled>Print Results</button>
+                    </div>
+                    <div id="result-${testKey}" class="result" style="display:none;"></div>
+                `;
+                container.innerHTML = html;
+            }
+        }
+
+        function generateAnswers() {
+            const accordionContainer = document.getElementById('accordion-container');
+            let html = '';
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const data = testsData[testKey];
+                html += `
+                    <div class="accordion-item">
+                        <button class="accordion-button">${data.title}</button>
+                        <div class="accordion-content">
+                            <ol>
+                                ${data.questions.map(q => `<li>${q.fullAnswer}</li>`).join('')}
+                            </ol>
+                        </div>
+                    </div>
+                `;
+            }
+            accordionContainer.innerHTML = html;
+        }
+        
+        function updateCheckButtonState(testNumber) {
+            const testKey = `test${testNumber}`;
+            const form = document.getElementById(`form-${testKey}`);
+            const inputs = form.querySelectorAll('input[type="text"]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim().length >= 4) {
+                    validCount++;
+                }
+            });
+            const checkButton = document.getElementById(`check-btn-${testKey}`);
+            checkButton.disabled = validCount < 22;
+        }
+
+        function setupAccordion() {
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const isActive = content.classList.contains('active');
+                    
+                    document.querySelectorAll('.accordion-content').forEach(c => {
+                        c.classList.remove('active');
+                        c.style.maxHeight = null;
+                        c.style.padding = "0 20px";
+                    });
+
+                    if (!isActive) {
+                        content.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+
+        function showTab(tabId) {
+            if (tabId === 'answers' && !answersUnlocked) {
+                const password = prompt("Please enter the password to view answers:");
+                if (password === "Cl@r@") {
+                    answersUnlocked = true;
+                } else {
+                    if (password !== null) { 
+                        alert("Incorrect password!");
+                    }
+                    return; 
+                }
+            }
+
+            if (!testTimestamps[tabId] && tabId.startsWith('test')) {
+                testTimestamps[tabId] = { start: new Date() };
+            }
+
+            const contents = document.querySelectorAll('.test-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-link[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function calculateScore(testNumber) {
+            const testKey = `test${testNumber}`;
+            const correctAnswers = testsData[testKey].questions.map(q => q.answer);
+            let score = 0;
+            
+            for (let i = 0; i < correctAnswers.length; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i + 1}`);
+                if (!inputElement) continue;
+
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const possibleAnswers = correctAnswers[i].split('/');
+                
+                if (possibleAnswers.includes(userAnswer)) {
+                    score++;
+                    inputElement.style.borderColor = '#2ecc71';
+                } else {
+                    inputElement.style.borderColor = '#e74c3c';
+                }
+            }
+            
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            resultDiv.innerHTML = `Your Score: ${score} / ${correctAnswers.length}`;
+            resultDiv.style.display = 'block';
+
+            const printButton = document.getElementById(`print-btn-${testKey}`);
+            if (printButton) {
+                printButton.disabled = false;
+            }
+        }
+        
+        function printStyledText(doc, parts, x, y, maxWidth) {
+            let currentX = x;
+            let currentY = y;
+            
+            parts.forEach(part => {
+                doc.setFont('Helvetica', part.bold ? 'bold' : 'normal');
+                const text = part.text;
+                const words = text.split(/(\s+)/);
+
+                words.forEach(word => {
+                    if (word.length === 0) return;
+                    const wordWidth = doc.getTextWidth(word);
+                    if (currentX + wordWidth > x + maxWidth && !/^\s+$/.test(word)) {
+                        currentY += 5;
+                        currentX = x;
+                    }
+                    doc.text(word, currentX, currentY);
+                    currentX += wordWidth;
+                });
+            });
+            return currentY;
+        }
+
+        function printResults(testNumber) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFont('Helvetica', 'normal');
+
+            const testKey = `test${testNumber}`;
+            const data = testsData[testKey];
+            const questionsCount = data.questions.length;
+            let score = 0;
+
+            for (let i = 0; i < questionsCount; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i + 1}`);
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = data.questions[i].answer.toLowerCase();
+                if (correctAnswer.split('/').includes(userAnswer)) {
+                    score++;
+                }
+            }
+            
+            const grade = 1 + (score / questionsCount) * 9;
+
+            let yPosition = 20;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 20;
+            const maxWidth = doc.internal.pageSize.width - margin * 2;
+
+            doc.setFontSize(16);
+            doc.setFont('Helvetica', 'bold');
+            doc.text(`Results - ${data.title}`, 105, yPosition, { align: 'center' });
+            yPosition += 10;
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(12);
+            doc.text(`Score: ${score} / ${questionsCount}`, 105, yPosition, { align: 'center' });
+            yPosition += 7;
+            
+            doc.setTextColor(255, 0, 0);
+            doc.text(`Grade: ${grade.toFixed(2)}`, 105, yPosition, { align: 'center' });
+            doc.setTextColor(0, 0, 0);
+            
+            yPosition += 10;
+            doc.line(margin, yPosition, doc.internal.pageSize.width - margin, yPosition);
+            yPosition += 10;
+
+            doc.setFontSize(10);
+            for (let i = 0; i < questionsCount; i++) {
+                if (yPosition > pageHeight - margin - 30) { 
+                    doc.addPage();
+                    yPosition = margin;
+                }
+
+                const question = data.questions[i];
+                const userInput = document.getElementById(`q-${testNumber}-${i + 1}`).value.trim();
+
+                doc.setFont('Helvetica', 'bold');
+                const questionLines = doc.splitTextToSize(`${i + 1}. ${question.first} (${question.given})`, maxWidth);
+                doc.text(questionLines, margin, yPosition);
+                yPosition += (questionLines.length * 5) + 3;
+                
+                doc.setFont('Helvetica', 'normal');
+                const userInputLines = doc.splitTextToSize(`Your Answer: ${userInput || '[Not answered]'}`, maxWidth - 5);
+                doc.text(userInputLines, margin + 5, yPosition);
+                yPosition += (userInputLines.length * 5) + 3;
+
+                const correctAnswerLines = doc.splitTextToSize(`Correct Answer: ${question.answer}`, maxWidth - 5);
+                doc.text(correctAnswerLines, margin + 5, yPosition);
+                yPosition += (correctAnswerLines.length * 5) + 3;
+
+                const fullSentence = question.fullAnswer;
+                const answerPart = question.answer;
+                const startIndex = fullSentence.toLowerCase().indexOf(answerPart.toLowerCase());
+                
+                let textParts;
+                if (startIndex !== -1) {
+                    const part1 = fullSentence.substring(0, startIndex);
+                    const boldPart = fullSentence.substring(startIndex, startIndex + answerPart.length);
+                    const part2 = fullSentence.substring(startIndex + answerPart.length);
+                    textParts = [
+                        { text: 'Full Sentence: ', bold: false },
+                        { text: part1, bold: false },
+                        { text: boldPart, bold: true },
+                        { text: part2, bold: false }
+                    ];
+                } else {
+                    textParts = [{ text: `Full Sentence: ${fullSentence}`, bold: false }];
+                }
+                
+                yPosition = printStyledText(doc, textParts, margin + 5, yPosition, maxWidth - 5);
+                yPosition += 8;
+            }
+
+            const finishTime = new Date();
+            const startTime = testTimestamps[testKey] ? testTimestamps[testKey].start : new Date();
+            
+            doc.setTextColor(255, 255, 255);
+            const keyText1 = `${testSetName} - Test started at: ${startTime.toLocaleString('en-GB')}`;
+            const keyText2 = `${testSetName} - Test finished at: ${finishTime.toLocaleString('en-GB')}`;
+            doc.text(keyText1, margin, yPosition > pageHeight - margin - 15 ? (doc.addPage(), margin) : yPosition + 10);
+            doc.text(keyText2, margin, yPosition > pageHeight - margin - 15 ? margin + 5 : yPosition + 15);
+
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const testName = data.title.split('&')[0].trim().replace(/\s/g, '-');
+            const fileName = `${testSetName}-${testName}_${hours}${day}${minutes}.pdf`;
+
+            doc.save(fileName);
+        }
+
+        function saveProgress(testNumber) {
+            const testKey = `test${testNumber}`;
+            const answers = {};
+            const questionsCount = testsData[testKey].questions.length;
+
+            for (let i = 1; i <= questionsCount; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i}`);
+                if (inputElement) {
+                    answers[`q-${testNumber}-${i}`] = inputElement.value;
+                }
+            }
+
+            localStorage.setItem(`testProgress_${testKey}`, JSON.stringify(answers));
+            
+            const saveButton = document.querySelector(`#${testKey} .button.save`);
+            if(saveButton) {
+                const originalText = "Save Progress";
+                saveButton.textContent = 'Saved!';
+                saveButton.style.backgroundColor = '#229954';
+                setTimeout(() => {
+                    saveButton.textContent = originalText;
+                    saveButton.style.backgroundColor = '#27ae60';
+                }, 2000);
+            }
+        }
+
+        function loadProgress() {
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const savedProgress = localStorage.getItem(`testProgress_${testKey}`);
+
+                if (savedProgress) {
+                    const answers = JSON.parse(savedProgress);
+                    for (const inputId in answers) {
+                        const inputElement = document.getElementById(inputId);
+                        if (inputElement) {
+                            inputElement.value = answers[inputId];
+                        }
+                    }
+                }
+                updateCheckButtonState(testNum);
+            }
+        }
+
+        function resetTest(testNumber) {
+            const testKey = `test${testNumber}`;
+            const form = document.getElementById(`form-${testKey}`);
+            if (form) {
+                form.reset();
+                const inputs = form.querySelectorAll('input[type="text"]');
+                inputs.forEach(input => {
+                    input.style.borderColor = '#ccc';
+                });
+            }
+
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            if (resultDiv) {
+                resultDiv.style.display = 'none';
+            }
+            
+            const printButton = document.getElementById(`print-btn-${testKey}`);
+            if (printButton) {
+                printButton.disabled = true;
+            }
+            
+            const checkButton = document.getElementById(`check-btn-${testKey}`);
+            if (checkButton) {
+                checkButton.disabled = true;
+            }
+            
+            localStorage.removeItem(`testProgress_${testKey}`);
+        }
+
+        window.onload = () => {
+            document.getElementById('test-set-name').textContent = testSetName;
+            document.getElementById('test-set-name').style.color = '#2980b9';
+            document.getElementById('test-instructions').textContent = 'For each question, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given.';
+            
+            generateQuestions();
+            generateAnswers();
+            setupAccordion();
+            loadProgress();
+            showTab('test1');
+        };
+    </script>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+                return false;
+            }
+        };
+    </script>
+
+</body>
+</html>
