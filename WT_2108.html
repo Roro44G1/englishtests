@@ -1,1 +1,762 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WT-21.08</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+       .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+       .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+       .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .tab-link:hover {
+            color: #3498db;
+        }
+       .tab-link.active {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+        }
+       .test-content {
+            display: none;
+        }
+       .test-content.active {
+            display: block;
+        }
+       .question {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-left: 3px solid #e0e0e0;
+            transition: border-left-color 0.3s;
+        }
+        .question:hover {
+            border-left-color: #3498db;
+        }
+       .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+            color: #555;
+        }
+        .sentence-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 15px;
+            width: 200px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+       .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+       .button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            margin: 5px;
+        }
+        .button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+       .button:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+       .button.reset {
+            background-color: #e74c3c;
+        }
+       .button.reset:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+        .button.save {
+            background-color: #27ae60;
+        }
+        .button.save:hover:not(:disabled) {
+            background-color: #229954;
+        }
+        .button.print {
+            background-color: #8e44ad;
+        }
+        .button.print:hover:not(:disabled) {
+            background-color: #7d3c98;
+        }
+       .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #eaf5ff;
+            border-radius: 5px;
+            border: 1px solid #bddef6;
+        }
+        /* Accordion Styles */
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .accordion-button {
+            width: 100%;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            cursor: pointer;
+            padding: 15px 20px;
+            text-align: left;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .accordion-button:hover {
+            background-color: #e9ecef;
+        }
+        .accordion-content {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .accordion-content.active {
+            padding: 15px 20px;
+        }
+        .accordion-content ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .accordion-content li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="container">
+        <h1>English Interactive Tests</h1>
+        <h2 id="test-set-name"></h2>
+        <p id="test-instructions" class="text-center italic text-gray-600 mb-6"></p>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="showTab('test1')">Education</button>
+            <button class="tab-link" onclick="showTab('test2')">Business</button>
+            <button class="tab-link" onclick="showTab('test3')">History</button>
+            <button class="tab-link" onclick="showTab('test4')">Media</button>
+            <button class="tab-link" onclick="showTab('test5')">Health</button>
+            <button class="tab-link" onclick="showTab('answers')">Answers</button>
+        </div>
+
+        <div id="test1" class="test-content active"></div>
+        <div id="test2" class="test-content"></div>
+        <div id="test3" class="test-content"></div>
+        <div id="test4" class="test-content"></div>
+        <div id="test5" class="test-content"></div>
+        <div id="answers" class="test-content">
+            <h2 class="text-2xl font-bold mb-4 text-center">Correct Answers</h2>
+            <div id="accordion-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let answersUnlocked = false;
+        const testTimestamps = {};
+        const testSetName = "WT_2108";
+
+        const testsData = {
+            test1: {
+                title: "Education & Learning",
+                questions: [
+                    { sentence: "The ___ of the new curriculum was a major undertaking. (DEVELOP)", answer: "development" },
+                    { sentence: "She is a very ___ and dedicated teacher. (CREATE)", answer: "creative" },
+                    { sentence: "The ___ of the new school was a community effort. (ESTABLISH)", answer: "establishment" },
+                    { sentence: "He is a very ___ and knowledgeable professor. (RESPECT)", answer: "respected" },
+                    { sentence: "The ___ of the new library was a positive step. (EXPAND)", answer: "expansion" },
+                    { sentence: "She is a very ___ and successful student. (AMBITION)", answer: "ambitious" },
+                    { sentence: "The ___ of the new course was a long process. (PREPARE)", answer: "preparation" },
+                    { sentence: "He is a very ___ and inspiring mentor. (MOTIVATE)", answer: "motivational" },
+                    { sentence: "The ___ of the new exam system was a challenge. (IMPLEMENT)", answer: "implementation" },
+                    { sentence: "She is a very ___ and articulate speaker. (PERSUADE)", answer: "persuasive" },
+                    { sentence: "The ___ of the new scholarship program was a great success. (INTRODUCE)", answer: "introduction" },
+                    { sentence: "He is a very ___ and well-read individual. (EDUCATE)", answer: "educated" },
+                    { sentence: "The ___ of the new learning platform was a team effort. (CREATE)", answer: "creation" },
+                    { sentence: "She is a very ___ and supportive tutor. (SUPPORT)", answer: "supportive" },
+                    { sentence: "The ___ of the new educational policy was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "He is a very ___ and disciplined student. (DISCIPLINE)", answer: "disciplined" },
+                    { sentence: "The ___ of the new research project was a major investment. (INVEST)", answer: "investment" },
+                    { sentence: "She is a very ___ and knowledgeable librarian. (KNOW)", answer: "knowledgeable" },
+                    { sentence: "The ___ of the new school was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "He is a very ___ and effective teacher. (EFFECT)", answer: "effective" },
+                    { sentence: "The ___ of the new curriculum was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "She is a very ___ and curious learner. (CURIOSITY)", answer: "curious" },
+                    { sentence: "The ___ of the new educational system was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "He is a very ___ and respected academic. (ACADEMY)", answer: "academic" },
+                    { sentence: "The ___ of the new school was a democratic process. (APPROVE)", answer: "approval" }
+                ]
+            },
+            test2: {
+                title: "Business & Commerce",
+                questions: [
+                    { sentence: "The ___ of the new company was a great success. (FOUND)", answer: "foundation" },
+                    { sentence: "She is a very ___ and successful businesswoman. (DRIVE)", answer: "driven" },
+                    { sentence: "The ___ of the new product was a major event. (ADVERTISE)", answer: "advertisement" },
+                    { sentence: "He is a very ___ and experienced negotiator. (NEGOTIATE)", answer: "negotiative" },
+                    { sentence: "The ___ of the new marketing strategy was a team effort. (DEVELOP)", answer: "development" },
+                    { sentence: "She is a very ___ and respected CEO. (POWER)", answer: "powerful" },
+                    { sentence: "The ___ of the new business was a major investment. (ACQUIRE)", answer: "acquisition" },
+                    { sentence: "He is a very ___ and successful entrepreneur. (INNOVATE)", answer: "innovative" },
+                    { sentence: "The ___ of the new company was a collaborative effort. (FORM)", answer: "formation" },
+                    { sentence: "She is a very ___ and dedicated manager. (MANAGE)", answer: "managerial" },
+                    { sentence: "The ___ of the new product line was a positive development. (EXPAND)", answer: "expansion" },
+                    { sentence: "He is a very ___ and respected consultant. (CONSULT)", answer: "consultative" },
+                    { sentence: "The ___ of the new business plan was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "She is a very ___ and successful investor. (INVEST)", answer: "investive" },
+                    { sentence: "The ___ of the new company was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "He is a very ___ and effective leader. (LEAD)", answer: "leading" },
+                    { sentence: "The ___ of the new marketing campaign was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "She is a very ___ and knowledgeable analyst. (ANALYSE)", answer: "analytical" },
+                    { sentence: "The ___ of the new business was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "He is a very ___ and respected executive. (EXECUTE)", answer: "executive" },
+                    { sentence: "The ___ of the new company was a democratic process. (APPROVE)", answer: "approval" },
+                    { sentence: "She is a very ___ and successful salesperson. (SALE)", answer: "sales-driven" },
+                    { sentence: "The ___ of the new product was a major challenge. (PRODUCE)", answer: "production" },
+                    { sentence: "He is a very ___ and respected partner. (PARTNER)", answer: "partner-like" },
+                    { sentence: "The ___ of the new business was a team effort. (CREATE)", answer: "creation" }
+                ]
+            },
+            test3: {
+                title: "History & Archaeology",
+                questions: [
+                    { sentence: "The ___ of the ancient city was a major archaeological find. (DISCOVER)", answer: "discovery" },
+                    { sentence: "He is a very ___ and respected historian. (HISTORY)", answer: "historical" },
+                    { sentence: "The ___ of the ancient artifacts was a delicate process. (PRESERVE)", answer: "preservation" },
+                    { sentence: "She is a very ___ and knowledgeable archaeologist. (ARCHAEOLOGY)", answer: "archaeological" },
+                    { sentence: "The ___ of the ancient civilization was a mystery. (DISAPPEAR)", answer: "disappearance" },
+                    { sentence: "He is a very ___ and influential figure in his field. (INFLUENCE)", answer: "influential" },
+                    { sentence: "The ___ of the ancient tomb was a major event. (EXCAVATE)", answer: "excavation" },
+                    { sentence: "She is a very ___ and respected expert on ancient Egypt. (EGYPT)", answer: "egyptological" },
+                    { sentence: "The ___ of the ancient script was a long and difficult process. (DECIPHER)", answer: "decipherment" },
+                    { sentence: "He is a very ___ and knowledgeable curator. (CURE)", answer: "curatorial" },
+                    { sentence: "The ___ of the ancient city was a gradual process. (DECLINE)", answer: "decline" },
+                    { sentence: "She is a very ___ and respected researcher. (RESEARCH)", answer: "research-oriented" },
+                    { sentence: "The ___ of the ancient artifacts was a team effort. (RESTORE)", answer: "restoration" },
+                    { sentence: "He is a very ___ and knowledgeable academic. (ACADEMY)", answer: "academic" },
+                    { sentence: "The ___ of the ancient city was a major investment. (RECONSTRUCT)", answer: "reconstruction" },
+                    { sentence: "She is a very ___ and respected scholar. (SCHOLAR)", answer: "scholarly" },
+                    { sentence: "The ___ of the ancient civilization was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "He is a very ___ and knowledgeable historian of science. (SCIENCE)", answer: "scientific" },
+                    { sentence: "The ___ of the ancient city was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "She is a very ___ and respected anthropologist. (ANTHROPOLOGY)", answer: "anthropological" },
+                    { sentence: "The ___ of the ancient artifacts was a major challenge. (DOCUMENT)", answer: "documentation" },
+                    { sentence: "He is a very ___ and knowledgeable classicist. (CLASSIC)", answer: "classical" },
+                    { sentence: "The ___ of the ancient city was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "She is a very ___ and respected numismatist. (NUMISMATICS)", answer: "numismatic" },
+                    { sentence: "The ___ of the ancient civilization was a democratic process. (APPROVE)", answer: "approval" }
+                ]
+            },
+            test4: {
+                title: "Media & Communication",
+                questions: [
+                    { sentence: "The ___ of the new TV channel was a major event. (LAUNCH)", answer: "launch" },
+                    { sentence: "She is a very ___ and respected journalist. (JOURNAL)", answer: "journalistic" },
+                    { sentence: "The ___ of the new documentary was a great success. (PRODUCE)", answer: "production" },
+                    { sentence: "He is a very ___ and influential broadcaster. (BROADCAST)", answer: "broadcasting" },
+                    { sentence: "The ___ of the new radio show was a team effort. (CREATE)", answer: "creation" },
+                    { sentence: "She is a very ___ and experienced editor. (EDIT)", answer: "editorial" },
+                    { sentence: "The ___ of the new magazine was a major undertaking. (PUBLISH)", answer: "publication" },
+                    { sentence: "He is a very ___ and respected news anchor. (ANCHOR)", answer: "anchoring" },
+                    { sentence: "The ___ of the new website was a collaborative effort. (DESIGN)", answer: "design" },
+                    { sentence: "She is a very ___ and successful presenter. (PRESENT)", answer: "presentational" },
+                    { sentence: "The ___ of the new TV series was a positive development. (EXPAND)", answer: "expansion" },
+                    { sentence: "He is a very ___ and respected correspondent. (CORRESPOND)", answer: "corresponding" },
+                    { sentence: "The ___ of the new media campaign was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "She is a very ___ and knowledgeable columnist. (COLUMN)", answer: "columnistic" },
+                    { sentence: "The ___ of the new news program was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "He is a very ___ and experienced cameraman. (CAMERA)", answer: "cameraman-like" },
+                    { sentence: "The ___ of the new media outlet was a major investment. (INVEST)", answer: "investment" },
+                    { sentence: "She is a very ___ and respected producer. (PRODUCE)", answer: "productive" },
+                    { sentence: "The ___ of the new media law was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "He is a very ___ and effective communicator. (COMMUNICATE)", answer: "communicative" },
+                    { sentence: "The ___ of the new media system was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "She is a very ___ and respected photographer. (PHOTO)", answer: "photographic" },
+                    { sentence: "The ___ of the new media policy was a democratic process. (APPROVE)", answer: "approval" },
+                    { sentence: "He is a very ___ and knowledgeable reporter. (REPORT)", answer: "reportorial" },
+                    { sentence: "The ___ of the new media company was a major achievement. (ACHIEVE)", answer: "achievement" }
+                ]
+            },
+            test5: {
+                title: "Health & Fitness",
+                questions: [
+                    { sentence: "The ___ of the new gym was a major event. (OPEN)", answer: "opening" },
+                    { sentence: "She is a very ___ and dedicated personal trainer. (PERSON)", answer: "personal" },
+                    { sentence: "The ___ of the new fitness app was a great success. (LAUNCH)", answer: "launch" },
+                    { sentence: "He is a very ___ and experienced nutritionist. (NUTRITION)", answer: "nutritional" },
+                    { sentence: "The ___ of the new wellness center was a team effort. (CREATE)", answer: "creation" },
+                    { sentence: "She is a very ___ and successful athlete. (ATHLETE)", answer: "athletic" },
+                    { sentence: "The ___ of the new health program was a major undertaking. (DEVELOP)", answer: "development" },
+                    { sentence: "He is a very ___ and respected physiotherapist. (PHYSICS)", answer: "physical" },
+                    { sentence: "The ___ of the new fitness class was a collaborative effort. (DESIGN)", answer: "design" },
+                    { sentence: "She is a very ___ and dedicated yoga instructor. (INSTRUCT)", answer: "instructive" },
+                    { sentence: "The ___ of the new health club was a positive development. (EXPAND)", answer: "expansion" },
+                    { sentence: "He is a very ___ and knowledgeable sports scientist. (SCIENCE)", answer: "scientific" },
+                    { sentence: "The ___ of the new wellness retreat was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "She is a very ___ and experienced dietitian. (DIET)", answer: "dietary" },
+                    { sentence: "The ___ of the new fitness challenge was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "He is a very ___ and respected chiropractor. (CHIROPRACTIC)", answer: "chiropractic" },
+                    { sentence: "The ___ of the new health spa was a major investment. (INVEST)", answer: "investment" },
+                    { sentence: "She is a very ___ and successful fitness model. (FIT)", answer: "fit" },
+                    { sentence: "The ___ of the new wellness program was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "He is a very ___ and effective coach. (COACH)", answer: "coaching" },
+                    { sentence: "The ___ of the new health system was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "She is a very ___ and respected massage therapist. (THERAPY)", answer: "therapeutic" },
+                    { sentence: "The ___ of the new fitness center was a democratic process. (APPROVE)", answer: "approval" },
+                    { sentence: "He is a very ___ and knowledgeable kinesiologist. (KINESIOLOGY)", answer: "kinesiological" },
+                    { sentence: "The ___ of the new health and wellness brand was a major achievement. (ACHIEVE)", answer: "achievement" }
+                ]
+            }
+        };
+
+        function generateQuestions() {
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const container = document.getElementById(testKey);
+                const data = testsData[testKey];
+                
+                let html = `<h2>${data.title}</h2>`;
+                html += `<form id="form-${testKey}" oninput="updateCheckButtonState(${testNum})">`;
+                
+                data.questions.forEach((q, index) => {
+                    const parts = q.sentence.split('___');
+                    html += `
+                        <div class="question">
+                            <div class="question-number">${index + 1}.</div>
+                            <div class="sentence-wrapper">
+                                <span>${parts[0]}</span>
+                                <input type="text" id="q-${testNum}-${index + 1}" autocomplete="off">
+                                <span>${parts[1]}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</form>`;
+                html += `
+                    <div class="controls">
+                        <button type="button" class="button check" id="check-btn-${testKey}" onclick="calculateScore(${testNum})" disabled>Check Score</button>
+                        <button type="button" class="button save" onclick="saveProgress(${testNum})">Save Progress</button>
+                        <button type="button" class="button reset" onclick="resetTest(${testNum})">Reset</button>
+                        <button type="button" class="button print" id="print-btn-${testKey}" onclick="printResults(${testNum})" disabled>Print Results</button>
+                    </div>
+                    <div id="result-${testKey}" class="result" style="display:none;"></div>
+                `;
+                container.innerHTML = html;
+            }
+        }
+
+        function generateAnswers() {
+            const accordionContainer = document.getElementById('accordion-container');
+            let html = '';
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const data = testsData[testKey];
+                
+                const fullAnswersHTML = data.questions.map(q => {
+                    const fullSentence = q.sentence.replace('___', `<strong>${q.answer}</strong>`);
+                    return `<li>${fullSentence}</li>`;
+                }).join('');
+
+                html += `
+                    <div class="accordion-item">
+                        <button class="accordion-button">${data.title}</button>
+                        <div class="accordion-content">
+                            <ol>
+                                ${fullAnswersHTML}
+                            </ol>
+                        </div>
+                    </div>
+                `;
+            }
+            accordionContainer.innerHTML = html;
+        }
+        
+        function updateCheckButtonState(testNumber) {
+            const testKey = `test${testNumber}`;
+            const form = document.getElementById(`form-${testKey}`);
+            const inputs = form.querySelectorAll('input[type="text"]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim().length >= 4) {
+                    validCount++;
+                }
+            });
+            const checkButton = document.getElementById(`check-btn-${testKey}`);
+            checkButton.disabled = validCount < 22;
+        }
+
+        function setupAccordion() {
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const isActive = content.classList.contains('active');
+                    
+                    document.querySelectorAll('.accordion-content').forEach(c => {
+                        c.classList.remove('active');
+                        c.style.maxHeight = null;
+                        c.style.padding = "0 20px";
+                    });
+
+                    if (!isActive) {
+                        content.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+
+        function showTab(tabId) {
+            if (tabId === 'answers' && !answersUnlocked) {
+                const password = prompt("Please enter the password to view answers:");
+                if (password === "Cl@r@") {
+                    answersUnlocked = true;
+                } else {
+                    if (password !== null) { 
+                        alert("Incorrect password!");
+                    }
+                    return; 
+                }
+            }
+
+            if (!testTimestamps[tabId] && tabId.startsWith('test')) {
+                testTimestamps[tabId] = { start: new Date() };
+            }
+
+            const contents = document.querySelectorAll('.test-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-link[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function calculateScore(testNumber) {
+            const testKey = `test${testNumber}`;
+            const correctAnswers = testsData[testKey].questions.map(q => q.answer);
+            let score = 0;
+            
+            for (let i = 0; i < correctAnswers.length; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i + 1}`);
+                if (!inputElement) continue;
+
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = correctAnswers[i].toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    inputElement.style.borderColor = '#2ecc71';
+                } else {
+                    inputElement.style.borderColor = '#e74c3c';
+                }
+            }
+            
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            resultDiv.innerHTML = `Your Score: ${score} / ${correctAnswers.length}`;
+            resultDiv.style.display = 'block';
+
+            const printButton = document.getElementById(`print-btn-${testKey}`);
+            if (printButton) {
+                printButton.disabled = false;
+            }
+        }
+        
+        function printStyledText(doc, parts, x, y, maxWidth) {
+            let currentX = x;
+            let currentY = y;
+            
+            parts.forEach(part => {
+                doc.setFont('Helvetica', part.bold ? 'bold' : 'normal');
+                const text = part.text;
+                const words = text.split(/(\s+)/);
+
+                words.forEach(word => {
+                    if (word.length === 0) return;
+                    const wordWidth = doc.getTextWidth(word);
+                    if (currentX + wordWidth > x + maxWidth && !/^\s+$/.test(word)) {
+                        currentY += 5;
+                        currentX = x;
+                    }
+                    doc.text(word, currentX, currentY);
+                    currentX += wordWidth;
+                });
+            });
+            return currentY;
+        }
+
+        function printResults(testNumber) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFont('Helvetica', 'normal');
+
+            const testKey = `test${testNumber}`;
+            const data = testsData[testKey];
+            const questionsCount = data.questions.length;
+            let score = 0;
+
+            for (let i = 0; i < questionsCount; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i + 1}`);
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = data.questions[i].answer.toLowerCase();
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+            }
+            
+            const grade = 1 + (score / questionsCount) * 9;
+
+            let yPosition = 20;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 20;
+            const maxWidth = doc.internal.pageSize.width - margin * 2;
+
+            doc.setFontSize(16);
+            doc.setFont('Helvetica', 'bold');
+            doc.text(`Results - ${data.title}`, 105, yPosition, { align: 'center' });
+            yPosition += 10;
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(12);
+            doc.text(`Score: ${score} / ${questionsCount}`, 105, yPosition, { align: 'center' });
+            yPosition += 7;
+            
+            doc.setTextColor(255, 0, 0);
+            doc.text(`Grade: ${grade.toFixed(2)}`, 105, yPosition, { align: 'center' });
+            doc.setTextColor(0, 0, 0);
+            
+            yPosition += 10;
+            doc.line(margin, yPosition, doc.internal.pageSize.width - margin, yPosition);
+            yPosition += 10;
+
+            doc.setFontSize(10);
+            for (let i = 0; i < questionsCount; i++) {
+                if (yPosition > pageHeight - margin - 30) { 
+                    doc.addPage();
+                    yPosition = margin;
+                }
+
+                const question = data.questions[i];
+                const userInput = document.getElementById(`q-${testNumber}-${i + 1}`).value.trim();
+                const fullSentence = question.sentence.replace('___', question.answer);
+
+                doc.setFont('Helvetica', 'bold');
+                const questionLines = doc.splitTextToSize(`${i + 1}. ${question.sentence}`, maxWidth);
+                doc.text(questionLines, margin, yPosition);
+                yPosition += (questionLines.length * 5) + 3;
+                
+                doc.setFont('Helvetica', 'normal');
+                const userInputLines = doc.splitTextToSize(`Your Answer: ${userInput || '[Not answered]'}`, maxWidth - 5);
+                doc.text(userInputLines, margin + 5, yPosition);
+                yPosition += (userInputLines.length * 5) + 3;
+
+                const correctAnswerLines = doc.splitTextToSize(`Correct Answer: ${question.answer}`, maxWidth - 5);
+                doc.text(correctAnswerLines, margin + 5, yPosition);
+                yPosition += (correctAnswerLines.length * 5) + 3;
+
+                const startIndex = fullSentence.toLowerCase().indexOf(question.answer.toLowerCase());
+                let textParts;
+                if (startIndex !== -1) {
+                    const part1 = fullSentence.substring(0, startIndex);
+                    const boldPart = fullSentence.substring(startIndex, startIndex + question.answer.length);
+                    const part2 = fullSentence.substring(startIndex + question.answer.length);
+                    textParts = [
+                        { text: 'Full Sentence: ', bold: false },
+                        { text: part1, bold: false },
+                        { text: boldPart, bold: true },
+                        { text: part2, bold: false }
+                    ];
+                } else {
+                    textParts = [{ text: `Full Sentence: ${fullSentence}`, bold: false }];
+                }
+                
+                yPosition = printStyledText(doc, textParts, margin + 5, yPosition, maxWidth - 5);
+                yPosition += 8;
+            }
+
+            const finishTime = new Date();
+            const startTime = testTimestamps[testKey] ? testTimestamps[testKey].start : new Date();
+            
+            doc.setTextColor(255, 255, 255);
+            const keyText1 = `${testSetName} - Test started at: ${startTime.toLocaleString('en-GB')}`;
+            const keyText2 = `${testSetName} - Test finished at: ${finishTime.toLocaleString('en-GB')}`;
+            doc.text(keyText1, margin, yPosition > pageHeight - margin - 15 ? (doc.addPage(), margin) : yPosition + 10);
+            doc.text(keyText2, margin, yPosition > pageHeight - margin - 15 ? margin + 5 : yPosition + 15);
+
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const testName = data.title.split('&')[0].trim().replace(/\s/g, '-');
+            const fileName = `${testSetName}-${testName}_${hours}${day}${minutes}.pdf`;
+
+            doc.save(fileName);
+        }
+
+        function saveProgress(testNumber) {
+            const testKey = `test${testNumber}`;
+            const answers = {};
+            const questionsCount = testsData[testKey].questions.length;
+
+            for (let i = 1; i <= questionsCount; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i}`);
+                if (inputElement) {
+                    answers[`q-${testNumber}-${i}`] = inputElement.value;
+                }
+            }
+
+            localStorage.setItem(`testProgress_${testKey}`, JSON.stringify(answers));
+            
+            const saveButton = document.querySelector(`#${testKey} .button.save`);
+            if(saveButton) {
+                const originalText = "Save Progress";
+                saveButton.textContent = 'Saved!';
+                saveButton.style.backgroundColor = '#229954';
+                setTimeout(() => {
+                    saveButton.textContent = originalText;
+                    saveButton.style.backgroundColor = '#27ae60';
+                }, 2000);
+            }
+        }
+
+        function loadProgress() {
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const savedProgress = localStorage.getItem(`testProgress_${testKey}`);
+
+                if (savedProgress) {
+                    const answers = JSON.parse(savedProgress);
+                    for (const inputId in answers) {
+                        const inputElement = document.getElementById(inputId);
+                        if (inputElement) {
+                            inputElement.value = answers[inputId];
+                        }
+                    }
+                }
+                updateCheckButtonState(testNum);
+            }
+        }
+
+        function resetTest(testNumber) {
+            const testKey = `test${testNumber}`;
+            const form = document.getElementById(`form-${testKey}`);
+            if (form) {
+                form.reset();
+                const inputs = form.querySelectorAll('input[type="text"]');
+                inputs.forEach(input => {
+                    input.style.borderColor = '#ccc';
+                });
+            }
+
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            if (resultDiv) {
+                resultDiv.style.display = 'none';
+            }
+            
+            const printButton = document.getElementById(`print-btn-${testKey}`);
+            if (printButton) {
+                printButton.disabled = true;
+            }
+            
+            const checkButton = document.getElementById(`check-btn-${testKey}`);
+            if (checkButton) {
+                checkButton.disabled = true;
+            }
+            
+            localStorage.removeItem(`testProgress_${testKey}`);
+        }
+
+        window.onload = () => {
+            document.getElementById('test-set-name').textContent = testSetName;
+            document.getElementById('test-set-name').style.color = '#2980b9';
+            document.getElementById('test-instructions').textContent = 'For each of the questions, use the word given in capitals at the end of the line to form a word that fits in the gap.';
+            
+            generateQuestions();
+            generateAnswers();
+            setupAccordion();
+            loadProgress();
+            showTab('test1');
+        };
+    </script>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+                return false;
+            }
+        };
+    </script>
+
+</body>
+</html>
