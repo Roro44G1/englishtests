@@ -1,1 +1,762 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WT-22.08</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+       .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+       .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+       .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .tab-link:hover {
+            color: #3498db;
+        }
+       .tab-link.active {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+        }
+       .test-content {
+            display: none;
+        }
+       .test-content.active {
+            display: block;
+        }
+       .question {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-left: 3px solid #e0e0e0;
+            transition: border-left-color 0.3s;
+        }
+        .question:hover {
+            border-left-color: #3498db;
+        }
+       .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+            color: #555;
+        }
+        .sentence-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 15px;
+            width: 200px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+       .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+       .button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            margin: 5px;
+        }
+        .button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+       .button:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+       .button.reset {
+            background-color: #e74c3c;
+        }
+       .button.reset:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+        .button.save {
+            background-color: #27ae60;
+        }
+        .button.save:hover:not(:disabled) {
+            background-color: #229954;
+        }
+        .button.print {
+            background-color: #8e44ad;
+        }
+        .button.print:hover:not(:disabled) {
+            background-color: #7d3c98;
+        }
+       .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #eaf5ff;
+            border-radius: 5px;
+            border: 1px solid #bddef6;
+        }
+        /* Accordion Styles */
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .accordion-button {
+            width: 100%;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            cursor: pointer;
+            padding: 15px 20px;
+            text-align: left;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .accordion-button:hover {
+            background-color: #e9ecef;
+        }
+        .accordion-content {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .accordion-content.active {
+            padding: 15px 20px;
+        }
+        .accordion-content ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .accordion-content li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="container">
+        <h1>English Interactive Tests</h1>
+        <h2 id="test-set-name"></h2>
+        <p id="test-instructions" class="text-center italic text-gray-600 mb-6"></p>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="showTab('test1')">Work World</button>
+            <button class="tab-link" onclick="showTab('test2')">Digital Age</button>
+            <button class="tab-link" onclick="showTab('test3')">Global Issues</button>
+            <button class="tab-link" onclick="showTab('test4')">Science</button>
+            <button class="tab-link" onclick="showTab('test5')">Modern Lifestyles</button>
+            <button class="tab-link" onclick="showTab('answers')">Answers</button>
+        </div>
+
+        <div id="test1" class="test-content active"></div>
+        <div id="test2" class="test-content"></div>
+        <div id="test3" class="test-content"></div>
+        <div id="test4" class="test-content"></div>
+        <div id="test5" class="test-content"></div>
+        <div id="answers" class="test-content">
+            <h2 class="text-2xl font-bold mb-4 text-center">Correct Answers</h2>
+            <div id="accordion-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let answersUnlocked = false;
+        const testTimestamps = {};
+        const testSetName = "WT_2208";
+
+        const testsData = {
+            test1: {
+                title: "The World of Work",
+                questions: [
+                    { sentence: "She is a highly respected ___ in her field. (PROFESSION)", answer: "professional" },
+                    { sentence: "The company is looking for ___ with good communication skills. (APPLY)", answer: "applicants" },
+                    { sentence: "He received a ___ for his excellent performance. (PROMOTE)", answer: "promotion" },
+                    { sentence: "The ___ of the new project was a major challenge. (MANAGE)", answer: "management" },
+                    { sentence: "She has a lot of ___ in her current role. (RESPONSIBLE)", answer: "responsibility" },
+                    { sentence: "The ___ of the new CEO was a surprise to many. (APPOINT)", answer: "appointment" },
+                    { sentence: "He is a very ___ and dedicated employee. (INDUSTRY)", answer: "industrious" },
+                    { sentence: "The ___ of the new office was a long process. (ESTABLISH)", answer: "establishment" },
+                    { sentence: "She is a very ___ and successful entrepreneur. (CREATE)", answer: "creative" },
+                    { sentence: "The ___ of the new product was a team effort. (DEVELOP)", answer: "development" },
+                    { sentence: "He is a very ___ and experienced negotiator. (SKILL)", answer: "skilful" },
+                    { sentence: "The ___ of the new company was a collaborative effort. (FOUND)", answer: "foundation" },
+                    { sentence: "She is a very ___ and respected leader. (LEAD)", answer: "leading" },
+                    { sentence: "The ___ of the new business was a major investment. (INVEST)", answer: "investment" },
+                    { sentence: "He is a very ___ and effective communicator. (COMMUNICATE)", answer: "effective" },
+                    { sentence: "The ___ of the new marketing campaign was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "She is a very ___ and successful salesperson. (SALE)", answer: "sales-driven" },
+                    { sentence: "The ___ of the new project was a positive development. (EXPAND)", answer: "expansion" },
+                    { sentence: "He is a very ___ and respected partner. (PARTNER)", answer: "partner-like" },
+                    { sentence: "The ___ of the new business plan was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "She is a very ___ and knowledgeable analyst. (ANALYSE)", answer: "analytical" },
+                    { sentence: "The ___ of the new company was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "He is a very ___ and respected executive. (EXECUTE)", answer: "executive" },
+                    { sentence: "The ___ of the new product was a major challenge. (PRODUCE)", answer: "production" },
+                    { sentence: "She is a very ___ and successful businesswoman. (BUSINESS)", answer: "business-minded" }
+                ]
+            },
+            test2: {
+                title: "The Digital Age",
+                questions: [
+                    { sentence: "The ___ of the internet has transformed our lives. (ARRIVE)", answer: "arrival" },
+                    { sentence: "She is a very ___ and influential blogger. (INFLUENCE)", answer: "influential" },
+                    { sentence: "The ___ of the new app was a great success. (CREATE)", answer: "creation" },
+                    { sentence: "He is a very ___ and knowledgeable web developer. (KNOW)", answer: "knowledgeable" },
+                    { sentence: "The ___ of the new social media platform was a major event. (LAUNCH)", answer: "launch" },
+                    { sentence: "She is a very ___ and creative content creator. (CREATE)", answer: "creative" },
+                    { sentence: "The ___ of the new software was a team effort. (DEVELOP)", answer: "development" },
+                    { sentence: "He is a very ___ and respected cybersecurity expert. (SECURITY)", answer: "security-conscious" },
+                    { sentence: "The ___ of the new website was a collaborative effort. (DESIGN)", answer: "design" },
+                    { sentence: "She is a very ___ and successful online entrepreneur. (SUCCEED)", answer: "successful" },
+                    { sentence: "The ___ of the new digital marketing campaign was a major challenge. (MANAGE)", answer: "management" },
+                    { sentence: "He is a very ___ and effective social media manager. (EFFECT)", answer: "effective" },
+                    { sentence: "The ___ of the new e-commerce platform was a positive development. (EXPAND)", answer: "expansion" },
+                    { sentence: "She is a very ___ and knowledgeable data analyst. (DATA)", answer: "data-driven" },
+                    { sentence: "The ___ of the new app was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "He is a very ___ and respected digital artist. (ART)", answer: "artistic" },
+                    { sentence: "The ___ of the new online course was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "She is a very ___ and experienced UX designer. (DESIGN)", answer: "design-oriented" },
+                    { sentence: "The ___ of the new digital platform was a major investment. (INVEST)", answer: "investment" },
+                    { sentence: "He is a very ___ and successful podcaster. (PODCAST)", answer: "podcast-savvy" },
+                    { sentence: "The ___ of the new digital currency was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "She is a very ___ and respected online tutor. (TUTOR)", answer: "tutorial" },
+                    { sentence: "The ___ of the new digital system was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "He is a very ___ and knowledgeable software engineer. (ENGINEER)", answer: "engineering-minded" },
+                    { sentence: "The ___ of the new digital law was a democratic process. (APPROVE)", answer: "approval" }
+                ]
+            },
+            test3: {
+                title: "Global Issues",
+                questions: [
+                    { sentence: "The ___ of poverty is a major global challenge. (ERADICATE)", answer: "eradication" },
+                    { sentence: "She is a very ___ and dedicated humanitarian worker. (HUMAN)", answer: "humane" },
+                    { sentence: "The ___ of the new international treaty was a historic moment. (SIGN)", answer: "signing" },
+                    { sentence: "He is a very ___ and influential diplomat. (DIPLOMACY)", answer: "diplomatic" },
+                    { sentence: "The ___ of the new global initiative was a team effort. (CREATE)", answer: "creation" },
+                    { sentence: "She is a very ___ and respected human rights activist. (ACT)", answer: "active" },
+                    { sentence: "The ___ of the new international organization was a major undertaking. (ESTABLISH)", answer: "establishment" },
+                    { sentence: "He is a very ___ and knowledgeable expert on international relations. (RELATE)", answer: "relational" },
+                    { sentence: "The ___ of the new global campaign was a collaborative effort. (DESIGN)", answer: "design" },
+                    { sentence: "She is a very ___ and successful peace negotiator. (NEGOTIATE)", answer: "negotiating" },
+                    { sentence: "The ___ of the new international agreement was a positive development. (EXPAND)", answer: "expansion" },
+                    { sentence: "He is a very ___ and respected international lawyer. (LAW)", answer: "law-abiding" },
+                    { sentence: "The ___ of the new global policy was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "She is a very ___ and knowledgeable expert on global health. (HEALTH)", answer: "health-conscious" },
+                    { sentence: "The ___ of the new international law was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "He is a very ___ and experienced foreign correspondent. (CORRESPOND)", answer: "corresponding" },
+                    { sentence: "The ___ of the new global fund was a major investment. (INVEST)", answer: "investment" },
+                    { sentence: "She is a very ___ and respected international aid worker. (AID)", answer: "aid-giving" },
+                    { sentence: "The ___ of the new global treaty was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "He is a very ___ and effective international mediator. (MEDIATE)", answer: "mediating" },
+                    { sentence: "The ___ of the new global system was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "She is a very ___ and knowledgeable expert on climate change. (CLIMATE)", answer: "climatic" },
+                    { sentence: "The ___ of the new international law was a democratic process. (APPROVE)", answer: "approval" },
+                    { sentence: "He is a very ___ and respected UN representative. (REPRESENT)", answer: "representative" },
+                    { sentence: "The ___ of the new global initiative was a major achievement. (ACHIEVE)", answer: "achievement" }
+                ]
+            },
+            test4: {
+                title: "Science & Discovery",
+                questions: [
+                    { sentence: "The ___ of the new species was a major scientific breakthrough. (DISCOVER)", answer: "discovery" },
+                    { sentence: "She is a very ___ and respected biologist. (BIOLOGY)", answer: "biological" },
+                    { sentence: "The ___ of the new chemical compound was a team effort. (SYNTHESIZE)", answer: "synthesis" },
+                    { sentence: "He is a very ___ and influential physicist. (PHYSICS)", answer: "physical" },
+                    { sentence: "The ___ of the new scientific theory was a collaborative effort. (FORMULATE)", answer: "formulation" },
+                    { sentence: "She is a very ___ and dedicated researcher. (RESEARCH)", answer: "research-oriented" },
+                    { sentence: "The ___ of the new laboratory was a major investment. (ESTABLISH)", answer: "establishment" },
+                    { sentence: "He is a very ___ and knowledgeable geologist. (GEOLOGY)", answer: "geological" },
+                    { sentence: "The ___ of the new scientific instrument was a major undertaking. (CREATE)", answer: "creation" },
+                    { sentence: "She is a very ___ and successful astronomer. (ASTRONOMY)", answer: "astronomical" },
+                    { sentence: "The ___ of the new research project was a positive development. (EXPAND)", answer: "expansion" },
+                    { sentence: "He is a very ___ and respected chemist. (CHEMISTRY)", answer: "chemical" },
+                    { sentence: "The ___ of the new scientific paper was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "She is a very ___ and knowledgeable botanist. (BOTANY)", answer: "botanical" },
+                    { sentence: "The ___ of the new scientific discovery was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "He is a very ___ and experienced geneticist. (GENETICS)", answer: "genetic" },
+                    { sentence: "The ___ of the new research facility was a major investment. (INVEST)", answer: "investment" },
+                    { sentence: "She is a very ___ and respected zoologist. (ZOOLOGY)", answer: "zoological" },
+                    { sentence: "The ___ of the new scientific theory was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "He is a very ___ and effective science communicator. (COMMUNICATE)", answer: "communicative" },
+                    { sentence: "The ___ of the new scientific method was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "She is a very ___ and knowledgeable ecologist. (ECOLOGY)", answer: "ecological" },
+                    { sentence: "The ___ of the new scientific law was a democratic process. (APPROVE)", answer: "approval" },
+                    { sentence: "He is a very ___ and respected mathematician. (MATHEMATICS)", answer: "mathematical" },
+                    { sentence: "The ___ of the new scientific discovery was a major achievement. (ACHIEVE)", answer: "achievement" }
+                ]
+            },
+            test5: {
+                title: "Modern Lifestyles",
+                questions: [
+                    { sentence: "The ___ of the new co-working space was a great success. (CREATE)", answer: "creation" },
+                    { sentence: "She is a very ___ and successful digital nomad. (ADVENTURE)", answer: "adventurous" },
+                    { sentence: "The ___ of the new online community was a team effort. (ESTABLISH)", answer: "establishment" },
+                    { sentence: "He is a very ___ and influential minimalist. (MINIMAL)", answer: "minimalist" },
+                    { sentence: "The ___ of the new sustainable lifestyle brand was a collaborative effort. (DESIGN)", answer: "design" },
+                    { sentence: "She is a very ___ and dedicated urban gardener. (GARDEN)", answer: "gardening-loving" },
+                    { sentence: "The ___ of the new remote work policy was a positive development. (EXPAND)", answer: "expansion" },
+                    { sentence: "He is a very ___ and respected life coach. (COACH)", answer: "coaching" },
+                    { sentence: "The ___ of the new wellness retreat was a transparent process. (DISCUSS)", answer: "discussion" },
+                    { sentence: "She is a very ___ and knowledgeable yoga instructor. (INSTRUCT)", answer: "instructive" },
+                    { sentence: "The ___ of the new zero-waste store was a public debate. (DEBATE)", answer: "debate" },
+                    { sentence: "He is a very ___ and experienced travel blogger. (BLOG)", answer: "blogging" },
+                    { sentence: "The ___ of the new ethical fashion brand was a major investment. (INVEST)", answer: "investment" },
+                    { sentence: "She is a very ___ and successful online influencer. (INFLUENCE)", answer: "influential" },
+                    { sentence: "The ___ of the new plant-based restaurant was a long-term goal. (REALISE)", answer: "realisation" },
+                    { sentence: "He is a very ___ and effective time management expert. (MANAGE)", answer: "managerial" },
+                    { sentence: "The ___ of the new mindfulness app was a gradual process. (EVOLVE)", answer: "evolution" },
+                    { sentence: "She is a very ___ and respected home-schooling parent. (SCHOOL)", answer: "scholarly" },
+                    { sentence: "The ___ of the new bike-sharing scheme was a democratic process. (APPROVE)", answer: "approval" },
+                    { sentence: "He is a very ___ and knowledgeable financial independence advocate. (ADVOCATE)", answer: "advocating" },
+                    { sentence: "The ___ of the new community garden was a major achievement. (ACHIEVE)", answer: "achievement" },
+                    { sentence: "She is a very ___ and successful freelance writer. (WRITE)", answer: "writerly" },
+                    { sentence: "The ___ of the new car-sharing service was a major challenge. (INTEGRATE)", answer: "integration" },
+                    { sentence: "He is a very ___ and respected ethical hacker. (HACK)", answer: "hacking" },
+                    { sentence: "The ___ of the new smart home system was a collaborative effort. (INSTALL)", answer: "installation" }
+                ]
+            }
+        };
+
+        function generateQuestions() {
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const container = document.getElementById(testKey);
+                const data = testsData[testKey];
+                
+                let html = `<h2>${data.title}</h2>`;
+                html += `<form id="form-${testKey}" oninput="updateCheckButtonState(${testNum})">`;
+                
+                data.questions.forEach((q, index) => {
+                    const parts = q.sentence.split('___');
+                    html += `
+                        <div class="question">
+                            <div class="question-number">${index + 1}.</div>
+                            <div class="sentence-wrapper">
+                                <span>${parts[0]}</span>
+                                <input type="text" id="q-${testNum}-${index + 1}" autocomplete="off">
+                                <span>${parts[1]}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</form>`;
+                html += `
+                    <div class="controls">
+                        <button type="button" class="button check" id="check-btn-${testKey}" onclick="calculateScore(${testNum})" disabled>Check Score</button>
+                        <button type="button" class="button save" onclick="saveProgress(${testNum})">Save Progress</button>
+                        <button type="button" class="button reset" onclick="resetTest(${testNum})">Reset</button>
+                        <button type="button" class="button print" id="print-btn-${testKey}" onclick="printResults(${testNum})" disabled>Print Results</button>
+                    </div>
+                    <div id="result-${testKey}" class="result" style="display:none;"></div>
+                `;
+                container.innerHTML = html;
+            }
+        }
+
+        function generateAnswers() {
+            const accordionContainer = document.getElementById('accordion-container');
+            let html = '';
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const data = testsData[testKey];
+                
+                const fullAnswersHTML = data.questions.map(q => {
+                    const fullSentence = q.sentence.replace('___', `<strong>${q.answer}</strong>`);
+                    return `<li>${fullSentence}</li>`;
+                }).join('');
+
+                html += `
+                    <div class="accordion-item">
+                        <button class="accordion-button">${data.title}</button>
+                        <div class="accordion-content">
+                            <ol>
+                                ${fullAnswersHTML}
+                            </ol>
+                        </div>
+                    </div>
+                `;
+            }
+            accordionContainer.innerHTML = html;
+        }
+        
+        function updateCheckButtonState(testNumber) {
+            const testKey = `test${testNumber}`;
+            const form = document.getElementById(`form-${testKey}`);
+            const inputs = form.querySelectorAll('input[type="text"]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim().length >= 4) {
+                    validCount++;
+                }
+            });
+            const checkButton = document.getElementById(`check-btn-${testKey}`);
+            checkButton.disabled = validCount < 22;
+        }
+
+        function setupAccordion() {
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const isActive = content.classList.contains('active');
+                    
+                    document.querySelectorAll('.accordion-content').forEach(c => {
+                        c.classList.remove('active');
+                        c.style.maxHeight = null;
+                        c.style.padding = "0 20px";
+                    });
+
+                    if (!isActive) {
+                        content.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+
+        function showTab(tabId) {
+            if (tabId === 'answers' && !answersUnlocked) {
+                const password = prompt("Please enter the password to view answers:");
+                if (password === "Cl@r@") {
+                    answersUnlocked = true;
+                } else {
+                    if (password !== null) { 
+                        alert("Incorrect password!");
+                    }
+                    return; 
+                }
+            }
+
+            if (!testTimestamps[tabId] && tabId.startsWith('test')) {
+                testTimestamps[tabId] = { start: new Date() };
+            }
+
+            const contents = document.querySelectorAll('.test-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-link[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function calculateScore(testNumber) {
+            const testKey = `test${testNumber}`;
+            const correctAnswers = testsData[testKey].questions.map(q => q.answer);
+            let score = 0;
+            
+            for (let i = 0; i < correctAnswers.length; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i + 1}`);
+                if (!inputElement) continue;
+
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = correctAnswers[i].toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    inputElement.style.borderColor = '#2ecc71';
+                } else {
+                    inputElement.style.borderColor = '#e74c3c';
+                }
+            }
+            
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            resultDiv.innerHTML = `Your Score: ${score} / ${correctAnswers.length}`;
+            resultDiv.style.display = 'block';
+
+            const printButton = document.getElementById(`print-btn-${testKey}`);
+            if (printButton) {
+                printButton.disabled = false;
+            }
+        }
+        
+        function printStyledText(doc, parts, x, y, maxWidth) {
+            let currentX = x;
+            let currentY = y;
+            
+            parts.forEach(part => {
+                doc.setFont('Helvetica', part.bold ? 'bold' : 'normal');
+                const text = part.text;
+                const words = text.split(/(\s+)/);
+
+                words.forEach(word => {
+                    if (word.length === 0) return;
+                    const wordWidth = doc.getTextWidth(word);
+                    if (currentX + wordWidth > x + maxWidth && !/^\s+$/.test(word)) {
+                        currentY += 5;
+                        currentX = x;
+                    }
+                    doc.text(word, currentX, currentY);
+                    currentX += wordWidth;
+                });
+            });
+            return currentY;
+        }
+
+        function printResults(testNumber) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFont('Helvetica', 'normal');
+
+            const testKey = `test${testNumber}`;
+            const data = testsData[testKey];
+            const questionsCount = data.questions.length;
+            let score = 0;
+
+            for (let i = 0; i < questionsCount; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i + 1}`);
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = data.questions[i].answer.toLowerCase();
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+            }
+            
+            const grade = 1 + (score / questionsCount) * 9;
+
+            let yPosition = 20;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 20;
+            const maxWidth = doc.internal.pageSize.width - margin * 2;
+
+            doc.setFontSize(16);
+            doc.setFont('Helvetica', 'bold');
+            doc.text(`Results - ${data.title}`, 105, yPosition, { align: 'center' });
+            yPosition += 10;
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(12);
+            doc.text(`Score: ${score} / ${questionsCount}`, 105, yPosition, { align: 'center' });
+            yPosition += 7;
+            
+            doc.setTextColor(255, 0, 0);
+            doc.text(`Grade: ${grade.toFixed(2)}`, 105, yPosition, { align: 'center' });
+            doc.setTextColor(0, 0, 0);
+            
+            yPosition += 10;
+            doc.line(margin, yPosition, doc.internal.pageSize.width - margin, yPosition);
+            yPosition += 10;
+
+            doc.setFontSize(10);
+            for (let i = 0; i < questionsCount; i++) {
+                if (yPosition > pageHeight - margin - 30) { 
+                    doc.addPage();
+                    yPosition = margin;
+                }
+
+                const question = data.questions[i];
+                const userInput = document.getElementById(`q-${testNumber}-${i + 1}`).value.trim();
+                const fullSentence = question.sentence.replace('___', question.answer);
+
+                doc.setFont('Helvetica', 'bold');
+                const questionLines = doc.splitTextToSize(`${i + 1}. ${question.sentence}`, maxWidth);
+                doc.text(questionLines, margin, yPosition);
+                yPosition += (questionLines.length * 5) + 3;
+                
+                doc.setFont('Helvetica', 'normal');
+                const userInputLines = doc.splitTextToSize(`Your Answer: ${userInput || '[Not answered]'}`, maxWidth - 5);
+                doc.text(userInputLines, margin + 5, yPosition);
+                yPosition += (userInputLines.length * 5) + 3;
+
+                const correctAnswerLines = doc.splitTextToSize(`Correct Answer: ${question.answer}`, maxWidth - 5);
+                doc.text(correctAnswerLines, margin + 5, yPosition);
+                yPosition += (correctAnswerLines.length * 5) + 3;
+
+                const startIndex = fullSentence.toLowerCase().indexOf(question.answer.toLowerCase());
+                let textParts;
+                if (startIndex !== -1) {
+                    const part1 = fullSentence.substring(0, startIndex);
+                    const boldPart = fullSentence.substring(startIndex, startIndex + question.answer.length);
+                    const part2 = fullSentence.substring(startIndex + question.answer.length);
+                    textParts = [
+                        { text: 'Full Sentence: ', bold: false },
+                        { text: part1, bold: false },
+                        { text: boldPart, bold: true },
+                        { text: part2, bold: false }
+                    ];
+                } else {
+                    textParts = [{ text: `Full Sentence: ${fullSentence}`, bold: false }];
+                }
+                
+                yPosition = printStyledText(doc, textParts, margin + 5, yPosition, maxWidth - 5);
+                yPosition += 8;
+            }
+
+            const finishTime = new Date();
+            const startTime = testTimestamps[testKey] ? testTimestamps[testKey].start : new Date();
+            
+            doc.setTextColor(255, 255, 255);
+            const keyText1 = `${testSetName} - Test started at: ${startTime.toLocaleString('en-GB')}`;
+            const keyText2 = `${testSetName} - Test finished at: ${finishTime.toLocaleString('en-GB')}`;
+            doc.text(keyText1, margin, yPosition > pageHeight - margin - 15 ? (doc.addPage(), margin) : yPosition + 10);
+            doc.text(keyText2, margin, yPosition > pageHeight - margin - 15 ? margin + 5 : yPosition + 15);
+
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const testName = data.title.split('&')[0].trim().replace(/\s/g, '-');
+            const fileName = `${testSetName}-${testName}_${hours}${day}${minutes}.pdf`;
+
+            doc.save(fileName);
+        }
+
+        function saveProgress(testNumber) {
+            const testKey = `test${testNumber}`;
+            const answers = {};
+            const questionsCount = testsData[testKey].questions.length;
+
+            for (let i = 1; i <= questionsCount; i++) {
+                const inputElement = document.getElementById(`q-${testNumber}-${i}`);
+                if (inputElement) {
+                    answers[`q-${testNumber}-${i}`] = inputElement.value;
+                }
+            }
+
+            localStorage.setItem(`testProgress_${testKey}`, JSON.stringify(answers));
+            
+            const saveButton = document.querySelector(`#${testKey} .button.save`);
+            if(saveButton) {
+                const originalText = "Save Progress";
+                saveButton.textContent = 'Saved!';
+                saveButton.style.backgroundColor = '#229954';
+                setTimeout(() => {
+                    saveButton.textContent = originalText;
+                    saveButton.style.backgroundColor = '#27ae60';
+                }, 2000);
+            }
+        }
+
+        function loadProgress() {
+            for (let testNum = 1; testNum <= 5; testNum++) {
+                const testKey = `test${testNum}`;
+                const savedProgress = localStorage.getItem(`testProgress_${testKey}`);
+
+                if (savedProgress) {
+                    const answers = JSON.parse(savedProgress);
+                    for (const inputId in answers) {
+                        const inputElement = document.getElementById(inputId);
+                        if (inputElement) {
+                            inputElement.value = answers[inputId];
+                        }
+                    }
+                }
+                updateCheckButtonState(testNum);
+            }
+        }
+
+        function resetTest(testNumber) {
+            const testKey = `test${testNumber}`;
+            const form = document.getElementById(`form-${testKey}`);
+            if (form) {
+                form.reset();
+                const inputs = form.querySelectorAll('input[type="text"]');
+                inputs.forEach(input => {
+                    input.style.borderColor = '#ccc';
+                });
+            }
+
+            const resultDiv = document.getElementById(`result-${testKey}`);
+            if (resultDiv) {
+                resultDiv.style.display = 'none';
+            }
+            
+            const printButton = document.getElementById(`print-btn-${testKey}`);
+            if (printButton) {
+                printButton.disabled = true;
+            }
+            
+            const checkButton = document.getElementById(`check-btn-${testKey}`);
+            if (checkButton) {
+                checkButton.disabled = true;
+            }
+            
+            localStorage.removeItem(`testProgress_${testKey}`);
+        }
+
+        window.onload = () => {
+            document.getElementById('test-set-name').textContent = testSetName;
+            document.getElementById('test-set-name').style.color = '#2980b9';
+            document.getElementById('test-instructions').textContent = 'For each of the questions, use the word given in capitals at the end of the line to form a word that fits in the gap.';
+            
+            generateQuestions();
+            generateAnswers();
+            setupAccordion();
+            loadProgress();
+            showTab('test1');
+        };
+    </script>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+                return false;
+            }
+        };
+    </script>
+
+</body>
+</html>
