@@ -190,7 +190,8 @@
 
     <div class="container">
         <h1>English Interactive Tests</h1>
-        <h2>Key Word Transformation (B2) - Set 2</h2>
+        <h2 id="test-set-name"></h2>
+        <p id="test-instructions" class="text-center italic text-gray-600 mb-6"></p>
 
         <div class="tabs">
             <button class="tab-link active" onclick="showTab('test1')">Society</button>
@@ -215,6 +216,7 @@
     <script>
         let answersUnlocked = false;
         const testTimestamps = {};
+        const testSetName = "KWT_1908";
 
         const testsData = {
             test1: {
@@ -427,8 +429,8 @@
             accordionContainer.innerHTML = html;
         }
         
-        function updateCheckButtonState(testNumber) {
-            const testKey = `test${testNumber}`;
+        function updateCheckButtonState(testNum) {
+            const testKey = `test${testNum}`;
             const form = document.getElementById(`form-${testKey}`);
             const inputs = form.querySelectorAll('input[type="text"]');
             let filledCount = 0;
@@ -525,20 +527,17 @@
             
             parts.forEach(part => {
                 doc.setFont('Helvetica', part.bold ? 'bold' : 'normal');
-                const words = part.text.split(' ');
-                words.forEach((word, index) => {
-                    if (word === '') return;
-                    let wordWithSpace = word + ' ';
-                    if (index === words.length - 1 && part.text.endsWith(word)) {
-                       wordWithSpace = word;
-                    }
+                const text = part.text;
+                const words = text.split(/(\s+)/);
 
-                    const wordWidth = doc.getTextWidth(wordWithSpace);
-                    if (currentX + wordWidth > x + maxWidth) {
+                words.forEach(word => {
+                    if (word.length === 0) return;
+                    const wordWidth = doc.getTextWidth(word);
+                    if (currentX + wordWidth > x + maxWidth && !/^\s+$/.test(word)) {
                         currentY += 5;
                         currentX = x;
                     }
-                    doc.text(wordWithSpace, currentX, currentY);
+                    doc.text(word, currentX, currentY);
                     currentX += wordWidth;
                 });
             });
@@ -651,7 +650,7 @@
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const testName = data.title.split('&')[0].trim().replace(/\s/g, '-');
-            const fileName = `${testName}_${hours}${day}${minutes}.pdf`;
+            const fileName = `${testSetName}-${testName}_${hours}${day}${minutes}.pdf`;
 
             doc.save(fileName);
         }
@@ -730,6 +729,10 @@
         }
 
         window.onload = () => {
+            document.getElementById('test-set-name').textContent = testSetName;
+            document.getElementById('test-set-name').style.color = '#2980b9';
+            document.getElementById('test-instructions').textContent = 'For each question, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given.';
+            
             generateQuestions();
             generateAnswers();
             setupAccordion();
