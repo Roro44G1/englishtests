@@ -216,68 +216,77 @@
         const testTimestamps = {};
         
         const allQuestions = [
-            // Present Simple
-            { sentence: "Water ___ (boil) at 100 degrees Celsius.", answer: "boils", tense: "Present Simple", explanation: "Used for general truths and scientific facts. The verb takes an '-s' in the third person singular." },
-            { sentence: "She usually ___ (walk) to work, but today she is driving.", answer: "walks", tense: "Present Simple", explanation: "Used for habits and routines, often with adverbs of frequency like 'usually'. The verb takes an '-s' in the third person singular." },
-            { sentence: "The sun ___ (rise) in the east.", answer: "rises", tense: "Present Simple", explanation: "Used for facts that are always true. The verb takes an '-s' in the third person singular." },
-            { sentence: "How often ___ you ___ (go) to the cinema?", answer: "do you go", tense: "Present Simple", explanation: "Used to ask about the frequency of an action. The auxiliary 'do' is used for questions with 'you'." },
-            { sentence: "He ___ (not play) tennis on Fridays.", answer: "doesn't play", tense: "Present Simple", explanation: "Used for negative statements about habits. The auxiliary 'does not' (doesn't) is used for the third person singular." },
+            // Present Simple (6)
+            { sentence: "Water ___ (boil) at 100 degrees Celsius.", answer: "boils", tense: "Present Simple", explanation: "Folosit pentru adevăruri generale și fapte științifice. Verbul primește terminația '-s' la persoana a treia singular." },
+            { sentence: "She usually ___ (walk) to work, but today she is driving.", answer: "walks", tense: "Present Simple", explanation: "Folosit pentru obiceiuri și rutine, adesea cu adverbe de frecvență precum 'usually'. Verbul primește terminația '-s' la persoana a treia singular." },
+            { sentence: "The sun ___ (rise) in the east.", answer: "rises", tense: "Present Simple", explanation: "Folosit pentru fapte care sunt întotdeauna adevărate. Verbul primește terminația '-s' la persoana a treia singular." },
+            { sentence: "How often ___ you ___ (go) to the cinema?", answer: "do you go", tense: "Present Simple", explanation: "Folosit pentru a întreba despre frecvența unei acțiuni. Se folosește auxiliarul 'do' pentru întrebări cu 'you'." },
+            { sentence: "He ___ (not play) tennis on Fridays.", answer: "doesn't play", tense: "Present Simple", explanation: "Folosit pentru propoziții negative despre obiceiuri. Se folosește auxiliarul 'does not' (doesn't) pentru persoana a treia singular." },
+            { sentence: "The train to London ___ (leave) at 7 AM every morning.", answer: "leaves", tense: "Present Simple", explanation: "Folosit pentru orare și programe fixe. Verbul primește terminația '-s' la persoana a treia singular." },
 
-            // Present Continuous
-            { sentence: "Look! The children ___ (play) in the garden.", answer: "are playing", tense: "Present Continuous", explanation: "Used for actions happening at the moment of speaking, often indicated by words like 'Look!'." },
-            { sentence: "I ___ (read) a really interesting book at the moment.", answer: "am reading", tense: "Present Continuous", explanation: "Used for temporary situations or actions happening around the present time, indicated by 'at the moment'." },
-            { sentence: "Why ___ you ___ (wear) a coat? It's not cold.", answer: "are you wearing", tense: "Present Continuous", explanation: "Used to ask about an action happening now. The structure is 'am/is/are' + subject + verb-ing." },
-            { sentence: "She ___ (meet) her friends for dinner tonight.", answer: "is meeting", tense: "Present Continuous", explanation: "Used for future arrangements that are already planned, especially with a specific time like 'tonight'." },
-            { sentence: "He ___ (not work) this week; he's on holiday.", answer: "is not working", tense: "Present Continuous", explanation: "Used for negative statements about temporary situations. The structure is subject + 'am/is/are not' + verb-ing." },
+            // Present Continuous (6)
+            { sentence: "Look! The children ___ (play) in the garden.", answer: "are playing", tense: "Present Continuous", explanation: "Folosit pentru acțiuni care se întâmplă în momentul vorbirii, adesea indicate de cuvinte precum 'Look!'." },
+            { sentence: "I ___ (read) a really interesting book at the moment.", answer: "am reading", tense: "Present Continuous", explanation: "Folosit pentru situații temporare sau acțiuni care se desfășoară în jurul momentului prezent, indicate de 'at the moment'." },
+            { sentence: "Why ___ you ___ (wear) a coat? It's not cold.", answer: "are you wearing", tense: "Present Continuous", explanation: "Folosit pentru a întreba despre o acțiune care se întâmplă acum. Structura este 'am/is/are' + subiect + verb-ing." },
+            { sentence: "She ___ (meet) her friends for dinner tonight.", answer: "is meeting", tense: "Present Continuous", explanation: "Folosit pentru aranjamente viitoare care sunt deja planificate, în special cu un timp specific precum 'tonight'." },
+            { sentence: "He ___ (not work) this week; he's on holiday.", answer: "is not working", tense: "Present Continuous", explanation: "Folosit pentru propoziții negative despre situații temporare. Structura este subiect + 'am/is/are not' + verb-ing." },
+            { sentence: "My brother ___ (always borrow) my clothes without asking!", answer: "is always borrowing", tense: "Present Continuous", explanation: "Folosit cu 'always' pentru a exprima un obicei repetat care este enervant pentru vorbitor." },
             
-            // Past Simple
-            { sentence: "They ___ (visit) Paris last year.", answer: "visited", tense: "Past Simple", explanation: "Used for completed actions in the past at a specific time, indicated by 'last year'." },
-            { sentence: "When ___ you ___ (finish) your homework yesterday?", answer: "did you finish", tense: "Past Simple", explanation: "Used to ask about a completed past action. The auxiliary 'did' is used for questions, and the main verb is in the base form." },
-            { sentence: "I ___ (not see) him at the party on Saturday.", answer: "didn't see", tense: "Past Simple", explanation: "Used for negative statements about completed past actions. The auxiliary 'did not' (didn't) is used, and the main verb is in the base form." },
-            { sentence: "The Titanic ___ (sink) in 1912.", answer: "sank", tense: "Past Simple", explanation: "Used for historical events that are completed. 'Sink' is an irregular verb." },
-            { sentence: "She ___ (study) for three hours before she took a break.", answer: "studied", tense: "Past Simple", explanation: "Used for a completed action that happened before another past action. The regular verb 'study' ends in '-ied'." },
+            // Past Simple (6)
+            { sentence: "They ___ (visit) Paris last year.", answer: "visited", tense: "Past Simple", explanation: "Folosit pentru acțiuni finalizate în trecut la un moment specific, indicat de 'last year'." },
+            { sentence: "When ___ you ___ (finish) your homework yesterday?", answer: "did you finish", tense: "Past Simple", explanation: "Folosit pentru a întreba despre o acțiune finalizată în trecut. Se folosește auxiliarul 'did', iar verbul principal este la forma de bază." },
+            { sentence: "I ___ (not see) him at the party on Saturday.", answer: "didn't see", tense: "Past Simple", explanation: "Folosit pentru propoziții negative despre acțiuni finalizate în trecut. Se folosește auxiliarul 'did not' (didn't), iar verbul principal este la forma de bază." },
+            { sentence: "The Titanic ___ (sink) in 1912.", answer: "sank", tense: "Past Simple", explanation: "Folosit pentru evenimente istorice finalizate. 'Sink' este un verb neregulat." },
+            { sentence: "She ___ (study) for three hours before she took a break.", answer: "studied", tense: "Past Simple", explanation: "Folosit pentru o acțiune finalizată care a avut loc înaintea unei alte acțiuni din trecut. Verbul regulat 'study' se termină în '-ied'." },
+            { sentence: "He ___ (get up), ___ (have) breakfast and ___ (go) to work.", answer: "got up, had, went", tense: "Past Simple", explanation: "Folosit pentru a descrie o succesiune de acțiuni finalizate în trecut." },
 
-            // Past Continuous
-            { sentence: "I ___ (watch) TV when the phone rang.", answer: "was watching", tense: "Past Continuous", explanation: "Used for an action in progress in the past that was interrupted by another shorter action (phone rang)." },
-            { sentence: "What ___ you ___ (do) at 8 PM last night?", answer: "were you doing", tense: "Past Continuous", explanation: "Used to ask about an action that was in progress at a specific time in the past." },
-            { sentence: "While they ___ (drive) to the coast, their car broke down.", answer: "were driving", tense: "Past Continuous", explanation: "Used for a background action that was in progress when another event occurred. Often used with 'while'." },
-            { sentence: "He ___ (not listen) while the teacher was explaining the rules.", answer: "was not listening", tense: "Past Continuous", explanation: "Used for a negative action that was (not) in progress at a particular time in the past." },
-            { sentence: "At this time yesterday, we ___ (fly) to New York.", answer: "were flying", tense: "Past Continuous", explanation: "Used to describe an action in progress at a specific point in past time." },
+            // Past Continuous (6)
+            { sentence: "I ___ (watch) TV when the phone rang.", answer: "was watching", tense: "Past Continuous", explanation: "Folosit pentru o acțiune în desfășurare în trecut, care a fost întreruptă de o altă acțiune mai scurtă (phone rang)." },
+            { sentence: "What ___ you ___ (do) at 8 PM last night?", answer: "were you doing", tense: "Past Continuous", explanation: "Folosit pentru a întreba despre o acțiune care era în desfășurare la un moment specific în trecut." },
+            { sentence: "While they ___ (drive) to the coast, their car broke down.", answer: "were driving", tense: "Past Continuous", explanation: "Folosit pentru o acțiune de fundal care era în desfășurare când a avut loc un alt eveniment. Adesea folosit cu 'while'." },
+            { sentence: "He ___ (not listen) while the teacher was explaining the rules.", answer: "was not listening", tense: "Past Continuous", explanation: "Folosit pentru o acțiune negativă care (nu) era în desfășurare la un anumit moment în trecut." },
+            { sentence: "At this time yesterday, we ___ (fly) to New York.", answer: "were flying", tense: "Past Continuous", explanation: "Folosit pentru a descrie o acțiune în desfășurare la un punct specific în trecut." },
+            { sentence: "The sun ___ (shine) and the birds ___ (sing) as she walked through the park.", answer: "was shining, were singing", tense: "Past Continuous", explanation: "Folosit pentru a descrie o scenă sau o atmosferă în trecut, cu acțiuni simultane în desfășurare." },
 
-            // Future Simple
-            { sentence: "I think it ___ (rain) tomorrow.", answer: "will rain", tense: "Future Simple", explanation: "Used for predictions about the future, especially with expressions like 'I think'." },
-            { sentence: "Don't worry, I ___ (help) you with your luggage.", answer: "will help", tense: "Future Simple", explanation: "Used for spontaneous decisions or offers of help made at the moment of speaking." },
-            { sentence: "She ___ probably ___ (be) late for the meeting.", answer: "will probably be", tense: "Future Simple", explanation: "Used for predictions, often with adverbs like 'probably'." },
-            { sentence: "___ you ___ (marry) me?", answer: "will you marry", tense: "Future Simple", explanation: "Used to make requests or proposals." },
-            { sentence: "They ___ (not pass) the exam if they don't study.", answer: "will not pass", tense: "Future Simple", explanation: "Used in the main clause of a first conditional sentence to talk about a likely future result." },
+            // Future Simple (6)
+            { sentence: "I think it ___ (rain) tomorrow.", answer: "will rain", tense: "Future Simple", explanation: "Folosit pentru predicții despre viitor, în special cu expresii precum 'I think'." },
+            { sentence: "Don't worry, I ___ (help) you with your luggage.", answer: "will help", tense: "Future Simple", explanation: "Folosit pentru decizii spontane sau oferte de ajutor făcute în momentul vorbirii." },
+            { sentence: "She ___ probably ___ (be) late for the meeting.", answer: "will probably be", tense: "Future Simple", explanation: "Folosit pentru predicții, adesea cu adverbe precum 'probably'." },
+            { sentence: "___ you ___ (marry) me?", answer: "will you marry", tense: "Future Simple", explanation: "Folosit pentru a face cereri sau propuneri." },
+            { sentence: "They ___ (not pass) the exam if they don't study.", answer: "will not pass", tense: "Future Simple", explanation: "Folosit în propoziția principală a unei fraze condiționale de tip 1 pentru a vorbi despre un rezultat viitor probabil." },
+            { sentence: "I promise I ___ (call) you as soon as I arrive.", answer: "will call", tense: "Future Simple", explanation: "Folosit pentru a face promisiuni despre acțiuni viitoare." },
 
-            // "Going to" Future
-            { sentence: "Look at those dark clouds! It ___ (rain).", answer: "is going to rain", tense: "'Going to' Future", explanation: "Used for predictions based on present evidence (the dark clouds)." },
-            { sentence: "We ___ (visit) our grandparents next weekend.", answer: "are going to visit", tense: "'Going to' Future", explanation: "Used to talk about future plans and intentions that have already been decided." },
-            { sentence: "He ___ (start) a new business next year.", answer: "is going to start", tense: "'Going to' Future", explanation: "Used to express a firm intention or plan for the future." },
-            { sentence: "She ___ (not apply) for that job because it's too far away.", answer: "is not going to apply", tense: "'Going to' Future", explanation: "Used for negative statements about future intentions." },
-            { sentence: "What ___ you ___ (do) after you graduate?", answer: "are you going to do", tense: "'Going to' Future", explanation: "Used to ask about someone's future plans or intentions." },
+            // "Going to" Future (6)
+            { sentence: "Look at those dark clouds! It ___ (rain).", answer: "is going to rain", tense: "'Going to' Future", explanation: "Folosit pentru predicții bazate pe dovezi prezente (norii întunecați)." },
+            { sentence: "We ___ (visit) our grandparents next weekend.", answer: "are going to visit", tense: "'Going to' Future", explanation: "Folosit pentru a vorbi despre planuri și intenții viitoare care au fost deja decise." },
+            { sentence: "He ___ (start) a new business next year.", answer: "is going to start", tense: "'Going to' Future", explanation: "Folosit pentru a exprima o intenție fermă sau un plan pentru viitor." },
+            { sentence: "She ___ (not apply) for that job because it's too far away.", answer: "is not going to apply", tense: "'Going to' Future", explanation: "Folosit pentru propoziții negative despre intenții viitoare." },
+            { sentence: "What ___ you ___ (do) after you graduate?", answer: "are you going to do", tense: "'Going to' Future", explanation: "Folosit pentru a întreba despre planurile sau intențiile viitoare ale cuiva." },
+            { sentence: "I've already decided. I ___ (buy) the red dress.", answer: "am going to buy", tense: "'Going to' Future", explanation: "Folosit pentru a exprima o decizie luată înainte de momentul vorbirii." },
 
-            // Present Perfect
-            { sentence: "She ___ (already finish) her homework.", answer: "has already finished", tense: "Present Perfect", explanation: "Used for a past action with a result in the present. 'Already' emphasizes that it happened sooner than expected." },
-            { sentence: "I ___ (never be) to Japan.", answer: "have never been", tense: "Present Perfect", explanation: "Used to talk about life experiences (or lack thereof) at an unspecified time in the past." },
-            { sentence: "They ___ (not see) that film yet.", answer: "have not seen", tense: "Present Perfect", explanation: "Used for actions that have not happened up to the present time, often with 'yet' in negative sentences." },
-            { sentence: "___ you ever ___ (eat) sushi?", answer: "have you ever eaten", tense: "Present Perfect", explanation: "Used to ask about life experiences. 'Ever' is common in questions." },
-            { sentence: "He ___ (lose) his keys and can't get into his house.", answer: "has lost", tense: "Present Perfect", explanation: "Used for a past action ('he lost his keys') that has a clear result in the present ('he can't get in')." },
+            // Present Perfect (6)
+            { sentence: "She ___ (already finish) her homework.", answer: "has already finished", tense: "Present Perfect", explanation: "Folosit pentru o acțiune trecută cu rezultat în prezent. 'Already' subliniază că s-a întâmplat mai devreme decât se aștepta." },
+            { sentence: "I ___ (never be) to Japan.", answer: "have never been", tense: "Present Perfect", explanation: "Folosit pentru a vorbi despre experiențe de viață (sau lipsa acestora) la un moment nespecificat în trecut." },
+            { sentence: "They ___ (not see) that film yet.", answer: "have not seen", tense: "Present Perfect", explanation: "Folosit pentru acțiuni care nu s-au întâmplat până în prezent, adesea cu 'yet' în propoziții negative." },
+            { sentence: "___ you ever ___ (eat) sushi?", answer: "have you ever eaten", tense: "Present Perfect", explanation: "Folosit pentru a întreba despre experiențe de viață. 'Ever' este comun în întrebări." },
+            { sentence: "He ___ (lose) his keys and can't get into his house.", answer: "has lost", tense: "Present Perfect", explanation: "Folosit pentru o acțiune trecută ('he lost his keys') care are un rezultat clar în prezent ('he can't get in')." },
+            { sentence: "I ___ (just receive) an email from my boss.", answer: "have just received", tense: "Present Perfect", explanation: "Folosit pentru acțiuni foarte recente care au relevanță pentru prezent, adesea cu 'just'." },
 
-            // Present Perfect Continuous
-            { sentence: "She ___ (work) here for five years.", answer: "has been working", tense: "Present Perfect Continuous", explanation: "Used to emphasize the duration of an action that started in the past and continues into the present, indicated by 'for five years'." },
-            { sentence: "I'm tired because I ___ (study) all night.", answer: "have been studying", tense: "Present Perfect Continuous", explanation: "Used for a recent, continuous past activity that has a result in the present (being tired)." },
-            { sentence: "How long ___ you ___ (wait) for the bus?", answer: "have you been waiting", tense: "Present Perfect Continuous", explanation: "Used to ask about the duration of an action that started in the past and is still continuing." },
-            { sentence: "They ___ (play) tennis since this morning.", answer: "have been playing", tense: "Present Perfect Continuous", explanation: "Used to talk about an action that started at a specific time in the past ('since this morning') and is still in progress." },
-            { sentence: "It ___ (rain) for hours, so the ground is wet.", answer: "has been raining", tense: "Present Perfect Continuous", explanation: "Used for a continuous past action ('it rained for hours') that has a visible result in the present ('the ground is wet')." },
+            // Present Perfect Continuous (6)
+            { sentence: "She ___ (work) here for five years.", answer: "has been working", tense: "Present Perfect Continuous", explanation: "Folosit pentru a sublinia durata unei acțiuni care a început în trecut și continuă în prezent, indicată de 'for five years'." },
+            { sentence: "I'm tired because I ___ (study) all night.", answer: "have been studying", tense: "Present Perfect Continuous", explanation: "Folosit pentru o activitate trecută, recentă și continuă, care are un rezultat în prezent (oboseala)." },
+            { sentence: "How long ___ you ___ (wait) for the bus?", answer: "have you been waiting", tense: "Present Perfect Continuous", explanation: "Folosit pentru a întreba despre durata unei acțiuni care a început în trecut și încă continuă." },
+            { sentence: "They ___ (play) tennis since this morning.", answer: "have been playing", tense: "Present Perfect Continuous", explanation: "Folosit pentru a vorbi despre o acțiune care a început la un moment specific în trecut ('since this morning') și este încă în desfășurare." },
+            { sentence: "It ___ (rain) for hours, so the ground is wet.", answer: "has been raining", tense: "Present Perfect Continuous", explanation: "Folosit pentru o acțiune trecută continuă ('it rained for hours') care are un rezultat vizibil în prezent ('the ground is wet')." },
+            { sentence: "Your eyes are red. ___ you ___ (cry)?", answer: "have you been crying", tense: "Present Perfect Continuous", explanation: "Folosit pentru a întreba despre o activitate continuă recentă care s-a încheiat, dar ale cărei rezultate sunt vizibile în prezent." },
 
-            // Past Perfect
-            { sentence: "By the time we arrived, the film ___ (already start).", answer: "had already started", tense: "Past Perfect", explanation: "Used for an action that was completed before another action or specific time in the past ('we arrived')." },
-            { sentence: "She told me she ___ (never see) such a beautiful sunset before.", answer: "had never seen", tense: "Past Perfect", explanation: "Used to describe an experience that happened (or didn't happen) before a specific point in the past ('she told me')." },
-            { sentence: "He ___ (not finish) his report when his boss asked for it.", answer: "had not finished", tense: "Past Perfect", explanation: "Used for a negative action that was not completed before another past event." },
-            { sentence: "After he ___ (do) his homework, he went out to play.", answer: "had done", tense: "Past Perfect", explanation: "Used with 'after' to show that one action was completed before another one began in the past." },
-            { sentence: "They couldn't get into the house because they ___ (lose) the key.", answer: "had lost", tense: "Past Perfect", explanation: "Used to explain a past situation ('couldn't get in') by referring to an earlier past action ('lost the key')." }
+            // Past Perfect (6)
+            { sentence: "By the time we arrived, the film ___ (already start).", answer: "had already started", tense: "Past Perfect", explanation: "Folosit pentru o acțiune care a fost finalizată înainte de o altă acțiune sau un moment specific în trecut ('we arrived')." },
+            { sentence: "She told me she ___ (never see) such a beautiful sunset before.", answer: "had never seen", tense: "Past Perfect", explanation: "Folosit pentru a descrie o experiență care a avut loc (sau nu) înainte de un punct specific în trecut ('she told me')." },
+            { sentence: "He ___ (not finish) his report when his boss asked for it.", answer: "had not finished", tense: "Past Perfect", explanation: "Folosit pentru o acțiune negativă care nu a fost finalizată înainte de un alt eveniment din trecut." },
+            { sentence: "After he ___ (do) his homework, he went out to play.", answer: "had done", tense: "Past Perfect", explanation: "Folosit cu 'after' pentru a arăta că o acțiune a fost finalizată înainte ca alta să înceapă în trecut." },
+            { sentence: "They couldn't get into the house because they ___ (lose) the key.", answer: "had lost", tense: "Past Perfect", explanation: "Folosit pentru a explica o situație din trecut ('couldn't get in') făcând referire la o acțiune anterioară din trecut ('lost the key')." },
+            { sentence: "He realized he ___ (make) a mistake before he submitted the form.", answer: "had made", tense: "Past Perfect", explanation: "Folosit pentru a arăta că o acțiune ('make a mistake') s-a întâmplat înainte de o altă acțiune din trecut ('realized')." }
         ];
 
         function shuffle(array) {
@@ -330,7 +339,7 @@
                         <ol>
                             ${shuffledQuestions.map(q => `
                                 <li>
-                                    <strong>${q.sentence.replace('___', `(${q.answer})`)}</strong>
+                                    <strong>${q.sentence.replace(/___\s*\(.+\)/, q.answer)}</strong>
                                     <div class="explanation"><strong>Tense:</strong> ${q.tense}</div>
                                     <div class="explanation"><strong>Explanation:</strong> ${q.explanation}</div>
                                 </li>
@@ -347,12 +356,12 @@
             const inputs = form.querySelectorAll('input[type="text"]');
             let validCount = 0;
             inputs.forEach(input => {
-                if (input.value.trim().length > 0) { // Any input counts
+                if (input.value.trim().length > 0) {
                     validCount++;
                 }
             });
             const checkButton = document.getElementById('check-btn-test1');
-            checkButton.disabled = validCount < 40; // Activate after 40 answers
+            checkButton.disabled = validCount < 43; // Activate after 43 answers (approx 80%)
         }
 
         function setupAccordion() {
@@ -483,7 +492,7 @@
 
                 const question = shuffledQuestions[i];
                 const userInput = document.getElementById(`q-1-${i + 1}`).value.trim();
-                const fullSentence = question.sentence.replace('___', `(${question.answer})`);
+                const fullSentence = question.sentence.replace(/___\s*\(.+\)/, question.answer);
 
                 doc.setFont('Helvetica', 'bold');
                 const questionLines = doc.splitTextToSize(`${i + 1}. ${question.sentence}`, maxWidth);
@@ -594,4 +603,3 @@
 
 </body>
 </html>
-
