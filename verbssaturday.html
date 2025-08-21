@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb Tenses - Test Interactiv (Set 3)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+       .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+       .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+       .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .tab-link:hover {
+            color: #3498db;
+        }
+       .tab-link.active {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+        }
+       .test-content {
+            display: none;
+        }
+       .test-content.active {
+            display: block;
+        }
+       .question {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-left: 3px solid #e0e0e0;
+            transition: border-left-color 0.3s;
+        }
+        .question:hover {
+            border-left-color: #3498db;
+        }
+       .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+            color: #555;
+        }
+        .sentence-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 15px;
+            width: 200px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+       .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+       .button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            margin: 5px;
+        }
+        .button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+       .button:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+       .button.reset {
+            background-color: #e74c3c;
+        }
+       .button.reset:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+        .button.save {
+            background-color: #27ae60;
+        }
+        .button.save:hover:not(:disabled) {
+            background-color: #229954;
+        }
+        .button.print {
+            background-color: #8e44ad;
+        }
+        .button.print:hover:not(:disabled) {
+            background-color: #7d3c98;
+        }
+       .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #eaf5ff;
+            border-radius: 5px;
+            border: 1px solid #bddef6;
+        }
+        /* Accordion Styles */
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .accordion-button {
+            width: 100%;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            cursor: pointer;
+            padding: 15px 20px;
+            text-align: left;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .accordion-button:hover {
+            background-color: #e9ecef;
+        }
+        .accordion-content {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .accordion-content.active {
+            padding: 15px 20px;
+        }
+        .accordion-content ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .accordion-content li {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #eee;
+        }
+        .accordion-content li:last-child {
+            border-bottom: none;
+        }
+        .explanation {
+            font-style: italic;
+            color: #555;
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Teste Interactive - Timpurile Verbale (Set 3)</h1>
+        <p class="text-center italic text-gray-600 mb-6">Complete the sentences with the correct form of the verb in brackets.</p>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="showTab('test1')">Verb Tense Mix</button>
+            <button class="tab-link" onclick="showTab('answers')">Răspunsuri & Explicații</button>
+        </div>
+
+        <div id="test1" class="test-content active"></div>
+        <div id="answers" class="test-content">
+            <h2 class="text-2xl font-bold mb-4 text-center">Răspunsuri Corecte și Explicații</h2>
+            <div id="accordion-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let answersUnlocked = false;
+        const testTimestamps = {};
+        
+        const allQuestions = [
+            // Present Simple (6)
+            { sentence: "The museum ___ at 10 AM and ___ at 6 PM. (open, close)", answer: "opens, closes", tense: "Present Simple", explanation: "Folosit pentru orare și programe fixe. Ambele verbe sunt la persoana a treia singular și primesc terminația '-s'." },
+            { sentence: "He ___ coffee; he prefers tea. (not like)", answer: "doesn't like", tense: "Present Simple", explanation: "Folosit pentru a exprima o preferință generală, o stare permanentă. Se folosește auxiliarul 'does not' (doesn't) pentru persoana a treia singular." },
+            { sentence: "In this novel, the main character ___ on a long journey. (embark)", answer: "embarks", tense: "Present Simple", explanation: "Folosit pentru a descrie acțiuni într-o narațiune, cum ar fi rezumatul unei cărți sau al unui film (present historic). Verbul la persoana a treia singular primește '-s'." },
+            { sentence: "___ your boss often ___ you feedback? (give)", answer: "does your boss often give", tense: "Present Simple", explanation: "Folosit pentru a întreba despre frecvența unei acțiuni. Pentru subiectul 'your boss' (he/she), se folosește auxiliarul 'does'." },
+            { sentence: "It rarely ___ in this part of the country. (snow)", answer: "snows", tense: "Present Simple", explanation: "Folosit pentru a descrie un fapt climatic general, indicat de adverbul de frecvență 'rarely'. Verbul la persoana a treia singular primește '-s'." },
+            { sentence: "The Earth ___ approximately 365 days to orbit the Sun. (take)", answer: "takes", tense: "Present Simple", explanation: "Folosit pentru un fapt științific universal valabil. Verbul la persoana a treia singular primește '-s'." },
+
+            // Present Continuous (6)
+            { sentence: "The government ___ new policies to combat inflation. (currently consider)", answer: "is currently considering", tense: "Present Continuous", explanation: "Folosit pentru acțiuni temporare în desfășurare pe o perioadă de timp prezentă, indicat de 'currently'." },
+            { sentence: "She can't come to the phone because she ___ a shower. (have)", answer: "is having", tense: "Present Continuous", explanation: "Folosit pentru o acțiune care se întâmplă exact în momentul vorbirii, oferind un motiv pentru o altă situație." },
+            { sentence: "They ___ for their final exams all this month. (study)", answer: "are studying", tense: "Present Continuous", explanation: "Folosit pentru o acțiune temporară care se desfășoară pe o perioadă de timp limitată ('all this month')." },
+            { sentence: "The number of people working from home ___ rapidly. (increase)", answer: "is increasing", tense: "Present Continuous", explanation: "Folosit pentru a descrie o tendință sau o schimbare care este în plină desfășurare în prezent." },
+            { sentence: "He ___ at a hotel until he finds an apartment. (stay)", answer: "is staying", tense: "Present Continuous", explanation: "Folosit pentru a descrie o situație temporară. Contextul 'until he finds an apartment' arată că situația nu este permanentă." },
+            { sentence: "What ___ you ___ about? You seem distracted. (think)", answer: "are you thinking", tense: "Present Continuous", explanation: "Folosit pentru a întreba despre o activitate mentală care se desfășoară în momentul vorbirii." },
+            
+            // Past Simple (6)
+            { sentence: "The Berlin Wall ___ in 1989. (fall)", answer: "fell", tense: "Past Simple", explanation: "Folosit pentru evenimente istorice finalizate la o dată specifică. 'Fall' este un verb neregulat, iar forma sa la Past Simple este 'fell'." },
+            { sentence: "He ___ the company in 2005 and ___ it into a global brand. (found, turn)", answer: "founded, turned", tense: "Past Simple", explanation: "Folosit pentru a descrie o succesiune de acțiuni finalizate în trecut." },
+            { sentence: "___ the package ___ yesterday? (arrive)", answer: "did the package arrive", tense: "Past Simple", explanation: "Folosit pentru a întreba despre o acțiune finalizată într-un moment specific din trecut ('yesterday')." },
+            { sentence: "She ___ to the radio, so she didn't hear the doorbell. (not listen)", answer: "wasn't listening", tense: "Past Continuous", explanation: "Greșeală intenționată pentru a testa diferența. Răspunsul corect este Past Continuous, deoarece descrie o acțiune în desfășurare care a împiedicat o alta." },
+            { sentence: "I ___ that film last week, but I ___ it. (see, not enjoy)", answer: "saw, didn't enjoy", tense: "Past Simple", explanation: "Folosit pentru acțiuni finalizate în trecut. 'See' este neregulat, iar negația se formează cu 'didn't' + forma de bază." },
+            { sentence: "The Romans ___ a vast empire that lasted for centuries. (build)", answer: "built", tense: "Past Simple", explanation: "Folosit pentru acțiuni și stări finalizate în trecut. 'Build' este un verb neregulat." },
+
+            // Past Continuous (6)
+            { sentence: "He broke his leg while he ___ football. (play)", answer: "was playing", tense: "Past Continuous", explanation: "Folosit pentru o acțiune în desfășurare în trecut ('playing football'), care a fost întreruptă de un eveniment punctual ('broke his leg')." },
+            { sentence: "At 10 PM last night, I ___ a book in bed. (read)", answer: "was reading", tense: "Past Continuous", explanation: "Folosit pentru a descrie o acțiune care era în plină desfășurare la un moment specific din trecut." },
+            { sentence: "The lights went out as we ___ dinner. (have)", answer: "were having", tense: "Past Continuous", explanation: "Folosit pentru o acțiune de fundal, în desfășurare, în timpul căreia a avut loc un alt eveniment punctual." },
+            { sentence: "She ___ on her project all day yesterday. (work)", answer: "was working", tense: "Past Continuous", explanation: "Folosit pentru a sublinia durata unei acțiuni pe parcursul unei perioade de timp din trecut." },
+            { sentence: "They ___ about their holiday plans when I joined them. (talk)", answer: "were talking", tense: "Past Continuous", explanation: "Folosit pentru a descrie o acțiune care era deja în desfășurare când o altă acțiune a început." },
+            { sentence: "He ___ nervous because he ___ an important presentation later that day. (feel, give)", answer: "was feeling, was giving", tense: "Past Continuous", explanation: "Folosit pentru a descrie stări și acțiuni de fundal care explică contextul unei narațiuni din trecut." },
+
+            // Future Simple (6)
+            { sentence: "I expect she ___ the job offer. (accept)", answer: "will accept", tense: "Future Simple", explanation: "Folosit pentru o predicție bazată pe o opinie sau o așteptare, introdusă de verbul 'expect'." },
+            { sentence: "That bag looks heavy. I ___ it for you. (carry)", answer: "will carry", tense: "Future Simple", explanation: "Folosit pentru o ofertă de ajutor spontană, făcută în momentul vorbirii." },
+            { sentence: "Perhaps he ___ his mind about coming. (change)", answer: "will change", tense: "Future Simple", explanation: "Folosit pentru a exprima o posibilitate viitoare, adesea cu adverbe precum 'perhaps'." },
+            { sentence: "If you touch that wire, you ___ an electric shock. (get)", answer: "will get", tense: "Future Simple", explanation: "Folosit în propoziția principală a unei fraze condiționale de tip 1 pentru a avertiza despre o consecință viitoare." },
+            { sentence: "I'm sure the team ___ the championship this year. (win)", answer: "will win", tense: "Future Simple", explanation: "Folosit pentru o predicție puternică, bazată pe o convingere personală." },
+            { sentence: "In the future, people ___ on Mars. (live)", answer: "will live", tense: "Future Simple", explanation: "Folosit pentru a face predicții despre un viitor îndepărtat." },
+
+            // "Going to" Future (6)
+            { sentence: "The economist predicted that the economy ___ (slow down).", answer: "is going to slow down", tense: "'Going to' Future", explanation: "Folosit pentru a raporta o predicție bazată pe analiza unui expert." },
+            { sentence: "We've run out of milk. I ___ (buy) some on my way home.", answer: "am going to buy", tense: "'Going to' Future", explanation: "Folosit pentru a exprima o intenție sau un plan care tocmai a fost format ca răspuns la o situație prezentă." },
+            { sentence: "She ___ (have) a baby in May.", answer: "is going to have", tense: "'Going to' Future", explanation: "Folosit pentru a vorbi despre evenimente viitoare care sunt rezultatul unor procese deja începute (sarcina)." },
+            { sentence: "They ___ (demolish) that old building next week.", answer: "are going to demolish", tense: "'Going to' Future", explanation: "Folosit pentru a descrie un plan ferm, adesea unul oficial sau programat." },
+            { sentence: "He ___ (regret) that decision one day.", answer: "is going to regret", tense: "'Going to' Future", explanation: "Folosit pentru a face o predicție puternică despre viitor, bazată pe situația prezentă." },
+            { sentence: "I ___ (not tolerate) this behaviour any longer.", answer: "am not going to tolerate", tense: "'Going to' Future", explanation: "Folosit pentru a exprima o decizie fermă, negativă, despre viitor." },
+
+            // Present Perfect (6)
+            { sentence: "I ___ this movie three times already. (see)", answer: "have seen", tense: "Present Perfect", explanation: "Folosit pentru a descrie o acțiune repetată într-o perioadă de timp neîncheiată (viața vorbitorului)." },
+            { sentence: "The company ___ its profits this quarter. (increase)", answer: "has increased", tense: "Present Perfect", explanation: "Folosit pentru a descrie o acțiune recentă într-o perioadă de timp neîncheiată ('this quarter') cu relevanță pentru prezent." },
+            { sentence: "___ you ___ from him lately? (hear)", answer: "have you heard", tense: "Present Perfect", explanation: "Folosit pentru a întreba despre evenimente recente, adesea cu 'lately' sau 'recently'." },
+            { sentence: "She ___ a lot since the last time I saw her. (change)", answer: "has changed", tense: "Present Perfect", explanation: "Folosit pentru a descrie o schimbare care a avut loc într-o perioadă de timp neîncheiată, cu un rezultat vizibil în prezent." },
+            { sentence: "We ___ in this house since 2010. (live)", answer: "have lived", tense: "Present Perfect", explanation: "Folosit pentru a descrie o stare care a început în trecut și continuă în prezent. 'Since' introduce punctul de început." },
+            { sentence: "Someone ___ my bicycle! (steal)", answer: "has stolen", tense: "Present Perfect", explanation: "Folosit pentru o acțiune trecută cu un rezultat clar în prezent (bicicleta lipsește)." },
+
+            // Present Perfect Continuous (6)
+            { sentence: "She ___ the piano since she was a child. (play)", answer: "has been playing", tense: "Present Perfect Continuous", explanation: "Folosit pentru a sublinia continuitatea și durata unei acțiuni care a început în trecut și continuă în prezent." },
+            { sentence: "He is out of breath because he ___ for the bus. (run)", answer: "has been running", tense: "Present Perfect Continuous", explanation: "Folosit pentru a explica o situație prezentă (este fără suflare) printr-o activitate continuă recentă." },
+            { sentence: "They ___ that house for months, but it's still not finished. (build)", answer: "have been building", tense: "Present Perfect Continuous", explanation: "Folosit pentru a descrie o acțiune de lungă durată care a început în trecut și este încă în desfășurare." },
+            { sentence: "How long ___ you ___ for this company? (work)", answer: "have you been working", tense: "Present Perfect Continuous", explanation: "Folosit pentru a întreba despre durata unei situații de muncă care continuă în prezent." },
+            { sentence: "It ___ all day; I'm tired of this weather. (snow)", answer: "has been snowing", tense: "Present Perfect Continuous", explanation: "Folosit pentru a descrie o acțiune continuă care s-a desfășurat pe parcursul unei perioade de timp neîncheiate ('all day')." },
+            { sentence: "I ___ to get in touch with you since this morning. (try)", answer: "have been trying", tense: "Present Perfect Continuous", explanation: "Folosit pentru a sublinia o acțiune repetată pe o perioadă de timp care continuă până în prezent." },
+
+            // Past Perfect (6)
+            { sentence: "By the time he was 25, he ___ five different countries. (already visit)", answer: "had already visited", tense: "Past Perfect", explanation: "Folosit pentru a descrie acțiuni finalizate înainte de un moment specific din trecut ('by the time he was 25')." },
+            { sentence: "The team lost because they ___ enough. (not train)", answer: "had not trained", tense: "Past Perfect", explanation: "Folosit pentru a oferi o explicație (o acțiune anterioară) pentru un rezultat din trecut." },
+            { sentence: "She didn't want to see the film because she ___ the book. (read)", answer: "had read", tense: "Past Perfect", explanation: "Folosit pentru a arăta că o acțiune ('read the book') s-a întâmplat înainte de o altă acțiune sau stare din trecut ('didn't want to see')." },
+            { sentence: "When he arrived at the office, he realized he ___ his laptop at home. (leave)", answer: "had left", tense: "Past Perfect", explanation: "Folosit pentru a descrie o acțiune care s-a întâmplat înainte de momentul principal al narațiunii din trecut." },
+            { sentence: "___ you ever ___ abroad before your trip in 2019? (be)", answer: "had you ever been", tense: "Past Perfect", explanation: "Folosit pentru a întreba despre experiențe care au avut loc înainte de un moment specific din trecut." },
+            { sentence: "He was very familiar with the report because he ___ it several times. (review)", answer: "had reviewed", tense: "Past Perfect", explanation: "Folosit pentru a explica o stare din trecut ('was familiar') printr-o acțiune anterioară repetată." }
+        ];
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        const shuffledQuestions = shuffle([...allQuestions]);
+
+        function generateQuestions() {
+            const container = document.getElementById('test1');
+            let html = `<form id="form-test1" oninput="updateCheckButtonState()">`;
+            
+            shuffledQuestions.forEach((q, index) => {
+                const sentenceText = q.sentence;
+                const verbInBrackets = sentenceText.match(/\(([^)]+)\)/)[0];
+                const sentenceWithoutVerb = sentenceText.replace(/\s*\(([^)]+)\)/, '');
+                const parts = sentenceWithoutVerb.split('___');
+
+                html += `
+                    <div class="question">
+                        <div class="question-number">${index + 1}.</div>
+                        <div class="sentence-wrapper">
+                            <span>${parts[0]}</span>
+                            <input type="text" id="q-1-${index + 1}" autocomplete="off">
+                            <span>${parts[1] || ''} ${verbInBrackets}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</form>`;
+            html += `
+                <div class="controls">
+                    <button type="button" class="button check" id="check-btn-test1" onclick="calculateScore()" disabled>Verifică Scorul</button>
+                    <button type="button" class="button save" onclick="saveProgress()">Salvează Progresul</button>
+                    <button type="button" class="button reset" onclick="resetTest()">Resetează</button>
+                    <button type="button" class="button print" id="print-btn-test1" onclick="printResults()" disabled>Tipărește Rezultatele</button>
+                </div>
+                <div id="result-test1" class="result" style="display:none;"></div>
+            `;
+            container.innerHTML = html;
+        }
+
+        function generateAnswers() {
+            const accordionContainer = document.getElementById('accordion-container');
+            let html = `
+                <div class="accordion-item">
+                    <button class="accordion-button">Verb Tense Explanations</button>
+                    <div class="accordion-content">
+                        <ol>
+                            ${shuffledQuestions.map(q => {
+                                const fullSentence = q.sentence.replace(/___/, q.answer).replace(/\s*\(.+\)/, '');
+                                return `
+                                <li>
+                                    <strong>${fullSentence}</strong>
+                                    <div class="explanation"><strong>Timp verbal:</strong> ${q.tense}</div>
+                                    <div class="explanation"><strong>Explicație:</strong> ${q.explanation}</div>
+                                </li>`;
+                            }).join('')}
+                        </ol>
+                    </div>
+                </div>
+            `;
+            accordionContainer.innerHTML = html;
+        }
+        
+        function updateCheckButtonState() {
+            const form = document.getElementById('form-test1');
+            const inputs = form.querySelectorAll('input[type="text"]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim().length > 0) {
+                    validCount++;
+                }
+            });
+            const checkButton = document.getElementById('check-btn-test1');
+            checkButton.disabled = validCount < 43; 
+        }
+
+        function setupAccordion() {
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const isActive = content.classList.contains('active');
+                    
+                    document.querySelectorAll('.accordion-content').forEach(c => {
+                        c.classList.remove('active');
+                        c.style.maxHeight = null;
+                        c.style.padding = "0 20px";
+                    });
+
+                    if (!isActive) {
+                        content.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+
+        function showTab(tabId) {
+            if (tabId === 'answers' && !answersUnlocked) {
+                const password = prompt("Please enter the password to view answers:");
+                if (password === "Cl@r@") {
+                    answersUnlocked = true;
+                } else {
+                    if (password !== null) { 
+                        alert("Incorrect password!");
+                    }
+                    return; 
+                }
+            }
+
+            if (!testTimestamps[tabId] && tabId.startsWith('test')) {
+                testTimestamps[tabId] = { start: new Date() };
+            }
+
+            const contents = document.querySelectorAll('.test-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-link[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function calculateScore() {
+            let score = 0;
+            
+            shuffledQuestions.forEach((q, i) => {
+                const inputElement = document.getElementById(`q-1-${i + 1}`);
+                if (!inputElement) return;
+
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = q.answer.toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    inputElement.style.borderColor = '#2ecc71';
+                } else {
+                    inputElement.style.borderColor = '#e74c3c';
+                }
+            });
+            
+            const resultDiv = document.getElementById('result-test1');
+            resultDiv.innerHTML = `Scorul tău este: ${score} / ${shuffledQuestions.length}`;
+            resultDiv.style.display = 'block';
+
+            const printButton = document.getElementById('print-btn-test1');
+            if (printButton) {
+                printButton.disabled = false;
+            }
+        }
+        
+        function printResults() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFont('Helvetica', 'normal');
+
+            const questionsCount = shuffledQuestions.length;
+            let score = 0;
+
+            for (let i = 0; i < questionsCount; i++) {
+                const inputElement = document.getElementById(`q-1-${i + 1}`);
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = shuffledQuestions[i].answer.toLowerCase();
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+            }
+            
+            const grade = 1 + (score / questionsCount) * 9;
+
+            let yPosition = 20;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 20;
+            const maxWidth = doc.internal.pageSize.width - margin * 2;
+
+            doc.setFontSize(16);
+            doc.setFont('Helvetica', 'bold');
+            doc.text(`Results - Verb Tenses Test`, 105, yPosition, { align: 'center' });
+            yPosition += 10;
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(12);
+            doc.text(`Score: ${score} / ${questionsCount}`, 105, yPosition, { align: 'center' });
+            yPosition += 7;
+            
+            doc.setTextColor(255, 0, 0);
+            doc.text(`Grade: ${grade.toFixed(2)}`, 105, yPosition, { align: 'center' });
+            doc.setTextColor(0, 0, 0);
+            
+            yPosition += 10;
+            doc.line(margin, yPosition, doc.internal.pageSize.width - margin, yPosition);
+            yPosition += 10;
+
+            doc.setFontSize(10);
+            for (let i = 0; i < questionsCount; i++) {
+                if (yPosition > pageHeight - margin - 30) { 
+                    doc.addPage();
+                    yPosition = margin;
+                }
+
+                const question = shuffledQuestions[i];
+                const userInput = document.getElementById(`q-1-${i + 1}`).value.trim();
+                const fullSentence = question.sentence.replace(/___\s*\(.+\)/, `<strong>${question.answer}</strong>`);
+
+                doc.setFont('Helvetica', 'bold');
+                const questionLines = doc.splitTextToSize(`${i + 1}. ${question.sentence}`, maxWidth);
+                doc.text(questionLines, margin, yPosition);
+                yPosition += (questionLines.length * 5) + 3;
+                
+                doc.setFont('Helvetica', 'normal');
+                const userInputLines = doc.splitTextToSize(`Your Answer: ${userInput || '[Not answered]'}`, maxWidth - 5);
+                doc.text(userInputLines, margin + 5, yPosition);
+                yPosition += (userInputLines.length * 5) + 3;
+
+                const correctAnswerLines = doc.splitTextToSize(`Correct Answer: ${question.answer}`, maxWidth - 5);
+                doc.text(correctAnswerLines, margin + 5, yPosition);
+                yPosition += (correctAnswerLines.length * 5) + 3;
+                
+                const fullAnswerLines = doc.splitTextToSize(`Full Sentence: ${fullSentence.replace(/<strong>|<\/strong>/g, '')}`, maxWidth - 5);
+                doc.text(fullAnswerLines, margin + 5, yPosition);
+                yPosition += (fullAnswerLines.length * 5) + 8;
+            }
+
+            const finishTime = new Date();
+            const startTime = testTimestamps['test1'] ? testTimestamps['test1'].start : new Date();
+            
+            doc.setTextColor(255, 255, 255);
+            const keyText1 = `Test started at: ${startTime.toLocaleString('en-GB')}`;
+            const keyText2 = `Test finished at: ${finishTime.toLocaleString('en-GB')}`;
+            doc.text(keyText1, margin, yPosition > pageHeight - margin - 15 ? (doc.addPage(), margin) : yPosition + 10);
+            doc.text(keyText2, margin, yPosition > pageHeight - margin - 15 ? margin + 5 : yPosition + 15);
+
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const fileName = `VerbTensesTest_${hours}${day}${minutes}.pdf`;
+
+            doc.save(fileName);
+        }
+
+        function saveProgress() {
+            const answers = {};
+            for (let i = 1; i <= shuffledQuestions.length; i++) {
+                const inputElement = document.getElementById(`q-1-${i}`);
+                if (inputElement) {
+                    answers[`q-1-${i}`] = inputElement.value;
+                }
+            }
+            localStorage.setItem(`verbTenseProgress`, JSON.stringify(answers));
+            
+            const saveButton = document.querySelector(`#test1 .button.save`);
+            if(saveButton) {
+                saveButton.textContent = 'Salvat!';
+                setTimeout(() => { saveButton.textContent = 'Salvează Progresul'; }, 2000);
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem(`verbTenseProgress`);
+            if (savedProgress) {
+                const answers = JSON.parse(savedProgress);
+                for (const inputId in answers) {
+                    const inputElement = document.getElementById(inputId);
+                    if (inputElement) {
+                        inputElement.value = answers[inputId];
+                    }
+                }
+            }
+            updateCheckButtonState();
+        }
+
+        function resetTest() {
+            const form = document.getElementById('form-test1');
+            form.reset();
+            form.querySelectorAll('input[type="text"]').forEach(input => {
+                input.style.borderColor = '#ccc';
+            });
+            document.getElementById('result-test1').style.display = 'none';
+            document.getElementById('print-btn-test1').disabled = true;
+            document.getElementById('check-btn-test1').disabled = true;
+            localStorage.removeItem('verbTenseProgress');
+        }
+
+        window.onload = () => {
+            generateQuestions();
+            generateAnswers();
+            setupAccordion();
+            loadProgress();
+            showTab('test1');
+        };
+    </script>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+                return false;
+            }
+        };
+    </script>
+
+</body>
+</html>
