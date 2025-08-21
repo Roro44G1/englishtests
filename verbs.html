@@ -238,7 +238,7 @@
             { sentence: "I ___ him at the party on Saturday. (not see)", answer: "didn't see", tense: "Past Simple", explanation: "Folosit pentru a nega o acțiune finalizată în trecut. Se folosește auxiliarul 'did not' (didn't), iar verbul principal este la forma de bază." },
             { sentence: "The Titanic ___ in 1912. (sink)", answer: "sank", tense: "Past Simple", explanation: "Folosit pentru evenimente istorice care s-au încheiat la o dată specifică. 'Sink' este un verb neregulat, iar forma sa la Past Simple este 'sank'." },
             { sentence: "She ___ for three hours before she took a break. (study)", answer: "studied", tense: "Past Simple", explanation: "Folosit pentru o acțiune finalizată care a avut loc înaintea unei alte acțiuni din trecut. Verbul regulat 'study' se termină în '-ied'." },
-            { sentence: "He ___ up, ___ breakfast and ___ to work. (get, have, go)", answer: "got, had, went", tense: "Past Simple", explanation: "Folosit pentru a descrie o succesiune de acțiuni finalizate în trecut. Toate verbele sunt la forma de Past Simple." },
+            { sentence: "The ancient Egyptians ___ the pyramids. (build)", answer: "built", tense: "Past Simple", explanation: "Folosit pentru evenimente istorice finalizate. 'Build' este un verb neregulat, iar forma sa la Past Simple este 'built'." },
 
             // Past Continuous (6)
             { sentence: "I ___ TV when the phone rang. (watch)", answer: "was watching", tense: "Past Continuous", explanation: "Folosit pentru o acțiune în desfășurare în trecut ('watching TV'), care a fost întreruptă de o altă acțiune mai scurtă și finalizată ('rang')." },
@@ -246,7 +246,7 @@
             { sentence: "While they ___ to the coast, their car broke down. (drive)", answer: "were driving", tense: "Past Continuous", explanation: "Folosit pentru o acțiune de fundal, în desfășurare, în timpul căreia a avut loc un alt eveniment. Cuvântul 'while' introduce adesea această structură." },
             { sentence: "He ___ while the teacher was explaining the rules. (not listen)", answer: "was not listening", tense: "Past Continuous", explanation: "Folosit pentru a nega o acțiune care era în desfășurare la un anumit moment în trecut, în paralel cu o altă acțiune." },
             { sentence: "At this time yesterday, we ___ to New York. (fly)", answer: "were flying", tense: "Past Continuous", explanation: "Folosit pentru a descrie o acțiune în desfășurare la un punct de timp exact în trecut." },
-            { sentence: "The sun ___ and the birds ___ as she walked through the park. (shine, sing)", answer: "was shining, were singing", tense: "Past Continuous", explanation: "Folosit pentru a descrie o scenă sau o atmosferă în trecut, prezentând acțiuni paralele care erau în desfășurare." },
+            { sentence: "It ___ heavily while we were inside. (snow)", answer: "was snowing", tense: "Past Continuous", explanation: "Folosit pentru a descrie o acțiune de fundal (vremea) care era în desfășurare în trecut, în paralel cu o altă acțiune." },
 
             // Future Simple (6)
             { sentence: "I think it ___ tomorrow. (rain)", answer: "will rain", tense: "Future Simple", explanation: "Folosit pentru predicții despre viitor bazate pe opinie personală, adesea introduse de verbe precum 'think', 'believe', 'expect'." },
@@ -305,17 +305,17 @@
             
             shuffledQuestions.forEach((q, index) => {
                 const sentenceText = q.sentence;
-                const blankIndex = sentenceText.indexOf('___');
-                const firstPart = sentenceText.substring(0, blankIndex);
-                const restPart = sentenceText.substring(blankIndex + 3);
+                const verbInBrackets = sentenceText.match(/\(([^)]+)\)/)[0];
+                const sentenceWithoutVerb = sentenceText.replace(/\s*\(([^)]+)\)/, '');
+                const parts = sentenceWithoutVerb.split('___');
 
                 html += `
                     <div class="question">
                         <div class="question-number">${index + 1}.</div>
                         <div class="sentence-wrapper">
-                            <span>${firstPart}</span>
+                            <span>${parts[0]}</span>
                             <input type="text" id="q-1-${index + 1}" autocomplete="off">
-                            <span>${restPart}</span>
+                            <span>${parts[1] || ''} ${verbInBrackets}</span>
                         </div>
                     </div>
                 `;
@@ -343,7 +343,7 @@
                         <ol>
                             ${shuffledQuestions.map(q => `
                                 <li>
-                                    <strong>${q.sentence.replace(/___\s*\(.+\)/, q.answer)}</strong>
+                                    <strong>${q.sentence.replace(/___/, q.answer).replace(/\s*\(.+\)/, '')}</strong>
                                     <div class="explanation"><strong>Timp verbal:</strong> ${q.tense}</div>
                                     <div class="explanation"><strong>Explicație:</strong> ${q.explanation}</div>
                                 </li>
