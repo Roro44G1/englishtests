@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditional Clauses Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf-autotable.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #005a9e;
+            --secondary-color: #f0f8ff;
+            --border-color: #ccc;
+            --correct-color: #d4edda;
+            --incorrect-color: #f8d7da;
+            --correct-text: #155724;
+            --incorrect-text: #721c24;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        /* Tabs Navigation */
+        .tab-nav {
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-nav button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab-nav button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .tab-nav button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 6px 12px;
+            border-top: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Test Items */
+        .test-form ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+
+        .test-form li {
+            background-color: #fdfdfd;
+            border: 1px solid #e7e7e7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .verb {
+            font-style: italic;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 6px 8px;
+            margin: 0 5px;
+            font-family: inherit;
+            width: 120px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        input.correct {
+            background-color: var(--correct-color);
+            border-color: var(--correct-text);
+        }
+
+        input.incorrect {
+            background-color: var(--incorrect-color);
+            border-color: var(--incorrect-text);
+        }
+
+        /* Controls */
+        .controls {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .controls button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 8px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .controls button:hover:not(:disabled) {
+            background-color: #004175;
+        }
+
+        .controls button:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
+
+        #score-container {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 20px;
+            height: 30px;
+        }
+        
+        /* Answers Table */
+        #answers-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #answers-table th, #answers-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        #answers-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        #answers-table tr:nth-child(even) {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Conditional Clauses: Practical Test</h1>
+
+        <div class="tab-nav">
+            <button class="tab-button active" onclick="openTab(event, 'test')">📝 Test</button>
+            <button class="tab-button" onclick="openTab(event, 'answers')">🔑 Answers</button>
+        </div>
+
+        <div id="test" class="tab-content active">
+            <p>Complete the sentences with the correct form of the verbs in brackets.</p>
+            <form id="test-form" class="test-form" autocomplete="off">
+                
+                <h2>Type I Conditional</h2>
+                <ol>
+                    <li>If you (<span class="verb">study</span>) <input type="text" id="q1a" data-q="1"> hard, you (<span class="verb">pass</span>) <input type="text" id="q1b" data-q="1"> the exam.</li>
+                    <li>If it (<span class="verb">rain</span>) <input type="text" id="q2a" data-q="2">, we (<span class="verb">stay</span>) <input type="text" id="q2b" data-q="2"> at home.</li>
+                    <li>She (<span class="verb">miss</span>) <input type="text" id="q3a" data-q="3"> the bus if she (<span class="verb">not leave</span>) <input type="text" id="q3b" data-q="3"> now.</li>
+                    <li>If I (<span class="verb">find</span>) <input type="text" id="q4a" data-q="4"> your keys, I (<span class="verb">call</span>) <input type="text" id="q4b" data-q="4"> you.</li>
+                    <li>They (<span class="verb">go</span>) <input type="text" id="q5a" data-q="5"> to the party if they (<span class="verb">finish</span>) <input type="text" id="q5b" data-q="5"> their work on time.</li>
+                    <li>What (<span class="verb">you / do</span>) <input type="text" id="q6a" data-q="6"> if you (<span class="verb">get</span>) <input type="text" id="q6b" data-q="6"> the job?</li>
+                    <li>If the weather (<span class="verb">be</span>) <input type="text" id="q7a" data-q="7"> nice, we (<span class="verb">have</span>) <input type="text" id="q7b" data-q="7"> a picnic.</li>
+                    <li>He (<span class="verb">be</span>) <input type="text" id="q8a" data-q="8"> late if he (<span class="verb">not hurry</span>) <input type="text" id="q8b" data-q="8">.</li>
+                    <li>If you (<span class="verb">eat</span>) <input type="text" id="q9a" data-q="9"> all that cake, you (<span class="verb">feel</span>) <input type="text" id="q9b" data-q="9"> sick.</li>
+                    <li>I (<span class="verb">buy</span>) <input type="text" id="q10a" data-q="10"> a new car if I (<span class="verb">win</span>) <input type="text" id="q10b" data-q="10"> the lottery.</li>
+                </ol>
+
+                <h2>Type II Conditional</h2>
+                <ol start="11">
+                    <li>If I (<span class="verb">be</span>) <input type="text" id="q11a" data-q="11"> you, I (<span class="verb">tell</span>) <input type="text" id="q11b" data-q="11"> her the truth.</li>
+                    <li>If he (<span class="verb">have</span>) <input type="text" id="q12a" data-q="12"> more time, he (<span class="verb">learn</span>) <input type="text" id="q12b" data-q="12"> to play the guitar.</li>
+                    <li>If they (<span class="verb">live</span>) <input type="text" id="q13a" data-q="13"> closer, we (<span class="verb">visit</span>) <input type="text" id="q13b" data-q="13"> them more often.</li>
+                    <li>What (<span class="verb">you / do</span>) <input type="text" id="q14a" data-q="14"> if you (<span class="verb">win</span>) <input type="text" id="q14b" data-q="14"> a million dollars?</li>
+                    <li>If she (<span class="verb">speak</span>) <input type="text" id="q15a" data-q="15"> French, she (<span class="verb">get</span>) <input type="text" id="q15b" data-q="15"> the job in Paris.</li>
+                    <li>If we (<span class="verb">not have</span>) <input type="text" id="q16a" data-q="16"> to work today, we (<span class="verb">go</span>) <input type="text" id="q16b" data-q="16"> to the beach.</li>
+                    <li>If I (<span class="verb">know</span>) <input type="text" id="q17a" data-q="17"> his number, I (<span class="verb">call</span>) <input type="text" id="q17b" data-q="17"> him.</li>
+                    <li>The world (<span class="verb">be</span>) <input type="text" id="q18a" data-q="18"> a better place if everyone (<span class="verb">be</span>) <input type="text" id="q18b" data-q="18"> kinder.</li>
+                    <li>If you (<span class="verb">see</span>) <input type="text" id="q19a" data-q="19"> a ghost, what (<span class="verb">you / do</span>) <input type="text" id="q19b" data-q="19">?</li>
+                    <li>He (<span class="verb">travel</span>) <input type="text" id="q20a" data-q="20"> more if he (<span class="verb">be</span>) <input type="text" id="q20b" data-q="20"> younger.</li>
+                </ol>
+
+                <h2>Type III Conditional</h2>
+                <ol start="21">
+                    <li>If you (<span class="verb">study</span>) <input type="text" id="q21a" data-q="21"> harder, you (<span class="verb">pass</span>) <input type="text" id="q21b" data-q="21"> the exam.</li>
+                    <li>If it (<span class="verb">not rain</span>) <input type="text" id="q22a" data-q="22">, we (<span class="verb">go</span>) <input type="text" id="q22b" data-q="22"> to the park.</li>
+                    <li>She (<span class="verb">not miss</span>) <input type="text" id="q23a" data-q="23"> the bus if she (<span class="verb">leave</span>) <input type="text" id="q23b" data-q="23"> earlier.</li>
+                    <li>If I (<span class="verb">find</span>) <input type="text" id="q24a" data-q="24"> your keys yesterday, I (<span class="verb">call</span>) <input type="text" id="q24b" data-q="24"> you.</li>
+                    <li>They (<span class="verb">come</span>) <input type="text" id="q25a" data-q="25"> to the party if we (<span class="verb">invite</span>) <input type="text" id="q25b" data-q="25"> them.</li>
+                    <li>What (<span class="verb">you / do</span>) <input type="text" id="q26a" data-q="26"> if he (<span class="verb">ask</span>) <input type="text" id="q26b" data-q="26"> you for help?</li>
+                    <li>If he (<span class="verb">drive</span>) <input type="text" id="q27a" data-q="27"> more carefully, he (<span class="verb">not have</span>) <input type="text" id="q27b" data-q="27"> the accident.</li>
+                    <li>We (<span class="verb">buy</span>) <input type="text" id="q28a" data-q="28"> the house if it (<span class="verb">be</span>) <input type="text" id="q28b" data-q="28"> cheaper.</li>
+                    <li>If I (<span class="verb">know</span>) <input type="text" id="q29a" data-q="29"> you were coming, I (<span class="verb">bake</span>) <input type="text" id="q29b" data-q="29"> a cake.</li>
+                    <li>They (<span class="verb">win</span>) <input type="text" id="q30a" data-q="30"> the match if their best player (<span class="verb">not be</span>) <input type="text" id="q30b" data-q="30"> injured.</li>
+                </ol>
+            </form>
+            <div id="score-container"></div>
+            <div class="controls">
+                <button id="check-score-btn" disabled>Check score</button>
+                <button id="create-pdf-btn" disabled>Create PDF</button>
+                <button id="save-btn">Save</button>
+                <button id="reset-btn">Reset</button>
+            </div>
+        </div>
+
+        <div id="answers" class="tab-content">
+            <h2>Correct answers and explanations</h2>
+            <table id="answers-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Correct answer</th>
+                        <th>Explanation</th>
+                    </tr>
+                </thead>
+                <tbody id="answers-tbody">
+                    </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA ---
+        const correctAnswers = {
+            1: { a: "study", b: "will pass", expl: "Type I: Real future possibility. Structure: If + Present Simple, will + base verb." },
+            2: { a: "rains", b: "will stay", expl: "Type I: Real future possibility. Structure: If + Present Simple, will + base verb." },
+            3: { a: "will miss", b: "doesn't leave", expl: "Type I: Real future possibility. Structure: will + base verb if + Present Simple." },
+            4: { a: "find", b: "will call", expl: "Type I: Real future possibility. Structure: If + Present Simple, will + base verb." },
+            5: { a: "will go", b: "finish", expl: "Type I: Real future possibility. Structure: will + base verb if + Present Simple." },
+            6: { a: "will you do", b: "get", expl: "Type I: Question about a real future possibility. Structure: What will... if + Present Simple." },
+            7: { a: "is", b: "will have", expl: "Type I: Real future possibility. Structure: If + Present Simple, will + base verb." },
+            8: { a: "will be", b: "doesn't hurry", expl: "Type I: Real future possibility. Structure: will + base verb if + Present Simple." },
+            9: { a: "eat", b: "will feel", expl: "Type I: Real future possibility. Structure: If + Present Simple, will + base verb." },
+            10: { a: "will buy", b: "win", expl: "Type I: Real future possibility. Structure: will + base verb if + Present Simple." },
+            11: { a: "were", b: "would tell", expl: "Type II: Hypothetical present situation (giving advice). Structure: If + Past Simple, would + base verb. 'Were' is used for all subjects in formal/standard use." },
+            12: { a: "had", b: "would learn", expl: "Type II: Hypothetical present situation. Structure: If + Past Simple, would + base verb." },
+            13: { a: "lived", b: "would visit", expl: "Type II: Hypothetical present situation. Structure: If + Past Simple, would + base verb." },
+            14: { a: "would you do", b: "won", expl: "Type II: Question about a hypothetical present situation. Structure: What would... if + Past Simple." },
+            15: { a: "spoke", b: "would get", expl: "Type II: Hypothetical present situation. Structure: If + Past Simple, would + base verb." },
+            16: { a: "didn't have", b: "would go", expl: "Type II: Hypothetical present situation. Structure: If + Past Simple, would + base verb." },
+            17: { a: "knew", b: "would call", expl: "Type II: Hypothetical present situation. Structure: If + Past Simple, would + base verb." },
+            18: { a: "would be", b: "were", expl: "Type II: Hypothetical present situation. Structure: would + base verb if + Past Simple. 'Were' is common for hypotheticals." },
+            19: { a: "saw", b: "would you do", expl: "Type II: Question about a hypothetical present situation. Structure: if + Past Simple, What would..." },
+            20: { a: "would travel", b: "were", expl: "Type II: Hypothetical present situation. Structure: would + base verb if + Past Simple." },
+            21: { a: "had studied", b: "would have passed", expl: "Type III: Hypothetical past situation (regret/criticism). Structure: If + Past Perfect, would have + past participle." },
+            22: { a: "hadn't rained", b: "would have gone", expl: "Type III: Hypothetical past situation. Structure: If + Past Perfect, would have + past participle." },
+            23: { a: "wouldn't have missed", b: "had left", expl: "Type III: Hypothetical past situation. Structure: would have + past participle if + Past Perfect." },
+            24: { a: "had found", b: "would have called", expl: "Type III: Hypothetical past situation. Structure: If + Past Perfect, would have + past participle." },
+            25: { a: "would have come", b: "had invited", expl: "Type III: Hypothetical past situation. Structure: would have + past participle if + Past Perfect." },
+            26: { a: "would you have done", b: "had asked", expl: "Type III: Question about a hypothetical past situation. Structure: What would have... if + Past Perfect." },
+            27: { a: "had driven", b: "wouldn't have had", expl: "Type III: Hypothetical past situation. Structure: If + Past Perfect, would have + past participle." },
+            28: { a: "would have bought", b: "had been", expl: "Type III: Hypothetical past situation. Structure: would have + past participle if + Past Perfect." },
+            29: { a: "had known", b: "would have baked", expl: "Type III: Hypothetical past situation. Structure: If + Past Perfect, would have + past participle." },
+            30: { a: "would have won", b: "hadn't been", expl: "Type III: Hypothetical past situation. Structure: would have + past participle if + Past Perfect." }
+        };
+
+        const password = "Cl@r@";
+        let answersUnlocked = false;
+        let scoreChecked = false;
+
+        // --- DOM Elements ---
+        const form = document.getElementById('test-form');
+        const inputs = form.querySelectorAll('input[type="text"]');
+        const checkScoreBtn = document.getElementById('check-score-btn');
+        const createPdfBtn = document.getElementById('create-pdf-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const scoreContainer = document.getElementById('score-container');
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            checkProgress();
+            populateAnswersTable();
+        });
+
+        form.addEventListener('input', checkProgress);
+        checkScoreBtn.addEventListener('click', checkScore);
+        createPdfBtn.addEventListener('click', createPdf);
+        saveBtn.addEventListener('click', saveProgress);
+        resetBtn.addEventListener('click', resetTest);
+
+
+        // --- Functions ---
+        
+        function openTab(evt, tabName) {
+            if (tabName === 'answers' && !answersUnlocked) {
+                const enteredPassword = prompt("Please enter the password to view answers:");
+                if (enteredPassword === password) {
+                    answersUnlocked = true;
+                } else {
+                    if (enteredPassword !== null) { // User didn't click cancel
+                       alert("Incorrect password.");
+                    }
+                    return; // Stop tab switching
+                }
+            }
+
+            // Tab switching logic
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+            const tabButtons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        
+        function checkProgress() {
+            let filledCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    filledCount++;
+                }
+            });
+            // 95% of 60 inputs is 57
+            checkScoreBtn.disabled = (filledCount < 57);
+        }
+
+        function checkScore() {
+            let score = 0;
+            const totalQuestions = 30;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const inputA = document.getElementById(`q${i}a`);
+                const inputB = document.getElementById(`q${i}b`);
+                const answerA = correctAnswers[i].a;
+                const answerB = correctAnswers[i].b;
+
+                let questionCorrect = true;
+
+                // Check part A
+                if (inputA.value.trim().toLowerCase() === answerA) {
+                    inputA.classList.remove('incorrect');
+                    inputA.classList.add('correct');
+                } else {
+                    inputA.classList.remove('correct');
+                    inputA.classList.add('incorrect');
+                    questionCorrect = false;
+                }
+
+                // Check part B
+                if (inputB.value.trim().toLowerCase() === answerB) {
+                    inputB.classList.remove('incorrect');
+                    inputB.classList.add('correct');
+                } else {
+                    inputB.classList.remove('correct');
+                    inputB.classList.add('incorrect');
+                    questionCorrect = false;
+                }
+
+                if (questionCorrect) {
+                    score++;
+                }
+            }
+            
+            scoreContainer.textContent = `Your score: ${score} / ${totalQuestions}`;
+            createPdfBtn.disabled = false;
+            checkScoreBtn.disabled = true;
+            scoreChecked = true;
+        }
+        
+        function saveProgress() {
+            const userAnswers = {};
+            inputs.forEach(input => {
+                userAnswers[input.id] = input.value;
+            });
+            localStorage.setItem('conditionalsTestProgress', JSON.stringify(userAnswers));
+            alert('Your progress has been saved!');
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('conditionalsTestProgress');
+            if (savedProgress) {
+                const userAnswers = JSON.parse(savedProgress);
+                inputs.forEach(input => {
+                    if (userAnswers[input.id]) {
+                        input.value = userAnswers[input.id];
+                    }
+                });
+            }
+        }
+
+        function resetTest() {
+             if (!confirm("Are you sure you want to reset the test? All progress will be lost.")) {
+                return;
+            }
+            form.reset();
+            inputs.forEach(input => {
+                input.classList.remove('correct', 'incorrect');
+            });
+            scoreContainer.textContent = '';
+            checkScoreBtn.disabled = true;
+            createPdfBtn.disabled = true;
+            scoreChecked = false;
+            localStorage.removeItem('conditionalsTestProgress');
+            checkProgress(); // Re-check to disable button correctly
+        }
+
+        function populateAnswersTable() {
+            const tbody = document.getElementById('answers-tbody');
+            for (let i = 1; i <= 30; i++) {
+                const answer = correctAnswers[i];
+                const row = `
+                    <tr>
+                        <td>${i}</td>
+                        <td>${answer.a} / ${answer.b}</td>
+                        <td>${answer.expl}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            }
+        }
+
+        function createPdf() {
+            if (!scoreChecked) {
+                alert("Please check your score before creating the PDF.");
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(18);
+            doc.text("Conditional Clauses Test Results", 14, 22);
+
+            const scoreText = scoreContainer.textContent;
+            doc.setFontSize(14);
+            doc.text(scoreText, 14, 32);
+            
+            const tableData = [];
+            for (let i = 1; i <= 30; i++) {
+                const userAnswerA = document.getElementById(`q${i}a`).value;
+                const userAnswerB = document.getElementById(`q${i}b`).value;
+                const correctAnswer = `${correctAnswers[i].a} / ${correctAnswers[i].b}`;
+                const explanation = correctAnswers[i].expl;
+                
+                tableData.push([
+                    i,
+                    `${userAnswerA} / ${userAnswerB}`,
+                    correctAnswer,
+                    explanation
+                ]);
+            }
+            
+            doc.autoTable({
+                head: [['#', 'Your Answer', 'Correct Answer', 'Explanation']],
+                body: tableData,
+                startY: 40,
+                headStyles: { fillColor: [0, 90, 158] }, // #005a9e
+                styles: { fontSize: 8 },
+                columnStyles: {
+                    0: { cellWidth: 10 },
+                    1: { cellWidth: 40 },
+                    2: { cellWidth: 40 },
+                    3: { cellWidth: 'auto' }
+                }
+            });
+
+            doc.save('conditionals-test-results.pdf');
+        }
+
+    </script>
+
+</body>
+</html>
+
