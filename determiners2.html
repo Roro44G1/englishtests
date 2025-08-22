@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Determiners - Test Interactiv (Set 2)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+       .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+       .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+       .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .tab-link:hover {
+            color: #3498db;
+        }
+       .tab-link.active {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+        }
+       .test-content {
+            display: none;
+        }
+       .test-content.active {
+            display: block;
+        }
+       .question {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-left: 3px solid #e0e0e0;
+            transition: border-left-color 0.3s;
+        }
+        .question:hover {
+            border-left-color: #3498db;
+        }
+       .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+            color: #555;
+        }
+        .sentence-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 15px;
+            width: 150px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+       .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+       .button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            margin: 5px;
+        }
+        .button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+       .button:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+       .button.reset {
+            background-color: #e74c3c;
+        }
+       .button.reset:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+        .button.save {
+            background-color: #27ae60;
+        }
+        .button.save:hover:not(:disabled) {
+            background-color: #229954;
+        }
+        .button.print {
+            background-color: #8e44ad;
+        }
+        .button.print:hover:not(:disabled) {
+            background-color: #7d3c98;
+        }
+       .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #eaf5ff;
+            border-radius: 5px;
+            border: 1px solid #bddef6;
+        }
+        /* Accordion Styles */
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .accordion-button {
+            width: 100%;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            cursor: pointer;
+            padding: 15px 20px;
+            text-align: left;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .accordion-button:hover {
+            background-color: #e9ecef;
+        }
+        .accordion-content {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .accordion-content.active {
+            padding: 15px 20px;
+        }
+        .accordion-content ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .accordion-content li {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #eee;
+        }
+        .accordion-content li:last-child {
+            border-bottom: none;
+        }
+        .explanation {
+            font-style: italic;
+            color: #555;
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Teste Interactive - Determinanții Substantivului (Set 2)</h1>
+        <p class="text-center italic text-gray-600 mb-6">Complete the sentences with a suitable determiner (e.g., a, the, some, any, much, many, each, every, etc.).</p>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="showTab('test1')">Determiners Test</button>
+            <button class="tab-link" onclick="showTab('answers')">Răspunsuri & Explicații</button>
+        </div>
+
+        <div id="test1" class="test-content active"></div>
+        <div id="answers" class="test-content">
+            <h2 class="text-2xl font-bold mb-4 text-center">Răspunsuri Corecte și Explicații</h2>
+            <div id="accordion-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let answersUnlocked = false;
+        const testTimestamps = {};
+        
+        const allQuestions = [
+            { sentence: "___ of the three candidates was suitable for the job, so they had to start the recruitment process again.", answer: "None", explanation: "'None' este folosit pentru a indica zero dintr-un grup de trei sau mai mulți. 'Neither' ar fi fost folosit pentru un grup de doi." },
+            { sentence: "I have very ___ patience for people who are not willing to try.", answer: "little", explanation: "'Little' (fără 'a') are un sens negativ, însemnând 'foarte puțină, aproape deloc'. Subliniază lipsa aproape totală a răbdării." },
+            { sentence: "___ single one of his arguments was convincing.", answer: "Every", explanation: "'Every' este folosit în expresia 'every single one' pentru a oferi o accentuare puternică, referindu-se la toți membrii unui grup, fără excepție." },
+            { sentence: "___ of the twins has a different personality.", answer: "Each", explanation: "'Each' este folosit pentru a se referi la membrii individuali ai unui grup de doi sau mai mulți, subliniind individualitatea. 'Twins' indică un grup de doi." },
+            { sentence: "There is hardly ___ coffee left in the jar.", answer: "any", explanation: "'Any' este folosit în propoziții cu sens negativ, create de adverbe precum 'hardly', 'scarcely' sau 'barely'." },
+            { sentence: "You can take ___ route you like; they both lead to the city centre.", answer: "either", explanation: "'Either' este folosit pentru a indica una dintre cele două opțiuni disponibile ('both' este un indiciu)." },
+            { sentence: "He has spent a great ___ of time on this project.", answer: "deal", explanation: "Expresia 'a great deal of' este o colocare comună folosită cu substantive nenumărabile (time) pentru a indica o cantitate mare." },
+            { sentence: "___ of my colleagues speak French fluently.", answer: "Both", explanation: "Deși nu este specificat un număr, contextul unei propoziții simple sugerează adesea un grup de doi. 'Both' este cel mai natural determinant aici, dar 'All' ar putea fi acceptabil în funcție de contextul mai larg." },
+            { sentence: "She has ___ interest in politics whatsoever.", answer: "no", explanation: "'No' este un determinant negativ puternic, adesea accentuat de 'whatsoever', pentru a indica o absență totală." },
+            { sentence: "___ of the children received a prize for their participation.", answer: "All", explanation: "'All' este folosit pentru a se referi la totalitatea unui grup. 'Every' ar necesita 'child' (singular)." },
+            { sentence: "There are ___ reasons why this plan might fail.", answer: "several", explanation: "'Several' este folosit pentru a indica un număr nedefinit, dar mai mare de două, de obicei nu foarte mare." },
+            { sentence: "___ of the two proposals was accepted by the committee.", answer: "Neither", explanation: "'Neither' este folosit pentru a nega ambele opțiuni dintr-o pereche. Verbul care urmează este la singular." },
+            { sentence: "I have ___ sympathy for people who complain all the time.", answer: "little", explanation: "'Little' (fără 'a') are un sens negativ, indicând o cantitate foarte mică, aproape inexistentă, de simpatie." },
+            { sentence: "___ student must submit their essay by Friday.", answer: "Every", explanation: "'Every' este folosit cu un substantiv la singular pentru a se referi la toți membrii unui grup, ca o regulă generală." },
+            { sentence: "He ate ___ the cake by himself.", answer: "the whole", explanation: "'The whole' este folosit cu substantive numărabile la singular pentru a se referi la întreaga cantitate a unui singur obiect." },
+            { sentence: "___ of the information you provided was useful.", answer: "Much", explanation: "'Much' este folosit cu substantive nenumărabile (information) pentru a indica o cantitate mare, adesea în propoziții afirmative formale." },
+            { sentence: "There are ___ good restaurants in this area; we should go somewhere else.", answer: "few", explanation: "'Few' (fără 'a') are un sens negativ, indicând că numărul de restaurante bune este insuficient." },
+            { sentence: "Could you give me ___ advice on this matter?", answer: "some", explanation: "'Some' este folosit în cereri politicoase, chiar dacă propoziția este interogativă, pentru a se referi la o cantitate neprecizată dintr-un substantiv nenumărabil." },
+            { sentence: "___ of the solutions presented seems viable.", answer: "Neither", explanation: "Presupunând că au fost prezentate două soluții, 'neither' este corect. Dacă ar fi fost mai mult de două, 'None' ar fi fost răspunsul." },
+            { sentence: "She has made ___ progress in her studies this term.", answer: "a lot of", explanation: "'A lot of' este un cuantificator comun folosit atât cu substantive numărabile, cât și nenumărabile (progress) în propoziții afirmative." },
+            { sentence: "___ of the witnesses could identify the suspect.", answer: "None", explanation: "'None' este folosit pentru a indica zero dintr-un grup de mai mult de două persoane." },
+            { sentence: "I have ___ idea what you are talking about.", answer: "no", explanation: "'No' este folosit ca determinant înaintea unui substantiv pentru a forma o negație puternică." },
+            { sentence: "___ of the two brothers is taller than the other.", answer: "Neither", explanation: "'Neither' este folosit pentru a nega o caracteristică pentru ambele persoane dintr-o pereche." },
+            { sentence: "He has ___ experience in this type of work.", answer: "plenty of", explanation: "'Plenty of' este folosit pentru a indica o cantitate mare, mai mult decât suficientă, atât cu substantive numărabile, cât și nenumărabile." },
+            { sentence: "___ of the paintings in the gallery was for sale.", answer: "Each", explanation: "'Each' subliniază individualitatea fiecărui tablou din galerie." },
+            { sentence: "There is ___ point in continuing this argument.", answer: "no", explanation: "Expresia fixă 'there is no point in' înseamnă că ceva este inutil." },
+            { sentence: "___ of the participants was asked to give a short speech.", answer: "Each", explanation: "'Each' este folosit pentru a sublinia că fiecare participant, individual, a fost rugat să vorbească." },
+            { sentence: "We have ___ time to waste.", answer: "no", explanation: "'No' este folosit pentru a indica o cantitate zero, cu un sens de urgență." },
+            { sentence: "___ of the employees was happy with the new policy.", answer: "None", explanation: "'None' este folosit pentru a indica zero dintr-un grup de mai mult de două persoane. 'None of' este urmat de un verb la singular sau plural (în engleza modernă)." },
+            { sentence: "I have ___ friends who live abroad.", answer: "a few", explanation: "'A few' are un sens pozitiv, indicând un număr mic, dar existent, de prieteni." }
+        ];
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        const shuffledQuestions = shuffle([...allQuestions]);
+
+        function generateQuestions() {
+            const container = document.getElementById('test1');
+            let html = `<form id="form-test1" oninput="updateCheckButtonState()">`;
+            
+            shuffledQuestions.forEach((q, index) => {
+                const parts = q.sentence.split('___');
+                html += `
+                    <div class="question">
+                        <div class="question-number">${index + 1}.</div>
+                        <div class="sentence-wrapper">
+                            <span>${parts[0]}</span>
+                            <input type="text" id="q-1-${index + 1}" autocomplete="off">
+                            <span>${parts[1] || ''}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</form>`;
+            html += `
+                <div class="controls">
+                    <button type="button" class="button check" id="check-btn-test1" onclick="calculateScore()" disabled>Verifică Scorul</button>
+                    <button type="button" class="button save" onclick="saveProgress()">Salvează Progresul</button>
+                    <button type="button" class="button reset" onclick="resetTest()">Resetează</button>
+                    <button type="button" class="button print" id="print-btn-test1" onclick="printResults()" disabled>Tipărește Rezultatele</button>
+                </div>
+                <div id="result-test1" class="result" style="display:none;"></div>
+            `;
+            container.innerHTML = html;
+        }
+
+        function generateAnswers() {
+            const accordionContainer = document.getElementById('accordion-container');
+            let html = `
+                <div class="accordion-item">
+                    <button class="accordion-button">Determiners Explanations</button>
+                    <div class="accordion-content">
+                        <ol>
+                            ${shuffledQuestions.map(q => {
+                                const fullSentence = q.sentence.replace('___', `<strong>${q.answer}</strong>`);
+                                return `
+                                <li>
+                                    <strong>${fullSentence}</strong>
+                                    <div class="explanation"><strong>Explicație:</strong> ${q.explanation}</div>
+                                </li>`;
+                            }).join('')}
+                        </ol>
+                    </div>
+                </div>
+            `;
+            accordionContainer.innerHTML = html;
+        }
+        
+        function updateCheckButtonState() {
+            const form = document.getElementById('form-test1');
+            const inputs = form.querySelectorAll('input[type="text"]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim().length > 0) {
+                    validCount++;
+                }
+            });
+            const checkButton = document.getElementById('check-btn-test1');
+            checkButton.disabled = validCount < 25; 
+        }
+
+        function setupAccordion() {
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const isActive = content.classList.contains('active');
+                    
+                    document.querySelectorAll('.accordion-content').forEach(c => {
+                        c.classList.remove('active');
+                        c.style.maxHeight = null;
+                        c.style.padding = "0 20px";
+                    });
+
+                    if (!isActive) {
+                        content.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+
+        function showTab(tabId) {
+            if (tabId === 'answers' && !answersUnlocked) {
+                const password = prompt("Please enter the password to view answers:");
+                if (password === "Kl@r@1") {
+                    answersUnlocked = true;
+                } else {
+                    if (password !== null) { 
+                        alert("Incorrect password!");
+                    }
+                    return; 
+                }
+            }
+
+            if (!testTimestamps[tabId] && tabId.startsWith('test')) {
+                testTimestamps[tabId] = { start: new Date() };
+            }
+
+            const contents = document.querySelectorAll('.test-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-link[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function calculateScore() {
+            let score = 0;
+            
+            shuffledQuestions.forEach((q, i) => {
+                const inputElement = document.getElementById(`q-1-${i + 1}`);
+                if (!inputElement) return;
+
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = q.answer.toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    inputElement.style.borderColor = '#2ecc71';
+                } else {
+                    inputElement.style.borderColor = '#e74c3c';
+                }
+            });
+            
+            const resultDiv = document.getElementById('result-test1');
+            resultDiv.innerHTML = `Scorul tău este: ${score} / ${shuffledQuestions.length}`;
+            resultDiv.style.display = 'block';
+
+            const printButton = document.getElementById('print-btn-test1');
+            if (printButton) {
+                printButton.disabled = false;
+            }
+        }
+        
+        function printResults() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFont('Helvetica', 'normal');
+
+            const questionsCount = shuffledQuestions.length;
+            let score = 0;
+
+            for (let i = 0; i < questionsCount; i++) {
+                const inputElement = document.getElementById(`q-1-${i + 1}`);
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = shuffledQuestions[i].answer.toLowerCase();
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+            }
+            
+            const grade = 1 + (score / questionsCount) * 9;
+
+            let yPosition = 20;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 20;
+            const maxWidth = doc.internal.pageSize.width - margin * 2;
+
+            doc.setFontSize(16);
+            doc.setFont('Helvetica', 'bold');
+            doc.text(`Results - Determiners Test`, 105, yPosition, { align: 'center' });
+            yPosition += 10;
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(12);
+            doc.text(`Score: ${score} / ${questionsCount}`, 105, yPosition, { align: 'center' });
+            yPosition += 7;
+            
+            doc.setTextColor(255, 0, 0);
+            doc.text(`Grade: ${grade.toFixed(2)}`, 105, yPosition, { align: 'center' });
+            doc.setTextColor(0, 0, 0);
+            
+            yPosition += 10;
+            doc.line(margin, yPosition, doc.internal.pageSize.width - margin, yPosition);
+            yPosition += 10;
+
+            doc.setFontSize(10);
+            for (let i = 0; i < questionsCount; i++) {
+                if (yPosition > pageHeight - margin - 30) { 
+                    doc.addPage();
+                    yPosition = margin;
+                }
+
+                const question = shuffledQuestions[i];
+                const userInput = document.getElementById(`q-1-${i + 1}`).value.trim();
+                const fullSentence = question.sentence.replace('___', `<strong>${question.answer}</strong>`);
+
+                doc.setFont('Helvetica', 'bold');
+                const questionLines = doc.splitTextToSize(`${i + 1}. ${question.sentence}`, maxWidth);
+                doc.text(questionLines, margin, yPosition);
+                yPosition += (questionLines.length * 5) + 3;
+                
+                doc.setFont('Helvetica', 'normal');
+                const userInputLines = doc.splitTextToSize(`Your Answer: ${userInput || '[Not answered]'}`, maxWidth - 5);
+                doc.text(userInputLines, margin + 5, yPosition);
+                yPosition += (userInputLines.length * 5) + 3;
+
+                const correctAnswerLines = doc.splitTextToSize(`Correct Answer: ${question.answer}`, maxWidth - 5);
+                doc.text(correctAnswerLines, margin + 5, yPosition);
+                yPosition += (correctAnswerLines.length * 5) + 3;
+                
+                const fullAnswerLines = doc.splitTextToSize(`Full Sentence: ${fullSentence.replace(/<strong>|<\/strong>/g, '')}`, maxWidth - 5);
+                doc.text(fullAnswerLines, margin + 5, yPosition);
+                yPosition += (fullAnswerLines.length * 5) + 8;
+            }
+
+            const finishTime = new Date();
+            const startTime = testTimestamps['test1'] ? testTimestamps['test1'].start : new Date();
+            
+            doc.setTextColor(255, 255, 255);
+            const keyText1 = `Test started at: ${startTime.toLocaleString('en-GB')}`;
+            const keyText2 = `Test finished at: ${finishTime.toLocaleString('en-GB')}`;
+            doc.text(keyText1, margin, yPosition > pageHeight - margin - 15 ? (doc.addPage(), margin) : yPosition + 10);
+            doc.text(keyText2, margin, yPosition > pageHeight - margin - 15 ? margin + 5 : yPosition + 15);
+
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const fileName = `DeterminersTest_${hours}${day}${minutes}.pdf`;
+
+            doc.save(fileName);
+        }
+
+        function saveProgress() {
+            const answers = {};
+            for (let i = 1; i <= shuffledQuestions.length; i++) {
+                const inputElement = document.getElementById(`q-1-${i}`);
+                if (inputElement) {
+                    answers[`q-1-${i}`] = inputElement.value;
+                }
+            }
+            localStorage.setItem(`determinersProgress`, JSON.stringify(answers));
+            
+            const saveButton = document.querySelector(`#test1 .button.save`);
+            if(saveButton) {
+                saveButton.textContent = 'Salvat!';
+                setTimeout(() => { saveButton.textContent = 'Salvează Progresul'; }, 2000);
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem(`determinersProgress`);
+            if (savedProgress) {
+                const answers = JSON.parse(savedProgress);
+                for (const inputId in answers) {
+                    const inputElement = document.getElementById(inputId);
+                    if (inputElement) {
+                        inputElement.value = answers[inputId];
+                    }
+                }
+            }
+            updateCheckButtonState();
+        }
+
+        function resetTest() {
+            const form = document.getElementById('form-test1');
+            form.reset();
+            form.querySelectorAll('input[type="text"]').forEach(input => {
+                input.style.borderColor = '#ccc';
+            });
+            document.getElementById('result-test1').style.display = 'none';
+            document.getElementById('print-btn-test1').disabled = true;
+            document.getElementById('check-btn-test1').disabled = true;
+            localStorage.removeItem('determinersProgress');
+        }
+
+        window.onload = () => {
+            generateQuestions();
+            generateAnswers();
+            setupAccordion();
+            loadProgress();
+            showTab('test1');
+        };
+    </script>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+                return false;
+            }
+        };
+    </script>
+
+</body>
+</html>
