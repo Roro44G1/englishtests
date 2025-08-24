@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prepositions - Test Interactiv (set 3)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+       .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+       .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+       .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .tab-link:hover {
+            color: #3498db;
+        }
+       .tab-link.active {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+        }
+       .test-content {
+            display: none;
+        }
+       .test-content.active {
+            display: block;
+        }
+       .question {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-left: 3px solid #e0e0e0;
+            transition: border-left-color 0.3s;
+        }
+        .question:hover {
+            border-left-color: #3498db;
+        }
+       .question-number {
+            font-weight: bold;
+            margin-right: 8px;
+            color: #555;
+        }
+        .sentence-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 15px;
+            width: 150px; 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+       .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+       .button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            margin: 5px;
+        }
+        .button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+       .button:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+       .button.reset {
+            background-color: #e74c3c;
+        }
+       .button.reset:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+        .button.save {
+            background-color: #27ae60;
+        }
+        .button.save:hover:not(:disabled) {
+            background-color: #229954;
+        }
+        .button.print {
+            background-color: #8e44ad;
+        }
+        .button.print:hover:not(:disabled) {
+            background-color: #7d3c98;
+        }
+       .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #eaf5ff;
+            border-radius: 5px;
+            border: 1px solid #bddef6;
+        }
+        /* Accordion Styles */
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .accordion-button {
+            width: 100%;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            cursor: pointer;
+            padding: 15px 20px;
+            text-align: left;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .accordion-button:hover {
+            background-color: #e9ecef;
+        }
+        .accordion-content {
+            padding: 0 20px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .accordion-content.active {
+            padding: 15px 20px;
+        }
+        .accordion-content ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .accordion-content li {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #eee;
+        }
+        .accordion-content li:last-child {
+            border-bottom: none;
+        }
+        .explanation {
+            font-style: italic;
+            color: #555;
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Teste Interactive - Prepoziții (set 3)</h1>
+        <p class="text-center italic text-gray-600 mb-6">Complete the sentences with the correct preposition.</p>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="showTab('test1')">Prepositions Test</button>
+            <button class="tab-link" onclick="showTab('answers')">Răspunsuri & Explicații</button>
+        </div>
+
+        <div id="test1" class="test-content active"></div>
+        <div id="answers" class="test-content">
+            <h2 class="text-2xl font-bold mb-4 text-center">Răspunsuri Corecte și Explicații</h2>
+            <div id="accordion-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let answersUnlocked = false;
+        const testTimestamps = {};
+        
+        const allQuestions = [
+            { sentence: "The new regulations are ___ variance with the company's established policies.", answer: "at", explanation: "Expresia 'at variance with' este o colocare formală care înseamnă a fi în conflict sau în contradicție cu ceva." },
+            { sentence: "He was implicated ___ the scandal, although he denied any involvement.", answer: "in", explanation: "Verbul 'to implicate someone in something' înseamnă a arăta că cineva este implicat într-o activitate ilegală sau negativă." },
+            { sentence: "The success of the mission is contingent ___ the weather conditions.", answer: "on", explanation: "Adjectivul 'contingent on/upon' înseamnă a depinde de ceva care s-ar putea întâmpla în viitor." },
+            { sentence: "She is conversant ___ the latest developments in her field.", answer: "with", explanation: "Expresia 'to be conversant with' înseamnă a fi familiarizat cu sau a cunoaște bine un subiect." },
+            { sentence: "The politician's comments gave rise ___ a great deal of controversy.", answer: "to", explanation: "Expresia 'to give rise to something' înseamnă a cauza sau a provoca ceva, de obicei ceva neașteptat sau negativ." },
+            { sentence: "His work is held ___ high esteem by his colleagues.", answer: "in", explanation: "Expresia 'to hold someone/something in high esteem' înseamnă a avea un mare respect sau o mare admirație pentru cineva/ceva." },
+            { sentence: "The team's victory was ___ jeopardy until the final minute.", answer: "in", explanation: "Expresia 'in jeopardy' înseamnă a fi în pericol sau în risc de a fi pierdut sau deteriorat." },
+            { sentence: "She is not averse ___ taking on new challenges.", answer: "to", explanation: "Adjectivul 'averse to' este urmat de un substantiv sau de forma de gerunziu a unui verb (-ing) și înseamnă a nu-i plăcea ceva sau a se opune cu tărie." },
+            { sentence: "The new evidence is consistent ___ the defendant's testimony.", answer: "with", explanation: "Adjectivul 'consistent with' înseamnă a fi în acord sau a nu contrazice altceva." },
+            { sentence: "He is liable ___ a fine if he doesn't pay his taxes on time.", answer: "for", explanation: "Expresia 'liable for' este folosită pentru a indica responsabilitatea legală pentru plata a ceva." },
+            { sentence: "The company is intent ___ expanding into new markets.", answer: "on", explanation: "Expresia 'to be intent on doing something' înseamnă a fi hotărât să faci ceva." },
+            { sentence: "She is preoccupied ___ her upcoming exams.", answer: "with", explanation: "Adjectivul 'preoccupied with' înseamnă a se gândi sau a se îngrijora constant la ceva, astfel încât nu acorzi atenție altor lucruri." },
+            { sentence: "The new policy is fraught ___ difficulties and potential problems.", answer: "with", explanation: "Adjectivul 'fraught with' înseamnă a fi plin de ceva neplăcut, cum ar fi riscuri sau probleme." },
+            { sentence: "He is impervious ___ criticism and continues to follow his own path.", answer: "to", explanation: "Adjectivul 'impervious to' înseamnă a nu fi afectat sau influențat de ceva." },
+            { sentence: "The new discovery is tantamount ___ a revolution in the field of medicine.", answer: "to", explanation: "Expresia 'tantamount to' înseamnă a fi echivalent cu ceva, de obicei ceva foarte serios sau important." },
+            { sentence: "She is conversant ___ five different languages.", answer: "in", explanation: "Deși 'conversant with' este comun, 'conversant in' este de asemenea folosit, în special când ne referim la limbi străine." },
+            { sentence: "The new regulations are binding ___ all employees.", answer: "on", explanation: "Adjectivul 'binding on' înseamnă a fi obligatoriu din punct de vedere legal sau moral pentru cineva." },
+            { sentence: "He is very adept ___ navigating complex social situations.", answer: "at", explanation: "Adjectivul 'adept at' înseamnă a fi foarte priceput sau talentat la ceva." },
+            { sentence: "The new evidence casts doubt ___ the verdict.", answer: "on", explanation: "Expresia 'to cast doubt on' înseamnă a face ca ceva să pară mai puțin sigur sau credibil." },
+            { sentence: "She is very dismissive ___ anyone who disagrees with her.", answer: "of", explanation: "Adjectivul 'dismissive of' înseamnă a arăta că nu consideri pe cineva sau ceva demn de considerație." },
+            { sentence: "The new policy is geared ___ improving efficiency.", answer: "towards", explanation: "Expresia 'to be geared towards/to' înseamnă a fi proiectat sau organizat pentru a atinge un anumit scop." },
+            { sentence: "He is very meticulous ___ his work.", answer: "about", explanation: "Adjectivul 'meticulous' este adesea urmat de 'about' sau 'in' pentru a arăta o mare atenție la detalii." },
+            { sentence: "The new evidence is pertinent ___ the case.", answer: "to", explanation: "Adjectivul 'pertinent to' înseamnă a fi relevant sau a avea legătură directă cu un subiect." },
+            { sentence: "She is very resentful ___ the way she was treated.", answer: "of", explanation: "Adjectivul 'resentful of' înseamnă a simți amărăciune sau indignare față de ceva considerat nedrept." },
+            { sentence: "The new policy is subject ___ change without notice.", answer: "to", explanation: "Expresia 'subject to' înseamnă a fi susceptibil la ceva sau a depinde de ceva." },
+            { sentence: "He is very wary ___ making promises he can't keep.", answer: "of", explanation: "Adjectivul 'wary of' înseamnă a fi precaut sau suspicios față de cineva sau ceva." },
+            { sentence: "The new evidence is integral ___ the prosecution's case.", answer: "to", explanation: "Adjectivul 'integral to' înseamnă a fi esențial sau fundamental pentru ceva." },
+            { sentence: "She is very mindful ___ the impact of her words.", answer: "of", explanation: "Adjectivul 'mindful of' înseamnă a fi conștient de ceva și a acționa cu grijă." },
+            { sentence: "The new policy is predicated ___ the assumption that the economy will grow.", answer: "on", explanation: "Verbul 'to be predicated on/upon' înseamnă a se baza pe o anumită idee sau principiu." },
+            { sentence: "He is very zealous ___ his support for the cause.", answer: "in", explanation: "Adjectivul 'zealous' este adesea urmat de 'in' pentru a arăta un entuziasm mare și energic." }
+        ];
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        const shuffledQuestions = shuffle([...allQuestions]);
+
+        function generateQuestions() {
+            const container = document.getElementById('test1');
+            let html = `<form id="form-test1" oninput="updateCheckButtonState()">`;
+            
+            shuffledQuestions.forEach((q, index) => {
+                const parts = q.sentence.split('___');
+                html += `
+                    <div class="question">
+                        <div class="question-number">${index + 1}.</div>
+                        <div class="sentence-wrapper">
+                            <span>${parts[0]}</span>
+                            <input type="text" id="q-1-${index + 1}" autocomplete="off">
+                            <span>${parts[1] || ''}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</form>`;
+            html += `
+                <div class="controls">
+                    <button type="button" class="button check" id="check-btn-test1" onclick="calculateScore()" disabled>Verifică Scorul</button>
+                    <button type="button" class="button save" onclick="saveProgress()">Salvează Progresul</button>
+                    <button type="button" class="button reset" onclick="resetTest()">Resetează</button>
+                    <button type="button" class="button print" id="print-btn-test1" onclick="printResults()" disabled>Tipărește Rezultatele</button>
+                </div>
+                <div id="result-test1" class="result" style="display:none;"></div>
+            `;
+            container.innerHTML = html;
+        }
+
+        function generateAnswers() {
+            const accordionContainer = document.getElementById('accordion-container');
+            let html = `
+                <div class="accordion-item">
+                    <button class="accordion-button">Prepositions Explanations</button>
+                    <div class="accordion-content">
+                        <ol>
+                            ${shuffledQuestions.map(q => {
+                                const fullSentence = q.sentence.replace('___', `<strong>${q.answer}</strong>`);
+                                return `
+                                <li>
+                                    <strong>${fullSentence}</strong>
+                                    <div class="explanation"><strong>Explicație:</strong> ${q.explanation}</div>
+                                </li>`;
+                            }).join('')}
+                        </ol>
+                    </div>
+                </div>
+            `;
+            accordionContainer.innerHTML = html;
+        }
+        
+        function updateCheckButtonState() {
+            const form = document.getElementById('form-test1');
+            const inputs = form.querySelectorAll('input[type="text"]');
+            let validCount = 0;
+            inputs.forEach(input => {
+                if (input.value.trim().length > 0) {
+                    validCount++;
+                }
+            });
+            const checkButton = document.getElementById('check-btn-test1');
+            checkButton.disabled = validCount < 25; 
+        }
+
+        function setupAccordion() {
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const isActive = content.classList.contains('active');
+                    
+                    document.querySelectorAll('.accordion-content').forEach(c => {
+                        c.classList.remove('active');
+                        c.style.maxHeight = null;
+                        c.style.padding = "0 20px";
+                    });
+
+                    if (!isActive) {
+                        content.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+
+        function showTab(tabId) {
+            if (tabId === 'answers' && !answersUnlocked) {
+                const password = prompt("Please enter the password to view answers:");
+                if (password === "Cl@r@") {
+                    answersUnlocked = true;
+                } else {
+                    if (password !== null) { 
+                        alert("Incorrect password!");
+                    }
+                    return; 
+                }
+            }
+
+            if (!testTimestamps[tabId] && tabId.startsWith('test')) {
+                testTimestamps[tabId] = { start: new Date() };
+            }
+
+            const contents = document.querySelectorAll('.test-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const links = document.querySelectorAll('.tab-link');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-link[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function calculateScore() {
+            let score = 0;
+            
+            shuffledQuestions.forEach((q, i) => {
+                const inputElement = document.getElementById(`q-1-${i + 1}`);
+                if (!inputElement) return;
+
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = q.answer.toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    inputElement.style.borderColor = '#2ecc71';
+                } else {
+                    inputElement.style.borderColor = '#e74c3c';
+                }
+            });
+            
+            const resultDiv = document.getElementById('result-test1');
+            resultDiv.innerHTML = `Scorul tău este: ${score} / ${shuffledQuestions.length}`;
+            resultDiv.style.display = 'block';
+
+            const printButton = document.getElementById('print-btn-test1');
+            if (printButton) {
+                printButton.disabled = false;
+            }
+        }
+        
+        function printResults() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFont('Helvetica', 'normal');
+
+            const questionsCount = shuffledQuestions.length;
+            let score = 0;
+
+            for (let i = 0; i < questionsCount; i++) {
+                const inputElement = document.getElementById(`q-1-${i + 1}`);
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const correctAnswer = shuffledQuestions[i].answer.toLowerCase();
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+            }
+            
+            const grade = 1 + (score / questionsCount) * 9;
+
+            let yPosition = 20;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 20;
+            const maxWidth = doc.internal.pageSize.width - margin * 2;
+
+            doc.setFontSize(16);
+            doc.setFont('Helvetica', 'bold');
+            doc.text(`Results - Prepositions Test (C1)`, 105, yPosition, { align: 'center' });
+            yPosition += 10;
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(12);
+            doc.text(`Score: ${score} / ${questionsCount}`, 105, yPosition, { align: 'center' });
+            yPosition += 7;
+            
+            doc.setTextColor(255, 0, 0);
+            doc.text(`Grade: ${grade.toFixed(2)}`, 105, yPosition, { align: 'center' });
+            doc.setTextColor(0, 0, 0);
+            
+            yPosition += 10;
+            doc.line(margin, yPosition, doc.internal.pageSize.width - margin, yPosition);
+            yPosition += 10;
+
+            doc.setFontSize(10);
+            for (let i = 0; i < questionsCount; i++) {
+                if (yPosition > pageHeight - margin - 30) { 
+                    doc.addPage();
+                    yPosition = margin;
+                }
+
+                const question = shuffledQuestions[i];
+                const userInput = document.getElementById(`q-1-${i + 1}`).value.trim();
+                const fullSentence = question.sentence.replace('___', `<strong>${question.answer}</strong>`);
+
+                doc.setFont('Helvetica', 'bold');
+                const questionLines = doc.splitTextToSize(`${i + 1}. ${question.sentence}`, maxWidth);
+                doc.text(questionLines, margin, yPosition);
+                yPosition += (questionLines.length * 5) + 3;
+                
+                doc.setFont('Helvetica', 'normal');
+                const userInputLines = doc.splitTextToSize(`Your Answer: ${userInput || '[Not answered]'}`, maxWidth - 5);
+                doc.text(userInputLines, margin + 5, yPosition);
+                yPosition += (userInputLines.length * 5) + 3;
+
+                const correctAnswerLines = doc.splitTextToSize(`Correct Answer: ${question.answer}`, maxWidth - 5);
+                doc.text(correctAnswerLines, margin + 5, yPosition);
+                yPosition += (correctAnswerLines.length * 5) + 3;
+                
+                const fullAnswerLines = doc.splitTextToSize(`Full Sentence: ${fullSentence.replace(/<strong>|<\/strong>/g, '')}`, maxWidth - 5);
+                doc.text(fullAnswerLines, margin + 5, yPosition);
+                yPosition += (fullAnswerLines.length * 5) + 8;
+            }
+
+            const finishTime = new Date();
+            const startTime = testTimestamps['test1'] ? testTimestamps['test1'].start : new Date();
+            
+            doc.setTextColor(255, 255, 255);
+            const keyText1 = `Test started at: ${startTime.toLocaleString('en-GB')}`;
+            const keyText2 = `Test finished at: ${finishTime.toLocaleString('en-GB')}`;
+            doc.text(keyText1, margin, yPosition > pageHeight - margin - 15 ? (doc.addPage(), margin) : yPosition + 10);
+            doc.text(keyText2, margin, yPosition > pageHeight - margin - 15 ? margin + 5 : yPosition + 15);
+
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const fileName = `PrepositionsTestC1_${hours}${day}${minutes}.pdf`;
+
+            doc.save(fileName);
+        }
+
+        function saveProgress() {
+            const answers = {};
+            for (let i = 1; i <= shuffledQuestions.length; i++) {
+                const inputElement = document.getElementById(`q-1-${i}`);
+                if (inputElement) {
+                    answers[`q-1-${i}`] = inputElement.value;
+                }
+            }
+            localStorage.setItem(`prepositionsProgressC1`, JSON.stringify(answers));
+            
+            const saveButton = document.querySelector(`#test1 .button.save`);
+            if(saveButton) {
+                saveButton.textContent = 'Salvat!';
+                setTimeout(() => { saveButton.textContent = 'Salvează Progresul'; }, 2000);
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem(`prepositionsProgressC1`);
+            if (savedProgress) {
+                const answers = JSON.parse(savedProgress);
+                for (const inputId in answers) {
+                    const inputElement = document.getElementById(inputId);
+                    if (inputElement) {
+                        inputElement.value = answers[inputId];
+                    }
+                }
+            }
+            updateCheckButtonState();
+        }
+
+        function resetTest() {
+            const form = document.getElementById('form-test1');
+            form.reset();
+            form.querySelectorAll('input[type="text"]').forEach(input => {
+                input.style.borderColor = '#ccc';
+            });
+            document.getElementById('result-test1').style.display = 'none';
+            document.getElementById('print-btn-test1').disabled = true;
+            document.getElementById('check-btn-test1').disabled = true;
+            localStorage.removeItem('prepositionsProgressC1');
+        }
+
+        window.onload = () => {
+            generateQuestions();
+            generateAnswers();
+            setupAccordion();
+            loadProgress();
+            showTab('test1');
+        };
+    </script>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+                return false;
+            }
+        };
+    </script>
+
+</body>
+</html>
