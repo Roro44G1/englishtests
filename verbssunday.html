@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verb Tenses - Test Interactiv (set3)</title>
+    <title>Verb Tenses - Test Interactiv</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
@@ -196,7 +196,7 @@
 <body>
 
     <div class="container">
-        <h1>Teste Interactive - Timpurile Verbale (set 3)</h1>
+        <h1>Teste Interactive - Timpurile Verbale</h1>
         <p class="text-center italic text-gray-600 mb-6">Complete the sentences with the correct form of the verb in brackets.</p>
 
         <div class="tabs">
@@ -216,36 +216,77 @@
         const testTimestamps = {};
         
         const allQuestions = [
-            { sentence: "For months, scientists ___ the phenomenon, but a clear cause has yet to emerge. (investigate)", answer: "have been investigating", tense: "Present Perfect Continuous", explanation: "Folosit pentru a sublinia durata unei acțiuni care a început în trecut și continuă în prezent, având relevanță pentru situația actuală." },
-            { sentence: "By the time the authorities intervened, the damage ___. (already/be done)", answer: "had already been done", tense: "Past Perfect Passive", explanation: "Folosit pentru o acțiune care a fost finalizată înainte de un alt moment din trecut. Forma pasivă este necesară deoarece 'damage' este obiectul acțiunii." },
-            { sentence: "By 2030, it is projected that renewable energy sources ___ fossil fuels as the primary power source. (surpass)", answer: "will have surpassed", tense: "Future Perfect", explanation: "Folosit pentru a descrie o acțiune care va fi finalizată înainte de un moment specific din viitor." },
-            { sentence: "If he ___ my advice back then, he ___ in this difficult situation now. (take, not be)", answer: "had taken, wouldn't be", tense: "Mixed Conditional", explanation: "Folosit pentru a descrie o situație prezentă nereală (nu ar fi în această situație) care este rezultatul unei condiții trecute nerealizate (dacă ar fi ascultat sfatul)." },
-            { sentence: "While the diplomats ___ the treaty, new conflicts were breaking out elsewhere. (negotiate)", answer: "were negotiating", tense: "Past Continuous", explanation: "Folosit pentru a descrie două acțiuni paralele, în desfășurare, în trecut." },
-            { sentence: "This time next week, we ___ over the Atlantic on our way to New York. (fly)", answer: "will be flying", tense: "Future Continuous", explanation: "Folosit pentru a descrie o acțiune care va fi în plină desfășurare la un moment specific din viitor." },
-            { sentence: "The company ___ hundreds of workers in recent months due to the economic downturn. (lay off)", answer: "has laid off", tense: "Present Perfect", explanation: "Folosit pentru acțiuni recente într-o perioadă de timp neîncheiată ('in recent months') cu relevanță pentru prezent." },
-            { sentence: "The Treaty of Versailles ___ in 1919, officially ending the First World War. (sign)", answer: "was signed", tense: "Past Simple Passive", explanation: "Folosit pentru evenimente istorice finalizate. Forma pasivă este necesară deoarece tratatul este obiectul acțiunii." },
-            { sentence: "In September, she ___ at this school for exactly twenty years. (teach)", answer: "will have been teaching", tense: "Future Perfect Continuous", explanation: "Folosit pentru a sublinia durata unei acțiuni până la un moment specific din viitor." },
-            { sentence: "The prime minister ___ the nation in a live broadcast this evening. (address)", answer: "is addressing", tense: "Present Continuous for Future", explanation: "Folosit pentru un aranjament viitor, planificat și confirmat, în special un eveniment oficial." },
-            { sentence: "He was exhausted because he ___ on the report for 12 hours straight. (work)", answer: "had been working", tense: "Past Perfect Continuous", explanation: "Folosit pentru a explica o stare din trecut (era epuizat) printr-o acțiune continuă anterioară." },
-            { sentence: "In the novel, the protagonist ___ the room and immediately ___ that something is wrong. (enter, sense)", answer: "enters, senses", tense: "Present Simple (Historic Present)", explanation: "Folosit pentru a crea un efect dramatic într-o narațiune, povestind evenimente din trecut ca și cum s-ar întâmpla acum." },
-            { sentence: "Based on the current data, analysts predict the market ___ a significant correction. (experience)", answer: "is going to experience", tense: "'Going to' Future", explanation: "Folosit pentru a raporta o predicție bazată pe dovezi sau analize prezente." },
-            { sentence: "She ___ a career in politics until she was inspired by the local activist. (never consider)", answer: "had never considered", tense: "Past Perfect", explanation: "Folosit pentru a descrie o stare sau o acțiune care era valabilă înainte de un anumit moment din trecut." },
-            { sentence: "I assure you, we ___ everything in our power to resolve this issue. (do)", answer: "will do", tense: "Future Simple", explanation: "Folosit pentru a face o promisiune fermă sau a exprima o intenție puternică." },
-            { sentence: "To date, no viable solution to the problem ___. (find)", answer: "has been found", tense: "Present Perfect Passive", explanation: "Folosit cu expresii precum 'to date' pentru a descrie o situație până în prezent. Forma pasivă este necesară deoarece 'solution' este obiectul acțiunii." },
-            { sentence: "He ___ his phone during the meeting, which was quite unprofessional. (constantly check)", answer: "was constantly checking", tense: "Past Continuous", explanation: "Folosit cu 'constantly' pentru a descrie un obicei repetat și enervant din trecut." },
-            { sentence: "I ___ this book by the time you get back. (finish reading)", answer: "will have finished reading", tense: "Future Perfect", explanation: "Folosit pentru o acțiune care va fi finalizată înainte de un alt eveniment din viitor." },
-            { sentence: "How long ___ you ___ unwell? (feel)", answer: "have you been feeling", tense: "Present Perfect Continuous", explanation: "Folosit pentru a întreba despre durata unei stări care a început în trecut și continuă în prezent." },
-            { sentence: "He ___ a brilliant speech, which ___ him a standing ovation. (give, earn)", answer: "gave, earned", tense: "Past Simple", explanation: "Folosit pentru a descrie o succesiune de acțiuni finalizate în trecut." },
-            { sentence: "If she ___ more ambitious, she ___ for that promotion last month. (be, apply)", answer: "were, would have applied", tense: "Mixed Conditional", explanation: "Folosit pentru a descrie o acțiune nerealizată în trecut ('would have applied') care este rezultatul unei condiții prezente nerealiste ('if she were')." },
-            { sentence: "Don't call me between 7 and 8, as I ___ dinner with my family. (have)", answer: "will be having", tense: "Future Continuous", explanation: "Folosit pentru a descrie o acțiune care va fi în desfășurare pe o perioadă de timp în viitor." },
-            { sentence: "They were unable to gain entry because they ___ to bring the security pass. (forget)", answer: "had forgotten", tense: "Past Perfect", explanation: "Folosit pentru a oferi o explicație (o acțiune anterioară) pentru o situație din trecut." },
-            { sentence: "First, you ___ the card, then you ___ your PIN. (insert, enter)", answer: "insert, enter", tense: "Present Simple", explanation: "Folosit pentru a da instrucțiuni sau a descrie un proces." },
-            { sentence: "The company has already decided. They ___ their headquarters to Asia. (relocate)", answer: "are going to relocate", tense: "'Going to' Future", explanation: "Folosit pentru a exprima o decizie fermă, luată înainte de momentul vorbirii." },
-            { sentence: "The author ___ more than twenty novels, and he is still active. (write)", answer: "has written", tense: "Present Perfect", explanation: "Folosit pentru a descrie realizările unei persoane în viață, într-o perioadă de timp neîncheiată." },
-            { sentence: "The ground was wet because it ___ all night. (rain)", answer: "had been raining", tense: "Past Perfect Continuous", explanation: "Folosit pentru a explica o situație din trecut (pământul era ud) printr-o acțiune continuă anterioară." },
-            { sentence: "By the end of his term, the president ___ for eight years. (serve)", answer: "will have been serving", tense: "Future Perfect Continuous", explanation: "Folosit pentru a sublinia durata unei acțiuni până la un moment specific din viitor." },
-            { sentence: "It is imperative that every member ___ the emergency meeting. (attend)", answer: "attend", tense: "Subjunctive", explanation: "Folosit după expresii impersonale care denotă urgență sau importanță (e.g., 'it is imperative that'). Verbul este la forma de bază (infinitiv fără 'to')." },
-            { sentence: "I ___ you could help me with this difficult task. (hope)", answer: "was hoping", tense: "Past Continuous", explanation: "Folosit pentru a face o cerere politicoasă, făcând-o să pară mai puțin directă." }
+            // Present Simple (6)
+            { sentence: "Water ___ at 100 degrees Celsius. (boil)", answer: "boils", tense: "Present Simple", explanation: "Folosit pentru adevăruri generale și fapte științifice care sunt universal valabile. Verbul la persoana a treia singular (water = it) primește terminația '-s'." },
+            { sentence: "She usually ___ to work, but today she is driving. (walk)", answer: "walks", tense: "Present Simple", explanation: "Folosit pentru a descrie un obicei sau o rutină, indicat de adverbul de frecvență 'usually'. Verbul la persoana a treia singular (she) primește terminația '-s'." },
+            { sentence: "The sun ___ in the east. (rise)", answer: "rises", tense: "Present Simple", explanation: "Folosit pentru fapte naturale care sunt considerate permanente. Verbul la persoana a treia singular (The sun = it) primește terminația '-s'." },
+            { sentence: "How often ___ you ___ to the cinema? (go)", answer: "do you go", tense: "Present Simple", explanation: "Folosit pentru a întreba despre frecvența unei acțiuni. Pentru subiectul 'you', se folosește auxiliarul 'do' la forma interogativă." },
+            { sentence: "He ___ tennis on Fridays. (not play)", answer: "doesn't play", tense: "Present Simple", explanation: "Folosit pentru a nega un obicei sau o rutină. Pentru persoana a treia singular (he), se folosește auxiliarul 'does not' (doesn't) urmat de verbul la infinitiv." },
+            { sentence: "The train to London ___ at 7 AM every morning. (leave)", answer: "leaves", tense: "Present Simple", explanation: "Folosit pentru orare și programe fixe, care se repetă. Verbul la persoana a treia singular (The train = it) primește terminația '-s'." },
+
+            // Present Continuous (6)
+            { sentence: "Look! The children ___ in the garden. (play)", answer: "are playing", tense: "Present Continuous", explanation: "Folosit pentru acțiuni care se întâmplă exact în momentul vorbirii. Exclamația 'Look!' este un indicator clar al acestui context." },
+            { sentence: "I ___ a really interesting book at the moment. (read)", answer: "am reading", tense: "Present Continuous", explanation: "Folosit pentru situații temporare sau acțiuni care se desfășoară în perioada prezentă, dar nu neapărat în momentul vorbirii. 'At the moment' este un indicator specific." },
+            { sentence: "Why ___ you ___ a coat? It's not cold. (wear)", answer: "are you wearing", tense: "Present Continuous", explanation: "Folosit pentru a întreba despre o acțiune care se întâmplă acum. Structura interogativă este 'am/is/are' + subiect + verb-ing." },
+            { sentence: "She ___ her friends for dinner tonight. (meet)", answer: "is meeting", tense: "Present Continuous", explanation: "Folosit pentru aranjamente viitoare, planificate și confirmate. Indicatorul de timp 'tonight' arată că este un plan stabilit." },
+            { sentence: "He ___ this week; he's on holiday. (not work)", answer: "is not working", tense: "Present Continuous", explanation: "Folosit pentru a nega o acțiune temporară. Contextul 'this week' și 'he's on holiday' arată că situația este temporară." },
+            { sentence: "My brother ___ my clothes without asking! (always borrow)", answer: "is always borrowing", tense: "Present Continuous", explanation: "Folosit cu adverbul 'always' pentru a exprima un obicei repetat care este considerat enervant sau iritant de către vorbitor." },
+            
+            // Past Simple (6)
+            { sentence: "They ___ Paris last year. (visit)", answer: "visited", tense: "Past Simple", explanation: "Folosit pentru acțiuni complet finalizate într-un moment specific din trecut. 'Last year' este un indicator de timp clar pentru Past Simple." },
+            { sentence: "When ___ you ___ your homework yesterday? (finish)", answer: "did you finish", tense: "Past Simple", explanation: "Folosit pentru a întreba despre o acțiune finalizată în trecut. Se folosește auxiliarul 'did', iar verbul principal rămâne la forma de bază (infinitiv fără 'to')." },
+            { sentence: "I ___ him at the party on Saturday. (not see)", answer: "didn't see", tense: "Past Simple", explanation: "Folosit pentru a nega o acțiune finalizată în trecut. Se folosește auxiliarul 'did not' (didn't), iar verbul principal este la forma de bază." },
+            { sentence: "The Titanic ___ in 1912. (sink)", answer: "sank", tense: "Past Simple", explanation: "Folosit pentru evenimente istorice care s-au încheiat la o dată specifică. 'Sink' este un verb neregulat, iar forma sa la Past Simple este 'sank'." },
+            { sentence: "She ___ for three hours before she took a break. (study)", answer: "studied", tense: "Past Simple", explanation: "Folosit pentru o acțiune finalizată care a avut loc înaintea unei alte acțiuni din trecut. Verbul regulat 'study' se termină în '-ied'." },
+            { sentence: "The ancient Egyptians ___ the pyramids. (build)", answer: "built", tense: "Past Simple", explanation: "Folosit pentru evenimente istorice finalizate. 'Build' este un verb neregulat." },
+
+            // Past Continuous (6)
+            { sentence: "I ___ TV when the phone rang. (watch)", answer: "was watching", tense: "Past Continuous", explanation: "Folosit pentru o acțiune în desfășurare în trecut ('watching TV'), care a fost întreruptă de o altă acțiune mai scurtă și finalizată ('rang')." },
+            { sentence: "What ___ you ___ at 8 PM last night? (do)", answer: "were you doing", tense: "Past Continuous", explanation: "Folosit pentru a întreba despre o acțiune care era în plină desfășurare la un moment specific în trecut ('at 8 PM last night')." },
+            { sentence: "While they ___ to the coast, their car broke down. (drive)", answer: "were driving", tense: "Past Continuous", explanation: "Folosit pentru o acțiune de fundal, în desfășurare, în timpul căreia a avut loc un alt eveniment. Cuvântul 'while' introduce adesea această structură." },
+            { sentence: "He ___ while the teacher was explaining the rules. (not listen)", answer: "was not listening", tense: "Past Continuous", explanation: "Folosit pentru a nega o acțiune care era în desfășurare la un anumit moment în trecut, în paralel cu o altă acțiune." },
+            { sentence: "At this time yesterday, we ___ to New York. (fly)", answer: "were flying", tense: "Past Continuous", explanation: "Folosit pentru a descrie o acțiune în desfășurare la un punct de timp exact în trecut." },
+            { sentence: "It ___ heavily while we were inside. (snow)", answer: "was snowing", tense: "Past Continuous", explanation: "Folosit pentru a descrie o acțiune de fundal (vremea) care era în desfășurare în trecut, în paralel cu o altă acțiune." },
+
+            // Future Simple (6)
+            { sentence: "I think it ___ tomorrow. (rain)", answer: "will rain", tense: "Future Simple", explanation: "Folosit pentru predicții despre viitor bazate pe opinie personală, adesea introduse de verbe precum 'think', 'believe', 'expect'." },
+            { sentence: "Don't worry, I ___ you with your luggage. (help)", answer: "will help", tense: "Future Simple", explanation: "Folosit pentru decizii spontane, oferte de ajutor sau promisiuni făcute în momentul vorbirii." },
+            { sentence: "She ___ probably ___ late for the meeting. (be)", answer: "will probably be", tense: "Future Simple", explanation: "Folosit pentru predicții, adesea în combinație cu adverbe care indică probabilitatea, precum 'probably' sau 'perhaps'." },
+            { sentence: "___ you ___ me? (marry)", answer: "will you marry", tense: "Future Simple", explanation: "Folosit pentru a face cereri, invitații sau propuneri formale." },
+            { sentence: "They ___ the exam if they don't study. (not pass)", answer: "will not pass", tense: "Future Simple", explanation: "Folosit în propoziția principală a unei fraze condiționale de tip 1, pentru a exprima un rezultat viitor probabil al unei condiții prezente." },
+            { sentence: "I promise I ___ you as soon as I arrive. (call)", answer: "will call", tense: "Future Simple", explanation: "Folosit în mod specific pentru a face promisiuni despre acțiuni viitoare." },
+
+            // "Going to" Future (6)
+            { sentence: "Look at those dark clouds! It ___. (rain)", answer: "is going to rain", tense: "'Going to' Future", explanation: "Folosit pentru predicții bazate pe dovezi vizibile sau semne clare din prezent (norii întunecați)." },
+            { sentence: "We ___ our grandparents next weekend. (visit)", answer: "are going to visit", tense: "'Going to' Future", explanation: "Folosit pentru a vorbi despre planuri și intenții viitoare care au fost deja decise înainte de momentul vorbirii." },
+            { sentence: "He ___ a new business next year. (start)", answer: "is going to start", tense: "'Going to' Future", explanation: "Folosit pentru a exprima o intenție fermă sau un plan pe termen mai lung." },
+            { sentence: "She ___ for that job because it's too far away. (not apply)", answer: "is not going to apply", tense: "'Going to' Future", explanation: "Folosit pentru a nega o intenție sau un plan viitor." },
+            { sentence: "What ___ you ___ after you graduate? (do)", answer: "are you going to do", tense: "'Going to' Future", explanation: "Folosit pentru a întreba despre planurile sau intențiile viitoare ale unei persoane." },
+            { sentence: "I've already decided. I ___ the red dress. (buy)", answer: "am going to buy", tense: "'Going to' Future", explanation: "Folosit pentru a exprima o decizie care a fost luată înainte de momentul vorbirii." },
+
+            // Present Perfect (6)
+            { sentence: "She ___ her homework. (already finish)", answer: "has already finished", tense: "Present Perfect", explanation: "Folosit pentru o acțiune trecută cu rezultat în prezent. 'Already' subliniază că acțiunea s-a încheiat, posibil mai devreme decât se aștepta." },
+            { sentence: "I ___ to Japan. (never be)", answer: "have never been", tense: "Present Perfect", explanation: "Folosit pentru a vorbi despre experiențe de viață (sau lipsa acestora) la un moment nespecificat în trecut." },
+            { sentence: "They ___ that film yet. (not see)", answer: "have not seen", tense: "Present Perfect", explanation: "Folosit pentru acțiuni care nu s-au întâmplat până în prezent, adesea cu 'yet' în propoziții negative și interogative." },
+            { sentence: "___ you ever ___ sushi? (eat)", answer: "have you ever eaten", tense: "Present Perfect", explanation: "Folosit pentru a întreba despre experiențe de viață. 'Ever' este un cuvânt cheie frecvent în acest tip de întrebări." },
+            { sentence: "He ___ his keys and can't get into his house. (lose)", answer: "has lost", tense: "Present Perfect", explanation: "Folosit pentru o acțiune trecută ('he lost his keys') care are un rezultat direct și vizibil în prezent ('he can't get in')." },
+            { sentence: "I ___ an email from my boss. (just receive)", answer: "have just received", tense: "Present Perfect", explanation: "Folosit pentru acțiuni care s-au încheiat foarte recent și au relevanță pentru prezent, adesea cu 'just'." },
+
+            // Present Perfect Continuous (6)
+            { sentence: "She ___ here for five years. (work)", answer: "has been working", tense: "Present Perfect Continuous", explanation: "Folosit pentru a sublinia durata neîntreruptă a unei acțiuni care a început în trecut și continuă în prezent. 'For' introduce perioada de timp." },
+            { sentence: "I'm tired because I ___ all night. (study)", answer: "have been studying", tense: "Present Perfect Continuous", explanation: "Folosit pentru o activitate trecută, recentă și continuă, care are un rezultat vizibil în prezent (oboseala)." },
+            { sentence: "How long ___ you ___ for the bus? (wait)", answer: "have you been waiting", tense: "Present Perfect Continuous", explanation: "Folosit pentru a întreba despre durata unei acțiuni care a început în trecut și încă este în desfășurare." },
+            { sentence: "They ___ tennis since this morning. (play)", answer: "have been playing", tense: "Present Perfect Continuous", explanation: "Folosit pentru a vorbi despre o acțiune care a început la un moment specific în trecut ('since this morning') și este încă în progres." },
+            { sentence: "It ___ for hours, so the ground is wet. (rain)", answer: "has been raining", tense: "Present Perfect Continuous", explanation: "Folosit pentru o acțiune trecută continuă ('it rained for hours') care are un rezultat vizibil în prezent ('the ground is wet')." },
+            { sentence: "Your eyes are red. ___ you ___? (cry)", answer: "have you been crying", tense: "Present Perfect Continuous", explanation: "Folosit pentru a întreba despre o activitate continuă recentă care s-a încheiat, dar ale cărei efecte sunt încă vizibile." },
+
+            // Past Perfect (6)
+            { sentence: "By the time we arrived, the film ___. (already start)", answer: "had already started", tense: "Past Perfect", explanation: "Folosit pentru o acțiune care s-a finalizat înaintea unei alte acțiuni sau a unui moment specific din trecut. 'By the time' este un indicator clar pentru această structură." },
+            { sentence: "She told me she ___ such a beautiful sunset before. (never see)", answer: "had never seen", tense: "Past Perfect", explanation: "Folosit în vorbirea indirectă pentru a descrie o experiență care a avut loc (sau nu) înainte de momentul relatării din trecut ('she told me')." },
+            { sentence: "He ___ his report when his boss asked for it. (not finish)", answer: "had not finished", tense: "Past Perfect", explanation: "Folosit pentru a arăta că o acțiune nu era finalizată în momentul în care o altă acțiune din trecut a avut loc." },
+            { sentence: "After he ___ his homework, he went out to play. (do)", answer: "had done", tense: "Past Perfect", explanation: "Folosit adesea cu 'after' pentru a clarifica secvența a două acțiuni din trecut: prima acțiune (cea mai veche) stă la Past Perfect." },
+            { sentence: "They couldn't get into the house because they ___ the key. (lose)", answer: "had lost", tense: "Past Perfect", explanation: "Folosit pentru a oferi o explicație sau un motiv (o acțiune anterioară) pentru o situație din trecut." },
+            { sentence: "He realized he ___ a mistake before he submitted the form. (make)", answer: "had made", tense: "Past Perfect", explanation: "Folosit pentru a arăta că o acțiune ('make a mistake') s-a întâmplat înaintea unei alte acțiuni din trecut ('realized'). 'Before' subliniază această ordine." }
         ];
 
         function shuffle(array) {
@@ -326,7 +367,7 @@
                 }
             });
             const checkButton = document.getElementById('check-btn-test1');
-            checkButton.disabled = validCount < 25; 
+            checkButton.disabled = validCount < 43; 
         }
 
         function setupAccordion() {
@@ -353,7 +394,7 @@
         function showTab(tabId) {
             if (tabId === 'answers' && !answersUnlocked) {
                 const password = prompt("Please enter the password to view answers:");
-                if (password === "Cl@r@") {
+                if (password === "Kl@r@"1) {
                     answersUnlocked = true;
                 } else {
                     if (password !== null) { 
@@ -432,7 +473,7 @@
 
             doc.setFontSize(16);
             doc.setFont('Helvetica', 'bold');
-            doc.text(`Results - Verb Tenses Test (C1)`, 105, yPosition, { align: 'center' });
+            doc.text(`Results - Verb Tenses Test`, 105, yPosition, { align: 'center' });
             yPosition += 10;
 
             doc.setFont('Helvetica', 'normal');
@@ -491,7 +532,7 @@
             const day = String(now.getDate()).padStart(2, '0');
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
-            const fileName = `VerbTensesTest_C1_${hours}${day}${minutes}.pdf`;
+            const fileName = `VerbTensesTest_${hours}${day}${minutes}.pdf`;
 
             doc.save(fileName);
         }
@@ -504,7 +545,7 @@
                     answers[`q-1-${i}`] = inputElement.value;
                 }
             }
-            localStorage.setItem(`verbTenseProgressC1`, JSON.stringify(answers));
+            localStorage.setItem(`verbTenseProgress`, JSON.stringify(answers));
             
             const saveButton = document.querySelector(`#test1 .button.save`);
             if(saveButton) {
@@ -514,7 +555,7 @@
         }
 
         function loadProgress() {
-            const savedProgress = localStorage.getItem(`verbTenseProgressC1`);
+            const savedProgress = localStorage.getItem(`verbTenseProgress`);
             if (savedProgress) {
                 const answers = JSON.parse(savedProgress);
                 for (const inputId in answers) {
@@ -536,7 +577,7 @@
             document.getElementById('result-test1').style.display = 'none';
             document.getElementById('print-btn-test1').disabled = true;
             document.getElementById('check-btn-test1').disabled = true;
-            localStorage.removeItem('verbTenseProgressC1');
+            localStorage.removeItem('verbTenseProgress');
         }
 
         window.onload = () => {
